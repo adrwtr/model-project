@@ -19,7 +19,7 @@ return [
     'Zend\Hydrator',
     'Zend\Router',
     'Zend\Validator',
-    'Application',
     'DoctrineModule',
-    'DoctrineORMModule'
+    'DoctrineORMModule',
+    'Application',
 ];

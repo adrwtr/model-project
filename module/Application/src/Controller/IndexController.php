@@ -19,6 +19,22 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
+        $entityManager = $this->getObjSm()->get('doctrine.entitymanager.orm_default');
+
+        $post = new \Application\Entity\Post();
+$post->setTitle('Top 10+ Books about Zend Framework 3');
+$post->setContent('Post body goes here');
+$post->setStatus(\Application\Entity\Post::STATUS_PUBLISHED);
+$currentDate = date('Y-m-d H:i:s');
+$post->setDateCreated($currentDate);
+
+// Add the entity to entity manager.
+$entityManager->persist($post);
+
+// Apply changes to database.
+$entityManager->flush();
+
+
         return new ViewModel();
     }
 

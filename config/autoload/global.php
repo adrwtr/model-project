@@ -11,6 +11,21 @@
  * file.
  */
 
+// use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
+use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDO;
+
 return [
-    // ...
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => PDO::class,
+                'params' => [
+                    'user'     => 'root1',
+                    'password' => 'root',
+                    'path' =>'sql.sqlite',
+                    'memory' => false
+                ]
+            ],
+        ],
+    ],
 ];

@@ -6,3 +6,4 @@ data/cache/*
 phpunit.xml
 saida.txt
 TODO.md
+*.sqlite
