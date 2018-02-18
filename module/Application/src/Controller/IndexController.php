@@ -22,6 +22,7 @@ class IndexController extends AbstractActionController
         $entityManager = $this->getObjSm()->get('doctrine.entitymanager.orm_default');
 
         $post = new \Application\Entity\Post();
+        $post->setId(1);
 $post->setTitle('Top 10+ Books about Zend Framework 3');
 $post->setContent('Post body goes here');
 $post->setStatus(\Application\Entity\Post::STATUS_PUBLISHED);
