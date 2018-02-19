@@ -25,7 +25,6 @@ class IndexController extends AbstractActionController
         $post->setId(1);
 $post->setTitle('Top 10+ Books about Zend Framework 3');
 $post->setContent('Post body goes here');
-$post->setStatus(\Application\Entity\Post::STATUS_PUBLISHED);
 $currentDate = date('Y-m-d H:i:s');
 $post->setDateCreated($currentDate);
 
