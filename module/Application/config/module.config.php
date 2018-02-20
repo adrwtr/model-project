@@ -25,13 +25,23 @@ return [
 
     'router' => [
         'routes' => [
-
             'home' => [
                 'type' => Literal::class,
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            'fixture' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/fixture',
+                    'defaults' => [
+                        'controller' => Controller\FixtureController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -58,12 +68,14 @@ return [
                     ],
                 ],
             ],
+
         ],
     ],
 
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => Factory\ControllerComServiceFactory::class,
+            Controller\FixtureController::class => Factory\ControllerComServiceFactory::class,
         ]
     ],
 

@@ -3,37 +3,20 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\Controller\BaseServiceManagerController;
 
 
-class IndexController extends AbstractActionController
+class IndexController extends BaseServiceManagerController
 {
-	private $objSM;
-
-	private function getObjSm() {
-		return $this->objSM;
-	}
-
 	public function __construct($objSM) {
-		$this->objSM = $objSM;
+		parent::__construct($objSM);
 	}
 
     public function indexAction()
     {
-        $entityManager = $this->getObjSm()->get('doctrine.entitymanager.orm_default');
-
-        $post = new \Application\Entity\Post();
-        $post->setId(1);
-$post->setTitle('Top 10+ Books about Zend Framework 3');
-$post->setContent('Post body goes here');
-$currentDate = date('Y-m-d H:i:s');
-$post->setDateCreated($currentDate);
-
-// Add the entity to entity manager.
-$entityManager->persist($post);
-
-// Apply changes to database.
-$entityManager->flush();
-
+        $arrValores = $this->getEntityManager()
+            ->find(\Application\Entity\Tabela::class, 1);
+        var_dump($arrValores);
 
         return new ViewModel();
     }
