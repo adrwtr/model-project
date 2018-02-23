@@ -23,12 +23,12 @@ class IndexController extends BaseServiceManagerController
     }
 
     public function listaTabelasAction() {
-        $result = new JsonModel(array(
-        'some_parameter' => 'some value',
-            'success'=>true,
-        ));
+        $arrValores = $this->getEntityManager()
+            ->findAll(\Application\Entity\Tabela::class);
 
-        return $result;
+        return new JsonModel(
+            $arrValores
+        );
     }
 
     public function lerSqlAction()
