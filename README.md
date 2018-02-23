@@ -15,3 +15,6 @@ Leituro de arquivos .sql para verificação de estruturas mysql
 ## Doctrine
     vendor\bin\doctrine-module orm:generate-proxies
     vendor\bin\doctrine-module orm:schema-tool:create
+
+
+    php ..\composer.phar require --dev nelmio/alice

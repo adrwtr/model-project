@@ -58,6 +58,17 @@ return [
                 ],
             ],
 
+            'lista-tabelas' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/tabela/lista-tabelas',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'listaTabelas',
+                    ],
+                ],
+            ],
+
             'application' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -110,5 +121,9 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
+
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
     ],
 ];

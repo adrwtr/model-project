@@ -3,8 +3,9 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
+use Zend\Json\Json;
 use Application\Controller\BaseServiceManagerController;
-
 
 class IndexController extends BaseServiceManagerController
 {
@@ -19,6 +20,15 @@ class IndexController extends BaseServiceManagerController
         var_dump($arrValores);
 
         return new ViewModel();
+    }
+
+    public function listaTabelasAction() {
+        $result = new JsonModel(array(
+        'some_parameter' => 'some value',
+            'success'=>true,
+        ));
+
+        return $result;
     }
 
     public function lerSqlAction()
