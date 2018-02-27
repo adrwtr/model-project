@@ -6,25 +6,25 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Application\Controller\BaseServiceManagerController;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 class IndexController extends BaseServiceManagerController
 {
-	public function __construct($objSM) {
+	public function __construct($objSM)
+    {
 		parent::__construct($objSM);
 	}
 
     public function indexAction()
     {
-        $arrValores = $this->getEntityManager()
-            ->find(\Application\Entity\Tabela::class, 1);
-        var_dump($arrValores);
-
         return new ViewModel();
     }
 
-    public function listaTabelasAction() {
+    public function listaTabelasAction()
+    {
         $arrValores = $this->getEntityManager()
-            ->findAll(\Application\Entity\Tabela::class);
+            ->createQuery('select t from \Application\Entity\Tabela t')
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return new JsonModel(
             $arrValores

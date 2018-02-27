@@ -5,7 +5,8 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Tabelas</h3>
             </div>
-            <div class="panel-body">
+
+            <div class="panel-body" id="vueApp-lista-tabela">
 
                 <div class="form-group">
                     <input type="text" class="form-control" id="ds_busca" placeholder="Buscar">
@@ -22,20 +23,10 @@
                     </thead>
 
                     <tbody>
+                        <tr v-for="arrValores in arrTabelas">
+                            <th scope="row">{{arrValores.id}}</th>
+                            <td>{{arrValores.ds_nome}}</td>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Nome Tabela</td>
-                            <td>Descrição</td>
-                            <td>@mdo</td> </tr>
-                        <tr>
-
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Nome Tabela</td>
-                            <td>Descrição</td>
-                            <td>@mdo</td> </tr>
-                        <tr>
-
                     </tbody>
                 </table>
             </div>
@@ -86,20 +77,21 @@
 
 <script>
 var app_lista_tabela = new Vue({
-   el: '#app-8',
-   data: {
-       arrTabelas: [],
-       sn_carregando : true
-   },
+    el: '#vueApp-lista-tabela',
+    data: {
+        arrTabelas: [],
+        sn_carregando : true
+    },
 
-   created : function() {
-       fetch('http://localhost:8080/tabela/lista-tabelas')
-           .then(response => response.json())
-           .then(
+    created : function() {
+        fetch('http://localhost:8080/tabela/lista-tabelas')
+            .then(response => response.json())
+            .then(
                 json => {
                     this.arrTabelas = json;
                     this.sn_carregando = false;
-       })
-   }
+                }
+            )
+    }
 });
     </script>

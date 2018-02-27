@@ -3,12 +3,18 @@ namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use \Indaxia\OTR\ITransformable;
+use \Indaxia\OTR\Traits\Transformable;
+use \Indaxia\OTR\Annotations\Policy;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="tabela")
  */
-class Tabela
+class Tabela implements ITransformable
 {
+    use Transformable;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -29,11 +35,11 @@ class Tabela
         $this->id = $id;
     }
 
-    public function getDsNome() {
+    public function getDs_nome() {
         return $this->ds_nome;
     }
 
-    public function setDsNome($ds_nome) {
+    public function setDs_nome($ds_nome) {
         $this->ds_nome = $ds_nome;
     }
 }
