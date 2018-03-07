@@ -9,7 +9,11 @@
             <div class="panel-body" id="vueApp-lista-tabela">
 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="ds_busca" placeholder="Buscar">
+                    <input type="text"
+                        class="form-control"
+                        id="ds_busca"
+                        placeholder="Buscar"
+                        v-model="ds_filtro">
                 </div>
 
                 <table class="table">
@@ -76,22 +80,50 @@
 
 
 <script>
+
 var app_lista_tabela = new Vue({
     el: '#vueApp-lista-tabela',
+
     data: {
         arrTabelas: [],
-        sn_carregando : true
+        arrTabelasOriginal: [],
+        sn_carregando : true,
+        ds_filtro : ''
     },
 
-    created : function() {
+    created: function() {
         fetch('http://localhost:8080/tabela/lista-tabelas')
             .then(response => response.json())
             .then(
                 json => {
                     this.arrTabelas = json;
+                    this.arrTabelasOriginal = json;
                     this.sn_carregando = false;
                 }
             )
-    }
+    },
+
+    watch: {
+        ds_filtro: function ()
+        {
+            var ds_filtrar = this.ds_filtro;
+            this.arrTabelas = this.arrTabelasOriginal;
+
+            if (_.isEmpty(ds_filtrar)) {
+                return;
+            }
+
+            this.arrTabelas = _.filter(
+                this.arrTabelasOriginal,
+                function (arrValor) {
+                    return arrValor.ds_nome
+                        .toLowerCase()
+                        .indexOf(ds_filtrar.toLowerCase()) >= 0;
+                }
+            );
+
+        }
+    },
 });
-    </script>
+
+</script>
