@@ -9,11 +9,22 @@
             <div class="panel-body" id="vueApp-lista-tabela">
 
                 <div class="form-group">
-                    <input type="text"
-                        class="form-control"
-                        id="ds_busca"
-                        placeholder="Buscar"
-                        v-model="ds_filtro">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <input type="text"
+                                    class="form-control"
+                                    id="ds_busca"
+                                    placeholder="Buscar"
+                                    v-model="ds_filtro" />
+                            </div>
+
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-secondary"
+                                    v:on="">Nova</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <table class="table">
@@ -33,6 +44,8 @@
                         <tr>
                     </tbody>
                 </table>
+
+
             </div>
         </div>
     </div>
@@ -77,6 +90,26 @@
 
 </div>
 
+
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -124,6 +157,11 @@ var app_lista_tabela = new Vue({
 
         }
     },
+
+
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#myInput').trigger('focus')
+    })
 });
 
 </script>
