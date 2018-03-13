@@ -7,6 +7,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Application\Controller\BaseServiceManagerController;
 use Doctrine\ORM\Query\ResultSetMapping;
+use \Application\Entity\Tabela;
 
 class IndexController extends BaseServiceManagerController
 {
@@ -28,6 +29,30 @@ class IndexController extends BaseServiceManagerController
 
         return new JsonModel(
             $arrValores
+        );
+    }
+
+    public function updateTabelasAction()
+    {
+        $ds_json_post = $this->getRequest()
+            ->getContent();
+
+        $objJson = json_decode($ds_json_post);
+        $ds_tabela = $objJson->ds_tabela;
+
+        $objTabela = new Tabela();
+        $objTabela->setDs_nome($ds_tabela);
+
+        $this->getEntityManager()
+            ->persist($objTabela);
+
+        $this->getEntityManager()
+            ->flush();
+
+        return new JsonModel(
+            [
+                'sn_sucesso' => true
+            ]
         );
     }
 

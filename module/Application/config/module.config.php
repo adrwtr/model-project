@@ -69,6 +69,17 @@ return [
                 ],
             ],
 
+            'update-tabelas' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/tabela/update',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'updateTabelas',
+                    ],
+                ],
+            ],
+
             'application' => [
                 'type'    => Segment::class,
                 'options' => [
