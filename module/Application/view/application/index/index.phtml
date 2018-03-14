@@ -35,6 +35,7 @@
                         <th>Tabela</th>
                         <th>Descrição</th>
                         <th>Ligações</th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -42,6 +43,11 @@
                         <tr v-for="arrValores in arrTabelas">
                             <th scope="row">{{arrValores.id}}</th>
                             <td>{{arrValores.ds_nome}}</td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <i class="fas fa-edit"></i> -- editar - {{arrValores.id}}
+                            </td>
                         <tr>
                     </tbody>
                 </table>
@@ -143,19 +149,12 @@ var app_lista_tabela = new Vue({
         ds_filtro : '',
 
         // form
-        ds_tabela : ''
+        ds_tabela : '',
+        cd_tabela_id : 0
     },
 
     created: function() {
-        fetch('http://localhost:8080/tabela/lista-tabelas')
-            .then(response => response.json())
-            .then(
-                json => {
-                    this.arrTabelas = json;
-                    this.arrTabelasOriginal = json;
-                    this.sn_carregando = false;
-                }
-            )
+        this.getListRegistros();
     },
 
     watch: {
@@ -181,13 +180,31 @@ var app_lista_tabela = new Vue({
     },
 
     methods: {
+        getListRegistros: function() {
+            fetch('http://localhost:8080/tabela/lista-tabelas')
+                .then(response => response.json())
+                .then(
+                    json => {
+                        this.arrTabelas = json;
+                        this.arrTabelasOriginal = json;
+
+                        this.sn_carregando = false;
+                    }
+                );
+        }
+
         modalIncluir: function () {
-            console.log('aqui');
             // do nothing
+            this.cd_tabela_id = 0;
+        },
+
+        modalEditar: function (cd_tabela_id) {
+            this.cd_tabela_id = cd_tabela_id;
         },
 
         submitModalIncluir: function() {
             var arrPost = {
+                cd_tabela_id : this.cd_tabela_id,
                 ds_tabela : this.ds_tabela
             };
 
@@ -197,6 +214,11 @@ var app_lista_tabela = new Vue({
             )
             .then(
                 function (response) {
+                    if (response.data.sn_sucesso == true) {
+                        app_lista_tabela.getListRegistros();
+                        return;
+                    }
+
                     console.log(response);
                 }
             )

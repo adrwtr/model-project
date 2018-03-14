@@ -38,9 +38,19 @@ class IndexController extends BaseServiceManagerController
             ->getContent();
 
         $objJson = json_decode($ds_json_post);
+
+        $cd_tabela_id = $objJson->cd_tabela_id;
         $ds_tabela = $objJson->ds_tabela;
 
         $objTabela = new Tabela();
+
+        // é alteracao
+        if ($cd_tabela_id > 0) {
+            $objTabela = $this->getEntityManager()
+                ->getRepository(\Application\Entity\Tabela::class)
+                ->getById($cd_tabela_id);
+        }
+
         $objTabela->setDs_nome($ds_tabela);
 
         $this->getEntityManager()
@@ -51,7 +61,8 @@ class IndexController extends BaseServiceManagerController
 
         return new JsonModel(
             [
-                'sn_sucesso' => true
+                'sn_sucesso' => true,
+                'nr_id_cadastrado' => $objTabela->getId()
             ]
         );
     }
