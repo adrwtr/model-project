@@ -32,6 +32,21 @@ class IndexController extends BaseServiceManagerController
         );
     }
 
+    public function getTabelaAction()
+    {
+        $cd_registro = $this->params()
+            ->fromRoute('cd_registro');
+
+        $arrValores = $this->getEntityManager()
+            ->createQuery('select t from \Application\Entity\Tabela t where t.id = :id')
+            ->setParameter('id', $cd_registro)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return new JsonModel(
+            $arrValores
+        );
+    }
+
     public function updateTabelasAction()
     {
         $ds_json_post = $this->getRequest()
@@ -48,7 +63,9 @@ class IndexController extends BaseServiceManagerController
         if ($cd_tabela_id > 0) {
             $objTabela = $this->getEntityManager()
                 ->getRepository(\Application\Entity\Tabela::class)
-                ->getById($cd_tabela_id);
+                ->findOneBy([
+                    'id' => $cd_tabela_id
+                ]);
         }
 
         $objTabela->setDs_nome($ds_tabela);

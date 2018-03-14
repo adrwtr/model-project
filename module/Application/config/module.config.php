@@ -80,6 +80,18 @@ return [
                 ],
             ],
 
+            'get-tabela' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/tabela/get[/:cd_registro]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'getTabela',
+                        'cd_registro' => '0'
+                    ],
+                ],
+            ],
+
             'application' => [
                 'type'    => Segment::class,
                 'options' => [
