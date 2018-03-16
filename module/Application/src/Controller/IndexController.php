@@ -23,8 +23,11 @@ class IndexController extends BaseServiceManagerController
 
     public function listaTabelasAction()
     {
+        $ds_dql = 'select t from \Application\Entity\Tabela t'
+            . ' where t.sn_excluido = 1';
+
         $arrValores = $this->getEntityManager()
-            ->createQuery('select t from \Application\Entity\Tabela t')
+            ->createQuery($ds_dql)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return new JsonModel(
@@ -69,6 +72,34 @@ class IndexController extends BaseServiceManagerController
         }
 
         $objTabela->setDs_nome($ds_tabela);
+        $objTabela->setSnExcluido(false);
+
+        $this->getEntityManager()
+            ->persist($objTabela);
+
+        $this->getEntityManager()
+            ->flush();
+
+        return new JsonModel(
+            [
+                'sn_sucesso' => true,
+                'nr_id_cadastrado' => $objTabela->getId()
+            ]
+        );
+    }
+
+    public function deleteTabelaAction()
+    {
+        $cd_registro = $this->params()
+            ->fromRoute('cd_registro');
+
+        $objTabela = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'id' => $cd_registro
+            ]);
+
+        $objTabela->setSnExcluido(true);
 
         $this->getEntityManager()
             ->persist($objTabela);

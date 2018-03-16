@@ -24,8 +24,16 @@ class Tabela implements ITransformable
 
     /**
      * @ORM\Column(name="ds_nome")
+     * @ORM\Column(nullable=false)
      */
     protected $ds_nome;
+
+    /**
+     * @ORM\Column(name="sn_excluido")
+     * @ORM\Column(nullable=false)
+     * @ORM\Column(type="boolean")
+     */
+    protected $sn_excluido;
 
     public function getId() {
         return $this->id;
@@ -35,11 +43,19 @@ class Tabela implements ITransformable
         $this->id = $id;
     }
 
-    public function getDs_nome() {
+    public function getDsNome() {
         return $this->ds_nome;
     }
 
-    public function setDs_nome($ds_nome) {
+    public function setDsNome($ds_nome) {
         $this->ds_nome = $ds_nome;
+    }
+
+    public function getSnExcluido() {
+        return $this->sn_excluido;
+    }
+
+    public function setSnExcluido($sn_excluido) {
+        $this->sn_excluido = $sn_excluido;
     }
 }

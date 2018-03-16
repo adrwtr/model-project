@@ -2,3 +2,4 @@ Application\Entity\Tabela:
     tabela1:
         id: 1
         ds_nome: 'Tabela 1'
+        sn_excluido: false

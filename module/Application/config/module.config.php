@@ -92,6 +92,19 @@ return [
                 ],
             ],
 
+            'delete-tabela' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/tabela/delete[/:cd_registro]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'deleteTabela',
+                        'cd_registro' => '0'
+                    ],
+                ],
+            ],
+
+
             'application' => [
                 'type'    => Segment::class,
                 'options' => [

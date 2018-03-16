@@ -22,7 +22,7 @@
                             <div class="col-sm-2">
                                 <button type="button" class="btn btn-secondary"
                                     v-on:click="modalIncluir"
-                                    class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Nova</button>
+                                    class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario">Nova</button>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,15 @@
                                         <button type="button" class="btn btn-secondary"
                                             v-on:click="modalEditar(arrValores.id)"
                                             style="font-size: 10px;"
-                                            class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                            class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario">
                                             <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-secondary"
+                                            v-on:click="modalExcluir(arrValores.id)"
+                                            style="font-size: 10px;"
+                                            class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -104,8 +111,8 @@
     </div>
 
 
-
-    <div class="modal" tabindex="-1" role="dialog" id="exampleModal">
+    <!-- Form -->
+    <div class="modal" tabindex="-1" role="dialog" id="modalFormulario">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -142,6 +149,33 @@
         </div>
     </div>
 
+
+    <!-- modal excluir -->
+    <div class="modal" tabindex="-1" role="dialog" id="modalExcluir">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Excluir</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    Deseja realmente excluir o registro?
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                        v-on:click="doDelete()"
+                        data-dismiss="modal">Sim</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -160,7 +194,7 @@ var app_lista_tabela = new Vue({
 
         // form
         ds_tabela : '',
-        cd_tabela_id : 0
+        nr_id : 0
     },
 
     created: function() {
@@ -192,41 +226,45 @@ var app_lista_tabela = new Vue({
     methods: {
         getListRegistros: function() {
             fetch('/tabela/lista-tabelas')
-                .then(response => response.json())
+                .then(objResponse => objResponse.json())
                 .then(
-                    json => {
-                        this.arrTabelas = json;
-                        this.arrTabelasOriginal = json;
+                    arrJson => {
+                        this.arrTabelas = arrJson;
+                        this.arrTabelasOriginal = arrJson;
 
                         this.sn_carregando = false;
                     }
                 );
         },
 
-        getRegistroEditar: function(cd_tabela_id) {
-            fetch('/tabela/get/' + cd_tabela_id)
-                .then(response => response.json())
+        getRegistroEditar: function(nr_id) {
+            fetch('/tabela/get/' + nr_id)
+                .then(objResponse => objResponse.json())
                 .then(
-                    json => {
-                        this.cd_tabela_id = json[0].id;
-                        this.ds_tabela = json[0].ds_nome;
+                    arrJson => {
+                        this.nr_id = arrJson[0].id;
+                        this.ds_tabela = arrJson[0].ds_nome;
                     }
                 );
         },
 
         modalIncluir: function () {
             // do nothing
-            this.cd_tabela_id = 0;
+            this.nr_id = 0;
         },
 
-        modalEditar: function (cd_tabela_id) {
-            this.cd_tabela_id = cd_tabela_id;
-            this.getRegistroEditar(cd_tabela_id);
+        modalEditar: function (nr_id) {
+            this.nr_id = nr_id;
+            this.getRegistroEditar(nr_id);
+        },
+
+        modalExcluir: function(nr_id) {
+            this.nr_id = nr_id;
         },
 
         submitModalIncluir: function() {
             var arrPost = {
-                cd_tabela_id : this.cd_tabela_id,
+                nr_id : this.nr_id,
                 ds_tabela : this.ds_tabela
             };
 
@@ -235,13 +273,13 @@ var app_lista_tabela = new Vue({
                 arrPost
             )
             .then(
-                function (response) {
-                    if (response.data.sn_sucesso == true) {
+                function (objResponse) {
+                    if (objResponse.data.sn_sucesso == true) {
                         app_lista_tabela.getListRegistros();
                         return;
                     }
 
-                    console.log(response);
+                    console.log(objResponse);
                 }
             )
             .catch(
@@ -249,6 +287,17 @@ var app_lista_tabela = new Vue({
                     console.log(error);
                 }
             );
+        },
+
+        doDelete: function() {
+            fetch('/tabela/delete/' + this.nr_id)
+                .then(objResponse => objResponse.json())
+                .then(
+                    arrJson => {
+                        this.getListRegistros();
+                        return;
+                    }
+                );
         }
     }
 });
