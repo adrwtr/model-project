@@ -58,7 +58,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             v-on:click="modalExcluir(arrValores.id)"
                                             style="font-size: 10px;"
-                                            class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario">
+                                            class="btn btn-primary" data-toggle="modal" data-target="#modalExcluir">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>
@@ -123,19 +123,55 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <label for="ds_tabela">Nome da Tabela</label>
-                                    <input type="text" class="form-control"
-                                        id="ds_tabela"
-                                        v-model="ds_tabela"
-                                        placeholder="Nome da Tabela">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tab-nova"
+                                data-toggle="tab" href="#nova" role="tab" aria-controls="nova"
+                                v-on:click="tabAtiva('nova')"
+                                aria-selected="true">Nova</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-sql" data-toggle="tab"
+                                href="#sql" role="tab" aria-controls="sql"
+                                v-on:click="tabAtiva('sql')"
+                                aria-selected="false">SQL</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="nova"
+                            role="tabpanel" aria-labelledby="tab-nova">
+                            <div class="form-group">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label for="ds_tabela">Nome da Tabela</label>
+                                            <input type="text" class="form-control"
+                                                id="ds_tabela"
+                                                v-model="ds_tabela"
+                                                placeholder="Nome da Tabela">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="sql" role="tabpanel" aria-labelledby="tab-sql">
+                            <div class="form-group">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label for="ds_tabela">SQL</label>
+                                            <textarea class="form-control"
+                                                id="exampleFormControlTextarea1"
+                                                cols="50"
+                                                rows="10"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="modal-footer">
@@ -194,7 +230,10 @@ var app_lista_tabela = new Vue({
 
         // form
         ds_tabela : '',
-        nr_id : 0
+        nr_id : 0,
+
+        // tabs
+        ds_tab_ativa : 'nova'
     },
 
     created: function() {
@@ -231,7 +270,6 @@ var app_lista_tabela = new Vue({
                     arrJson => {
                         this.arrTabelas = arrJson;
                         this.arrTabelasOriginal = arrJson;
-
                         this.sn_carregando = false;
                     }
                 );
@@ -249,8 +287,8 @@ var app_lista_tabela = new Vue({
         },
 
         modalIncluir: function () {
-            // do nothing
             this.nr_id = 0;
+            this.ds_tabela = '';
         },
 
         modalEditar: function (nr_id) {
@@ -298,6 +336,11 @@ var app_lista_tabela = new Vue({
                         return;
                     }
                 );
+        },
+
+        tabAtiva: function(ds_tab) {
+            console.log(ds_tab);
+            this.ds_tab_ativa = ds_tab;
         }
     }
 });

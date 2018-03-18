@@ -24,7 +24,7 @@ class IndexController extends BaseServiceManagerController
     public function listaTabelasAction()
     {
         $ds_dql = 'select t from \Application\Entity\Tabela t'
-            . ' where t.sn_excluido = 1';
+            . ' where t.sn_excluido = 0';
 
         $arrValores = $this->getEntityManager()
             ->createQuery($ds_dql)
@@ -57,21 +57,21 @@ class IndexController extends BaseServiceManagerController
 
         $objJson = json_decode($ds_json_post);
 
-        $cd_tabela_id = $objJson->cd_tabela_id;
+        $nr_id = $objJson->nr_id;
         $ds_tabela = $objJson->ds_tabela;
 
         $objTabela = new Tabela();
 
         // é alteracao
-        if ($cd_tabela_id > 0) {
+        if ($nr_id > 0) {
             $objTabela = $this->getEntityManager()
                 ->getRepository(\Application\Entity\Tabela::class)
                 ->findOneBy([
-                    'id' => $cd_tabela_id
+                    'id' => $nr_id
                 ]);
         }
 
-        $objTabela->setDs_nome($ds_tabela);
+        $objTabela->setDsNome($ds_tabela);
         $objTabela->setSnExcluido(false);
 
         $this->getEntityManager()

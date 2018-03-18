@@ -11,9 +11,9 @@ use \Indaxia\OTR\Annotations\Policy;
  * @ORM\Entity
  * @ORM\Table(name="tabela")
  */
-class Tabela implements ITransformable
+class Tabela // implements ITransformable
 {
-    use Transformable;
+    // use Transformable;
 
     /**
      * @ORM\Id
