@@ -73,6 +73,7 @@ class IndexController extends BaseServiceManagerController
 
         $objTabela->setDsNome($ds_tabela);
         $objTabela->setSnExcluido(false);
+        $objTabela->setSnTemporario(false);
 
         $this->getEntityManager()
             ->persist($objTabela);
