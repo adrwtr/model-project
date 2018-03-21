@@ -28,6 +28,10 @@ class ComandosSqlService {
         return $this->arrTabelas;
     }
 
+    public function getTotalTabelas() {
+        return count($this->arrTabelas);
+    }
+
     public function parseComandos() {
     	for ($i = 0; $i < $this->getTotalComandos(); $i++) {
             $ds_comando = $this->arrComandos[$i];

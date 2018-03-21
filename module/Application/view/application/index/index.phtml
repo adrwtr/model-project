@@ -160,9 +160,10 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <label for="ds_tabela">SQL</label>
+                                            <label for="ds_sql">SQL</label>
                                             <textarea class="form-control"
                                                 id="exampleFormControlTextarea1"
+                                                v-model="ds_sql"
                                                 cols="50"
                                                 rows="10"></textarea>
                                         </div>
@@ -231,6 +232,7 @@ var app_lista_tabela = new Vue({
         // form
         ds_tabela : '',
         nr_id : 0,
+        ds_sql : '',
 
         // tabs
         ds_tab_ativa : 'nova'
@@ -301,9 +303,18 @@ var app_lista_tabela = new Vue({
         },
 
         submitModalIncluir: function() {
+            if (this.ds_tab_ativa == 'nova') {
+                this.ds_sql = '';
+            }
+
+            if (this.ds_tab_ativa == 'sql') {
+                this.ds_tabela = '';
+            }
+
             var arrPost = {
                 nr_id : this.nr_id,
-                ds_tabela : this.ds_tabela
+                ds_tabela : this.ds_tabela,
+                ds_sql : this.ds_sql
             };
 
             axios.post(
@@ -314,6 +325,10 @@ var app_lista_tabela = new Vue({
                 function (objResponse) {
                     if (objResponse.data.sn_sucesso == true) {
                         app_lista_tabela.getListRegistros();
+
+                        // TODO: nao é uma boa pratica
+                        app_lista_tabela.ds_sql = '';
+                        app_lista_tabela.ds_tabela = '';
                         return;
                     }
 
@@ -339,7 +354,6 @@ var app_lista_tabela = new Vue({
         },
 
         tabAtiva: function(ds_tab) {
-            console.log(ds_tab);
             this.ds_tab_ativa = ds_tab;
         }
     }

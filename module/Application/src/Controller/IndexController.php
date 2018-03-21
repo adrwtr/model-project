@@ -59,27 +59,20 @@ class IndexController extends BaseServiceManagerController
 
         $nr_id = $objJson->nr_id;
         $ds_tabela = $objJson->ds_tabela;
+        $ds_sql = $objJson->ds_sql;
 
-        $objTabela = new Tabela();
+        $objTabela = null;
 
-        // é alteracao
-        if ($nr_id > 0) {
-            $objTabela = $this->getEntityManager()
-                ->getRepository(\Application\Entity\Tabela::class)
-                ->findOneBy([
-                    'id' => $nr_id
-                ]);
+        if ($ds_tabela != '') {
+            $objTabela = $this->updateTabela(
+                $ds_tabela,
+                $nr_id
+            );
         }
 
-        $objTabela->setDsNome($ds_tabela);
-        $objTabela->setSnExcluido(false);
-        $objTabela->setSnTemporario(false);
-
-        $this->getEntityManager()
-            ->persist($objTabela);
-
-        $this->getEntityManager()
-            ->flush();
+        if ($ds_sql != '') {
+            $objTabela = $this->processSql($ds_sql);
+        }
 
         return new JsonModel(
             [
@@ -118,7 +111,70 @@ class IndexController extends BaseServiceManagerController
 
     public function lerSqlAction()
     {
-    	var_dump($this->getObjSm()->get(\Application\Service\ComandosSqlService::class)->teste()); //->teste();
     	return new ViewModel();
+    }
+
+    private function updateTabela(
+        $ds_tabela,
+        $nr_id = null
+    ) {
+        $objTabela = new Tabela();
+
+        // é alteracao
+        if ($nr_id > 0) {
+            $objTabela = $this->getEntityManager()
+                ->getRepository(\Application\Entity\Tabela::class)
+                ->findOneBy([
+                    'id' => $nr_id
+                ]);
+        }
+
+        $objTabela->setDsNome($ds_tabela);
+        $objTabela->setSnExcluido(false);
+        $objTabela->setSnTemporario(false);
+
+        // é uma nova? verifica por duplicadas
+        if ($nr_id == null) {
+            $objTabelaDuplicada = $this->getEntityManager()
+                ->getRepository(\Application\Entity\Tabela::class)
+                ->findOneBy([
+                    'ds_nome' => $ds_tabela
+                ]);
+
+            // se ela ja existir, indica que é duplicada
+            if ($objTabelaDuplicada != null) {
+                $objTabela->setSnTemporario(true);
+            }
+        }
+
+        $this->getEntityManager()
+            ->persist($objTabela);
+
+        $this->getEntityManager()
+            ->flush();
+
+        return $objTabela;
+    }
+
+    private function processSql($ds_sql)
+    {
+        $objComandosSqlService = $this->getObjSm()
+            ->get(\Application\Service\ComandosSqlService::class);
+
+        $objComandosSqlService->parse($ds_sql);
+
+        $arrTabelas = $objComandosSqlService->getArrTabelas();
+        $objTabela = null;
+
+        // para cada tabela encontrada no sql
+        if ($objComandosSqlService->getTotalTabelas() > 0) {
+            foreach ($arrTabelas as $arrTabela) {
+                $ds_nome = $arrTabela['ds_nome'];
+                // inclui a tabela
+                $objTabela = $this->updateTabela($ds_nome, null);
+            }
+        }
+
+        return $objTabela;
     }
 }
