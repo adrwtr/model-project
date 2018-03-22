@@ -70,13 +70,18 @@ class IndexController extends BaseServiceManagerController
             );
         }
 
+        // importar por sql
         if ($ds_sql != '') {
             $objTabela = $this->processSql($ds_sql);
         }
 
+        // verifica se foi incluido algum temporario
+        $sn_tem_temporario = $this->getTemTemporario();
+
         return new JsonModel(
             [
                 'sn_sucesso' => true,
+                'sn_tem_temporario' => $sn_tem_temporario,
                 'nr_id_cadastrado' => $objTabela->getId()
             ]
         );
@@ -112,6 +117,35 @@ class IndexController extends BaseServiceManagerController
     public function lerSqlAction()
     {
     	return new ViewModel();
+    }
+
+    public function listaTabelasTemporariasAction()
+    {
+        $rsm = new ResultSetMapping;
+
+        $arrValores = $this->getEntityManager()
+            ->createNativeQuery(
+                'select
+                    t.id as id,
+                    t.ds_nome as ds_nome,
+                    t_temp.id as id_temp,
+                    t_temp.ds_nome as ds_nome_temp
+                from Tabela t
+                inner join Tabela t_temp ON (
+                    t_temp.ds_nome = t.ds_nome
+                    and t_temp.sn_temporario = 0
+                )
+                where
+                    t.sn_temporario = 1'
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return new JsonModel(
+            [
+                'sn_sucesso' => true,
+                'arrComparacao' => $arrComparacao
+            ]
+        );
     }
 
     private function updateTabela(
@@ -176,5 +210,20 @@ class IndexController extends BaseServiceManagerController
         }
 
         return $objTabela;
+    }
+
+    private function getTemTemporario()
+    {
+        $objTabela = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'sn_temporario' => true
+            ]);
+
+        if ($objTabela != null) {
+            return true;
+        }
+
+        return false;
     }
 }

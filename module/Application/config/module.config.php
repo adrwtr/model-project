@@ -104,6 +104,18 @@ return [
                 ],
             ],
 
+            'lista-tabelas-temporarias' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/tabela/lista-tabelas-temporarias',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'listaTabelasTemporarias',
+                    ],
+                ],
+            ],
+
+
 
             'application' => [
                 'type'    => Segment::class,

@@ -79,6 +79,15 @@
             </div>
             <div class="panel-body">
 
+                <button type="button" class="btn btn-secondary"
+                    v-on:click="iniciarCorrecaoTemporarios()"
+                    style="font-size: 10px;"
+                    class="btn btn-primary" data-toggle="modal"
+                    data-target="#modalTemporario">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+
+
                 <table class="table">
                     <thead>
                     <tr>
@@ -213,6 +222,42 @@
         </div>
     </div>
 
+    <!-- modal temporario -->
+    <div class="modal" tabindex="-1" role="dialog" id="modalTemporario">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Comparar tabelas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    A tabela atual está na esquerda, e a nova na direita.
+
+                    <div class="row" id="">
+                        <div class="col-md-6">
+                            coluna 1
+                        </div>
+                        <div class="col-md-6">
+                            coluna 2
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                        v-on:click="doDelete()"
+                        data-dismiss="modal">Sim</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -235,7 +280,10 @@ var app_lista_tabela = new Vue({
         ds_sql : '',
 
         // tabs
-        ds_tab_ativa : 'nova'
+        ds_tab_ativa : 'nova',
+
+        // comparador
+        arrComparacao: []
     },
 
     created: function() {
@@ -329,6 +377,13 @@ var app_lista_tabela = new Vue({
                         // TODO: nao é uma boa pratica
                         app_lista_tabela.ds_sql = '';
                         app_lista_tabela.ds_tabela = '';
+
+                        // processar temporarios
+                        var sn_temporario = objResponse.data.sn_tem_temporario;
+
+                        if (sn_temporario == true) {
+                            app_lista_tabela.iniciarCorrecaoTemporarios();
+                        }
                         return;
                     }
 
@@ -355,6 +410,18 @@ var app_lista_tabela = new Vue({
 
         tabAtiva: function(ds_tab) {
             this.ds_tab_ativa = ds_tab;
+        },
+
+        // busca registros temporarios para serem corrigidos
+        iniciarCorrecaoTemporarios: function() {
+            fetch('/tabela/lista-tabelas-temporarias')
+                .then(objResponse => objResponse.json())
+                .then(
+                    arrJson => {
+                        this.arrComparacao = arrJson;
+                        console.log(arrComparacao);
+                    }
+                );
         }
     }
 });
