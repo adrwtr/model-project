@@ -6,8 +6,10 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Application\Controller\BaseServiceManagerController;
-use Doctrine\ORM\Query\ResultSetMapping;
 use \Application\Entity\Tabela;
+
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 class IndexController extends BaseServiceManagerController
 {
@@ -24,7 +26,7 @@ class IndexController extends BaseServiceManagerController
     public function listaTabelasAction()
     {
         $ds_dql = 'select t from \Application\Entity\Tabela t'
-            . ' where t.sn_excluido = 0';
+            . ' where t.sn_excluido = 0 and t.sn_temporario = 0';
 
         $arrValores = $this->getEntityManager()
             ->createQuery($ds_dql)
@@ -121,29 +123,31 @@ class IndexController extends BaseServiceManagerController
 
     public function listaTabelasTemporariasAction()
     {
-        $rsm = new ResultSetMapping;
+        $conn = $this->getEntityManager()
+            ->getConnection();
 
-        $arrValores = $this->getEntityManager()
-            ->createNativeQuery(
-                'select
-                    t.id as id,
-                    t.ds_nome as ds_nome,
-                    t_temp.id as id_temp,
-                    t_temp.ds_nome as ds_nome_temp
-                from Tabela t
-                inner join Tabela t_temp ON (
-                    t_temp.ds_nome = t.ds_nome
-                    and t_temp.sn_temporario = 0
-                )
-                where
-                    t.sn_temporario = 1'
+        $sql = '
+            select
+                t.id as id,
+                t.ds_nome as ds_nome,
+                t_temp.id as id_temp,
+                t_temp.ds_nome as ds_nome_temp
+            from Tabela t
+            inner join Tabela t_temp ON (
+                t_temp.ds_nome = t.ds_nome
+                and t_temp.sn_temporario = 0
             )
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            where
+                t.sn_temporario = 1
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $arrValores = $stmt->fetch();
 
         return new JsonModel(
             [
                 'sn_sucesso' => true,
-                'arrComparacao' => $arrComparacao
+                'arrComparacao' => $arrValores
             ]
         );
     }

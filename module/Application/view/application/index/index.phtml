@@ -238,10 +238,10 @@
 
                     <div class="row" id="">
                         <div class="col-md-6">
-                            coluna 1
+                            {{ arrComparacao.ds_nome }}
                         </div>
                         <div class="col-md-6">
-                            coluna 2
+                            {{ arrComparacao.ds_nome_temp }}
                         </div>
                     </div>
 
@@ -418,8 +418,7 @@ var app_lista_tabela = new Vue({
                 .then(objResponse => objResponse.json())
                 .then(
                     arrJson => {
-                        this.arrComparacao = arrJson;
-                        console.log(arrComparacao);
+                        this.arrComparacao = arrJson.arrComparacao;
                     }
                 );
         }
