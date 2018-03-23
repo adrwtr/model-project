@@ -30,8 +30,6 @@ class Tabela
 
     /**
      * @ORM\Column(name="sn_excluido", type="boolean", nullable=false)
-     * @ORM\Column()
-     * @ORM\Column()
      */
     protected $sn_excluido;
 
