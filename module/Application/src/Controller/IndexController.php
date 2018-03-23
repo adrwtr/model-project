@@ -43,13 +43,21 @@ class IndexController extends BaseServiceManagerController
         $cd_registro = $this->params()
             ->fromRoute('cd_registro');
 
-        $arrValores = $this->getEntityManager()
+        $arrTabela = $this->getEntityManager()
             ->createQuery('select t from \Application\Entity\Tabela t where t.id = :id')
             ->setParameter('id', $cd_registro)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+        $arrCampos = $this->getEntityManager()
+            ->createQuery('select t from \Application\Entity\Campo c where c.tabela_id = :id')
+            ->setParameter('id', $cd_registro)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         return new JsonModel(
-            $arrValores
+            [
+                'arrTabela' => $arrTabela,
+                'arrCampos' => $arrCampos
+            ]
         );
     }
 
