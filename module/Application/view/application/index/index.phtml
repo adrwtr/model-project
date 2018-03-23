@@ -154,11 +154,21 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <label for="ds_tabela">Nome da Tabela</label>
-                                            <input type="text" class="form-control"
-                                                id="ds_tabela"
-                                                v-model="ds_tabela"
-                                                placeholder="Nome da Tabela">
+                                            <div class="row">
+                                                <label for="ds_tabela">Nome da Tabela</label>
+                                                <input type="text" class="form-control"
+                                                    id="ds_tabela"
+                                                    v-model="ds_tabela"
+                                                    placeholder="Nome da Tabela">
+                                            </div>
+                                            <div class="row">
+                                                <label for="ds_sql">Descrição</label>
+                                                <textarea class="form-control"
+                                                    id=""
+                                                    v-model="ds_descricao"
+                                                    cols="50"
+                                                    rows="10"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -276,6 +286,7 @@ var app_lista_tabela = new Vue({
 
         // form
         ds_tabela : '',
+        ds_descricao : '',
         nr_id : 0,
         ds_sql : '',
 
@@ -332,13 +343,13 @@ var app_lista_tabela = new Vue({
                     arrJson => {
                         this.nr_id = arrJson[0].id;
                         this.ds_tabela = arrJson[0].ds_nome;
+                        this.ds_descricao = arrJson[0].ds_descricao;
                     }
                 );
         },
 
         modalIncluir: function () {
-            this.nr_id = 0;
-            this.ds_tabela = '';
+            this.limparCampos();
         },
 
         modalEditar: function (nr_id) {
@@ -362,6 +373,7 @@ var app_lista_tabela = new Vue({
             var arrPost = {
                 nr_id : this.nr_id,
                 ds_tabela : this.ds_tabela,
+                ds_descricao: this.ds_descricao,
                 ds_sql : this.ds_sql
             };
 
@@ -373,12 +385,9 @@ var app_lista_tabela = new Vue({
                 function (objResponse) {
                     if (objResponse.data.sn_sucesso == true) {
                         app_lista_tabela.getListRegistros();
+                        app_lista_tabela.limparCampos();
 
-                        // TODO: nao é uma boa pratica
-                        app_lista_tabela.ds_sql = '';
-                        app_lista_tabela.ds_tabela = '';
-
-                        // processar temporarios
+                        // processar temporarios?
                         var sn_temporario = objResponse.data.sn_tem_temporario;
 
                         if (sn_temporario == true) {
@@ -421,6 +430,13 @@ var app_lista_tabela = new Vue({
                         this.arrComparacao = arrJson.arrComparacao;
                     }
                 );
+        },
+
+        limparCampos: function() {
+            this.nr_id = 0;
+            this.ds_tabela = '';
+            this.ds_descricao = '';
+            this.ds_sql = '';
         }
     }
 });

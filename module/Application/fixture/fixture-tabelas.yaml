@@ -2,5 +2,36 @@ Application\Entity\Tabela:
     tabela1:
         id: 1
         ds_nome: 'Tabela 1'
+        ds_descricao: 'Tabela 1'
         sn_temporario: false
         sn_excluido: false
+    tabela2:
+        id: 2
+        ds_nome: 'Tabela 2'
+        ds_descricao: 'Tabela 2'
+        sn_temporario: false
+        sn_excluido: false
+    tabelaExcluida:
+        id: 3
+        ds_nome: 'Tabela Excluida'
+        ds_descricao: 'Tabela Excluida'
+        sn_temporario: false
+        sn_excluido: true
+    tabelaTemporaria:
+        id: 4
+        ds_nome: 'Tabela Temporaria'
+        ds_descricao: 'Tabela Temporaria'
+        sn_temporario: true
+        sn_excluido: false
+
+Application\Entity\Campo:
+    campo1:
+        id: 1
+        objTabela: '@tabela1'
+        ds_nome: 'campo 1 tabela 1'
+        ds_prop: ''
+    campo2:
+        id: 2
+        objTabela: '@tabela1'
+        ds_nome: 'campo 2 tabela 1'
+        ds_prop: ''

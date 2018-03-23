@@ -2,10 +2,7 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use \Indaxia\OTR\ITransformable;
-use \Indaxia\OTR\Traits\Transformable;
-use \Indaxia\OTR\Annotations\Policy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -41,6 +38,21 @@ class Tabela
      */
     protected $sn_excluido;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Campo", mappedBy="objTabela")
+     */
+    protected $arrCampos;
+
+    /**
+     * @ORM\Column(name="ds_descricao")
+     * @ORM\Column(nullable=false)
+     * @ORM\Column(type="text")
+     */
+    protected $ds_descricao;
+
+    public function __construct() {
+        $this->arrCampos = new ArrayCollection();
+    }
 
 
     public function getId() {
@@ -49,6 +61,7 @@ class Tabela
 
     public function setId($id) {
         $this->id = $id;
+        return $this;
     }
 
     public function getDsNome() {
@@ -57,6 +70,7 @@ class Tabela
 
     public function setDsNome($ds_nome) {
         $this->ds_nome = $ds_nome;
+        return $this;
     }
 
     public function getSnTemporario() {
@@ -65,6 +79,7 @@ class Tabela
 
     public function setSnTemporario($sn_temporario = false) {
         $this->sn_temporario = $sn_temporario;
+        return $this;
     }
 
     public function getSnExcluido() {
@@ -73,5 +88,19 @@ class Tabela
 
     public function setSnExcluido($sn_excluido = false) {
         $this->sn_excluido = $sn_excluido;
+        return $this;
+    }
+
+    public function getArrCampos() {
+        return $this->arrCampos;
+    }
+
+    public function getDsDescricao() {
+        return $this->ds_descricao;
+    }
+
+    public function setDsDescricao($ds_descricao) {
+        $this->ds_descricao = $ds_descricao;
+        return $this;
     }
 }

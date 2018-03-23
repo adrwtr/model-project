@@ -13,8 +13,14 @@ Leituro de arquivos .sql para verificação de estruturas mysql
     D:\dev\php\modelpage>.\vendor\bin\phpunit
 
 ## Doctrine
+    > windows:
     vendor\bin\doctrine-module orm:generate-proxies
     vendor\bin\doctrine-module orm:schema-tool:create
+
+    > Unix
+    vendor/bin/doctrine-module orm:schema-tool:drop --force
+    vendor/bin/doctrine-module orm:schema-tool:create
+
 
 
     php ..\composer.phar require --dev nelmio/alice

@@ -62,12 +62,14 @@ class IndexController extends BaseServiceManagerController
         $nr_id = $objJson->nr_id;
         $ds_tabela = $objJson->ds_tabela;
         $ds_sql = $objJson->ds_sql;
+        $ds_descricao = $objJson->ds_descricao;
 
         $objTabela = null;
 
         if ($ds_tabela != '') {
             $objTabela = $this->updateTabela(
                 $ds_tabela,
+                $ds_descricao,
                 $nr_id
             );
         }
@@ -154,6 +156,7 @@ class IndexController extends BaseServiceManagerController
 
     private function updateTabela(
         $ds_tabela,
+        $ds_descricao = '',
         $nr_id = null
     ) {
         $objTabela = new Tabela();
@@ -170,6 +173,7 @@ class IndexController extends BaseServiceManagerController
         $objTabela->setDsNome($ds_tabela);
         $objTabela->setSnExcluido(false);
         $objTabela->setSnTemporario(false);
+        $objTabela->setDsDescricao($ds_descricao);
 
         // é uma nova? verifica por duplicadas
         if ($nr_id == null) {
