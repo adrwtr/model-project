@@ -7,6 +7,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Application\Controller\BaseServiceManagerController;
 use \Application\Entity\Tabela;
+use \Application\Entity\Campo;
 
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
@@ -212,8 +213,30 @@ class IndexController extends BaseServiceManagerController
         if ($objComandosSqlService->getTotalTabelas() > 0) {
             foreach ($arrTabelas as $arrTabela) {
                 $ds_nome = $arrTabela['ds_nome'];
+                $arrCampos = $arrTabela['arrCampos'];
+
                 // inclui a tabela
                 $objTabela = $this->updateTabela($ds_nome, null);
+                var_dump(count($arrCampos));
+                if (count($arrCampos) > 0) {
+                    foreach ($arrCampos as $arrCampo) {
+                        $ds_nome_campo = $arrCampo['ds_nome'];
+                        $ds_prop = $arrCampo['ds_prop'];
+                        $sn_pk = $arrCampo['sn_pk'];
+
+                        $objCampo = new Campo();
+                        $objCampo->setObjTabela($objTabela);
+                        $objCampo->setDsNome($ds_nome_campo);
+                        $objCampo->setDsProp($ds_prop);
+                        $objCampo->setSnPk($sn_pk);
+
+                        $this->getEntityManager()
+                            ->persist($objCampo);
+                    }
+
+                    $this->getEntityManager()
+                        ->flush();
+                }
             }
         }
 

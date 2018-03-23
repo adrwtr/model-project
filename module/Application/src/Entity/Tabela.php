@@ -18,23 +18,20 @@ class Tabela
     protected $id;
 
     /**
-     * @ORM\Column(name="ds_nome")
-     * @ORM\Column(nullable=false)
+     * @ORM\Column(name="ds_nome", nullable=false)
      */
     protected $ds_nome;
 
     /**
-     * @ORM\Column(name="sn_temporario")
-     * @ORM\Column(nullable=false)
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="sn_temporario", type="boolean", nullable=false)
      * Indica se a tabela e temporaria
      */
     protected $sn_temporario;
 
     /**
-     * @ORM\Column(name="sn_excluido")
-     * @ORM\Column(nullable=false)
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="sn_excluido", type="boolean", nullable=false)
+     * @ORM\Column()
+     * @ORM\Column()
      */
     protected $sn_excluido;
 
@@ -44,9 +41,7 @@ class Tabela
     protected $arrCampos;
 
     /**
-     * @ORM\Column(name="ds_descricao")
-     * @ORM\Column(nullable=false)
-     * @ORM\Column(type="text")
+     * @ORM\Column(name="ds_descricao", type="text", nullable=true)
      */
     protected $ds_descricao;
 

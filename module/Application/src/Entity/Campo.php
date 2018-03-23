@@ -18,35 +18,28 @@ class Campo
     protected $id;
 
     /**
-     * @ORM\Column(name="tabela_id")
      * @ORM\ManyToOne(targetEntity="Tabela", inversedBy="arrCampos")
      * @ORM\JoinColumn(name="tabela_id", referencedColumnName="id")
      */
     private $objTabela;
 
     /**
-     * @ORM\Column(name="ds_nome")
-     * @ORM\Column(nullable=false)
+     * @ORM\Column(name="ds_nome", nullable=false)
      */
     protected $ds_nome;
 
     /**
-     * @ORM\Column(name="ds_prop")
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(name="ds_prop", nullable=true)
      */
     protected $ds_prop;
 
     /**
-     * @ORM\Column(name="sn_pk")
-     * @ORM\Column(nullable=false)
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="sn_pk", type="boolean", nullable=false)
      */
     protected $sn_pk;
 
     /**
-     * @ORM\Column(name="me_descricao")
-     * @ORM\Column(nullable=false)
-     * @ORM\Column(type="text")
+     * @ORM\Column(name="me_descricao", type="text", nullable=true)
      */
     protected $me_descricao;
 
