@@ -19,16 +19,25 @@
 
         <!-- Scripts -->
         <?= $this->headScript()
-            ->prependFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
-            ->prependFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
-            ->prependFile("https://code.jquery.com/jquery-3.2.1.slim.min.js")
-            ->prependFile("https://cdn.jsdelivr.net/npm/vue")
-            ->prependFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js")
-            ->prependFile("https://unpkg.com/axios/dist/axios.min.js")
-            ->prependFile("http://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js")
-            ->prependFile("http://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.16.0/vuedraggable.min.js")
+            ->appendFile("https://code.jquery.com/jquery-3.2.1.slim.min.js")
+            ->appendFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
+            ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
+            // ->appendFile("https://cdn.jsdelivr.net/npm/vue")
+            ->appendFile("https://vuejs.org/js/vue.js")
+            ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js")
+            ->appendFile("https://unpkg.com/axios/dist/axios.min.js")
+            ->appendFile("http://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js")
+            ->appendFile("https://cdn.rawgit.com/David-Desmaisons/Vue.Draggable/master/dist/vuedraggable.min.js")
         ?>
     </head>
+
+    <style type="text/css">
+        .teste {
+            background-color: grey;
+        }
+
+    </style>
+
     <body>
         <nav class="navbar fixed-top navbar-light bg-light" role="navigation">
             <div class="container">

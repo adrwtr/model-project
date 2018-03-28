@@ -180,10 +180,40 @@
                                         <div class="col-sm-5">
                                             <div class="row">
                                                 <label for="ds_tabela">Campos:</label>
+                                            </div>
 
-                                                <draggable :list="arrCampos" class="dragArea">
-                                                    <div v-for="arrCampo in arrCampos">{{arrCampo.ds_nome}}</div>
-                                                </draggable>
+                                            <div class="row">
+                                                <div>
+                                                    <draggable :list="list" class="dragArea">
+                                                        <div v-for="(arrCampo, nr_index) in arrCampos">
+                                                            <div>
+                                                                {{arrCampo.ds_nome}}
+                                                            </div>
+                                                            <div>
+                                                                {{arrCampo.ds_prop}}
+                                                            </div>
+
+                                                            <div>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    v-on:click="excluirCampo(nr_index)"
+                                                                    style="font-size: 10px;"
+                                                                    class="btn btn-primary" >
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </draggable>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" v-show="sn_desfazer_campo_excluido}">
+                                                Deseja desfazer a ação de exclusão?
+                                                <button type="button" class="btn btn-secondary"
+                                                    v-on:click="desfazerExcluirCampo()"
+                                                    style="font-size: 10px;"
+                                                    class="btn btn-primary" >
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -311,7 +341,11 @@ var app_lista_tabela = new Vue({
         ds_tab_ativa : 'nova',
 
         // comparador
-        arrComparacao: []
+        arrComparacao: [],
+
+        // ultimo campo excluido
+        arrCampoExcluido : [],
+        sn_desfazer_campo_excluido : false
     },
 
     created: function() {
@@ -358,13 +392,13 @@ var app_lista_tabela = new Vue({
                 .then(objResponse => objResponse.json())
                 .then(
                     arrJson => {
-                        // TODO: revisar esta programacao
-                        console.log(arrJson);
-                        /*
-                        this.nr_id = arrJson[0].id;
-                        this.ds_tabela = arrJson[0].ds_nome;
-                        this.ds_descricao = arrJson[0].ds_descricao;
-                        */
+                        var arrTabela = arrJson.arrTabela[0];
+                        var arrCampos = arrJson.arrCampos;
+
+                        this.nr_id = arrTabela.id;
+                        this.ds_tabela = arrTabela.ds_nome;
+                        this.ds_descricao = arrTabela.ds_descricao;
+                        this.arrCampos = arrCampos;
                     }
                 );
         },
@@ -459,6 +493,20 @@ var app_lista_tabela = new Vue({
             this.ds_descricao = '';
             this.ds_sql = '';
             this.arrCampos = [];
+        },
+
+        excluirCampo: function(nr_index) {
+            this.arrCampoExcluido = this.arrCampos[nr_index];
+
+            this.arrCampos
+                .splice(nr_index, 1);
+
+            this.sn_desfazer_campo_excluido = true;
+        },
+
+        desfazerExcluirCampo: function() {
+            this.arrCampos.push(this.arrCampoExcluido);
+            this.sn_desfazer_campo_excluido = false;
         }
     }
 });

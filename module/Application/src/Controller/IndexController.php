@@ -49,8 +49,8 @@ class IndexController extends BaseServiceManagerController
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $arrCampos = $this->getEntityManager()
-            ->createQuery('select t from \Application\Entity\Campo c where c.tabela_id = :id')
-            ->setParameter('id', $cd_registro)
+            ->createQuery('select c from \Application\Entity\Campo c where c.objTabela = :tabela_id')
+            ->setParameter('tabela_id', $cd_registro)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return new JsonModel(
