@@ -1,6 +1,6 @@
 <div class="row" id="vueApp-lista-tabela">
 
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Tabelas</h3>
@@ -72,52 +72,6 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Discover Modules</h3>
-            </div>
-            <div class="panel-body">
-
-                <button type="button" class="btn btn-secondary"
-                    v-on:click="iniciarCorrecaoTemporarios()"
-                    style="font-size: 10px;"
-                    class="btn btn-primary" data-toggle="modal"
-                    data-target="#modalTemporario">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-
-
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Descrição</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <th scope="row">Descricao</th>
-                        <tr>
-                    </tbody>
-                </table>
-
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Descrição</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <th scope="row">Descricao</th>
-                        <tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
 
     <!-- Form -->
@@ -168,40 +122,6 @@
                                                     v-model="ds_descricao"
                                                     cols="50"
                                                     rows="10"></textarea>
-                                            </div>
-
-                                            <div class="row">
-                                                <label for="ds_campos">Campos</label>
-                                            </div>
-                                            <div class="row">
-                                                <draggable class="dragArea">
-
-                                                    <div v-for="(arrCampo, nr_index) in arrCampos">
-                                                        <div class="row">
-                                                            <div class="col-sm-1">
-                                                                <i class="fas fa-th-list" style="cursor: pointer;"></i>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <input type="text" class="form-control"
-                                                                    v-model="arrCampo.ds_nome"
-                                                                    placeholder="Nome do Campo" />
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" class="form-control"
-                                                                    v-model="arrCampo.ds_prop"
-                                                                    placeholder="Propriedades" />
-                                                            </div>
-                                                            <div class="col-sm-1">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    v-on:click="excluirCampo(nr_index)"
-                                                                    style="font-size: 10px;"
-                                                                    class="btn btn-primary" >
-                                                                    <i class="fas fa-trash-alt"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </draggable>
                                             </div>
                                         </div>
                                     </div>
@@ -482,6 +402,10 @@ var app_lista_tabela = new Vue({
             this.ds_sql = '';
             this.arrCampos = [];
         },
+
+
+
+
 
         excluirCampo: function(nr_index) {
             this.arrCampoExcluido = this.arrCampos[nr_index];
