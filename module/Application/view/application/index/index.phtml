@@ -122,8 +122,8 @@
 
     <!-- Form -->
     <div class="modal" tabindex="-1" role="dialog" id="modalFormulario">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width:750px;">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content" >
                 <div class="modal-header">
                     <h5 class="modal-title">Tabela</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -153,7 +153,7 @@
                             <div class="form-group">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                             <div class="row">
                                                 <label for="ds_tabela">Nome da Tabela</label>
                                                 <input type="text" class="form-control"
@@ -164,36 +164,34 @@
                                             <div class="row">
                                                 <label for="ds_sql">Descrição</label>
                                                 <textarea class="form-control"
-                                                    id=""
+                                                    id="ds_descricao"
                                                     v-model="ds_descricao"
                                                     cols="50"
                                                     rows="10"></textarea>
                                             </div>
-                                        </div>
 
-                                        <div class="col-sm-1">
                                             <div class="row">
-
+                                                <label for="ds_campos">Campos</label>
                                             </div>
-                                        </div>
-
-                                        <div class="col-sm-5">
                                             <div class="row">
-                                                <label for="ds_tabela">Campos:</label>
-                                            </div>
+                                                <draggable class="dragArea">
 
-                                            <div class="row">
-                                                <div>
-                                                    <draggable :list="list" class="dragArea">
-                                                        <div v-for="(arrCampo, nr_index) in arrCampos">
-                                                            <div>
-                                                                {{arrCampo.ds_nome}}
+                                                    <div v-for="(arrCampo, nr_index) in arrCampos">
+                                                        <div class="row">
+                                                            <div class="col-sm-1">
+                                                                <i class="fas fa-th-list" style="cursor: pointer;"></i>
                                                             </div>
-                                                            <div>
-                                                                {{arrCampo.ds_prop}}
+                                                            <div class="col-sm-4">
+                                                                <input type="text" class="form-control"
+                                                                    v-model="arrCampo.ds_nome"
+                                                                    placeholder="Nome do Campo" />
                                                             </div>
-
-                                                            <div>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control"
+                                                                    v-model="arrCampo.ds_prop"
+                                                                    placeholder="Propriedades" />
+                                                            </div>
+                                                            <div class="col-sm-1">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     v-on:click="excluirCampo(nr_index)"
                                                                     style="font-size: 10px;"
@@ -202,18 +200,8 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                    </draggable>
-                                                </div>
-                                            </div>
-
-                                            <div class="row" v-show="sn_desfazer_campo_excluido}">
-                                                Deseja desfazer a ação de exclusão?
-                                                <button type="button" class="btn btn-secondary"
-                                                    v-on:click="desfazerExcluirCampo()"
-                                                    style="font-size: 10px;"
-                                                    class="btn btn-primary" >
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                                    </div>
+                                                </draggable>
                                             </div>
                                         </div>
                                     </div>
