@@ -115,6 +115,18 @@ return [
                 ],
             ],
 
+            'detalhes-tabela' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/tabela/detalhes[/:nr_tabela_id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'detalhesTabela',
+                        'nr_tabela_id' => '0'
+                    ],
+                ],
+            ],
+
 
 
             'application' => [

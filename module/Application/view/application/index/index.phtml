@@ -56,6 +56,13 @@
                                         </button>
 
                                         <button type="button" class="btn btn-secondary"
+                                            v-on:click="verDetalhes(arrValores.id)"
+                                            style="font-size: 10px;"
+                                            class="btn btn-primary" >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-secondary"
                                             v-on:click="modalExcluir(arrValores.id)"
                                             style="font-size: 10px;"
                                             class="btn btn-primary" data-toggle="modal" data-target="#modalExcluir">
@@ -400,26 +407,15 @@ var app_lista_tabela = new Vue({
             this.ds_tabela = '';
             this.ds_descricao = '';
             this.ds_sql = '';
-            this.arrCampos = [];
         },
 
-
-
-
-
-        excluirCampo: function(nr_index) {
-            this.arrCampoExcluido = this.arrCampos[nr_index];
-
-            this.arrCampos
-                .splice(nr_index, 1);
-
-            this.sn_desfazer_campo_excluido = true;
-        },
-
-        desfazerExcluirCampo: function() {
-            this.arrCampos.push(this.arrCampoExcluido);
-            this.sn_desfazer_campo_excluido = false;
+        verDetalhes: function(tabela_id) {
+            document.location = '/tabela/detalhes/' + tabela_id;
         }
+
+
+
+
     }
 });
 </script>

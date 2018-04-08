@@ -163,6 +163,17 @@ class IndexController extends BaseServiceManagerController
         );
     }
 
+    public function detalhesTabelaAction() {
+        $nr_tabela_id = $this->params()
+            ->fromRoute('nr_tabela_id');
+
+        return new ViewModel(
+            [
+                'nr_tabela_id' => $nr_tabela_id
+            ]
+        );
+    }
+
     private function updateTabela(
         $ds_tabela,
         $ds_descricao = '',

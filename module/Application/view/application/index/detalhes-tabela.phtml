@@ -1,0 +1,159 @@
+<div class="row" id="vueApp-lista-tabela">
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h3>Detalhes da tabela</h3>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-secondary"
+                        v-on:click="salvar"
+                        class="btn btn-primary">Salvar</button>
+
+                    <button type="button" class="btn btn-secondary"
+                        v-on:click="voltar"
+                        class="btn btn-primary">Voltar</button>
+                </div>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="ds_tabela">Nome da Tabela</label>
+                                <input type="text" class="form-control"
+                                    id="ds_tabela"
+                                    v-model="ds_tabela"
+                                    placeholder="Nome da Tabela">
+                            </div>
+
+                            <div class="col-sm-12">
+                                <label for="ds_sql">Descrição</label>
+                                <textarea class="form-control"
+                                    id="ds_descricao"
+                                    v-model="ds_descricao"
+                                    cols="50"
+                                    rows="3"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <button type="button" class="btn btn-secondary"
+                            v-on:click="addCampo"
+                            class="btn btn-primary">Novo Campo</button>
+                    </div>
+                    <div class="row">
+                        <strong>Campos:</strong>
+                    </div>
+
+                    <div class="row">
+                        <draggable class="dragArea container">
+                            <div v-for="(arrCampo, nr_index) in arrCampos">
+                                <div class="row" style="padding-top: 3px">
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control"
+                                            v-model="arrCampo.value"
+                                            placeholder="Nome da Tabela">
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control"
+                                            v-model="arrCampo.value"
+                                            placeholder="Nome da Tabela">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn btn-secondary"
+                                            v-on:click="excluirCampo(nr_index)"
+                                            style="font-size: 10px;"
+                                            class="btn btn-primary" >
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </draggable>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<script>
+
+var app_lista_tabela = new Vue({
+    el: '#vueApp-lista-tabela',
+
+    data: {
+        // form
+        ds_tabela : '',
+        ds_descricao : '',
+        nr_tabela_id : 0,
+        ds_sql : '',
+        arrCampos : [],
+
+    },
+
+    created: function() {
+        this.getRegistroEditar('<?php echo $nr_tabela_id; ?>');
+    },
+
+    methods: {
+        getRegistroEditar: function(nr_tabela_id) {
+            fetch('/tabela/get/' + nr_tabela_id)
+                .then(objResponse => objResponse.json())
+                .then(
+                    arrJson => {
+                        var arrTabela = arrJson.arrTabela[0];
+                        var arrCampos = arrJson.arrCampos;
+
+                        this.nr_tabela_id = arrTabela.id;
+                        this.ds_tabela = arrTabela.ds_nome;
+                        this.ds_descricao = arrTabela.ds_descricao;
+                        this.arrCampos = arrCampos;
+                    }
+                );
+        },
+
+        addCampo: function() {
+            this.arrCampos.push(
+                {
+                    ds_nome: 'nome do campo',
+                    ds_prop: 'varchar(255)',
+                }
+            );
+        },
+
+        excluirCampo: function(nr_index) {
+            this.arrCampoExcluido = this.arrCampos[nr_index];
+
+            this.arrCampos
+                .splice(nr_index, 1);
+
+            this.sn_desfazer_campo_excluido = true;
+        },
+
+        salvar: function() {
+
+        },
+
+        voltar: function() {
+            document.location = '/';
+        }
+    }
+});
+</script>
