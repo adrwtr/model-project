@@ -295,6 +295,8 @@ class IndexController extends BaseServiceManagerController
                 $nr_campo_id = $arrCampo->id ?? 0;
                 $ds_nome = $arrCampo->ds_nome ?? '';
                 $ds_prop = $arrCampo->ds_prop ?? '';
+                $sn_pk = (($arrCampo->sn_pk ?? false) == '1' ? true : false);
+
                 $objCampo = new Campo();
 
                 // o campo ja existe
@@ -309,7 +311,7 @@ class IndexController extends BaseServiceManagerController
                 $objCampo->setDsNome($ds_nome);
                 $objCampo->setDsProp($ds_prop);
                 $objCampo->setObjTabela($objTabela);
-                $objCampo->setSnPk(false);
+                $objCampo->setSnPk($sn_pk);
 
                 $this->getEntityManager()
                     ->persist($objCampo);
