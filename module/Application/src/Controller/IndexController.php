@@ -290,21 +290,33 @@ class IndexController extends BaseServiceManagerController
         $objTabela,
         $arrCampos
     ) {
-        foreach ($arrCampos as $nr_id => $arrCampo) {
-            $ds_nome = $arrCampo->ds_nome;
-            $ds_prop = $arrCampo->ds_prop;
+        if (is_array($arrCampos)) {
+            foreach ($arrCampos as $nr_id => $arrCampo) {
+                $nr_campo_id = $arrCampo->id ?? 0;
+                $ds_nome = $arrCampo->ds_nome ?? '';
+                $ds_prop = $arrCampo->ds_prop ?? '';
+                $objCampo = new Campo();
 
-            $objCampo = new Campo();
-            $objCampo->setDsNome($ds_nome);
-            $objCampo->setDsProp($ds_prop);
-            $objCampo->setObjTabela($objTabela);
-            $objCampo->setSnPk(false);
+                // o campo ja existe
+                if ($nr_campo_id > 0) {
+                    $objCampo = $this->getEntityManager()
+                        ->getRepository(\Application\Entity\Campo::class)
+                        ->findOneBy([
+                            'id' => $nr_campo_id
+                        ]);
+                }
+
+                $objCampo->setDsNome($ds_nome);
+                $objCampo->setDsProp($ds_prop);
+                $objCampo->setObjTabela($objTabela);
+                $objCampo->setSnPk(false);
+
+                $this->getEntityManager()
+                    ->persist($objCampo);
+            }
 
             $this->getEntityManager()
-                ->persist($objCampo);
+                ->flush();
         }
-
-        $this->getEntityManager()
-            ->flush();
     }
 }
