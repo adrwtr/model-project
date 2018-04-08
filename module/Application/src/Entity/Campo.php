@@ -43,6 +43,11 @@ class Campo
      */
     protected $me_descricao;
 
+    /**
+     * @ORM\Column(name="nr_ordem", nullable=false, type="integer")
+     */
+    protected $nr_ordem;
+
 
     public function getId() {
         return $this->id;
@@ -95,6 +100,15 @@ class Campo
 
     public function setMeDescricao($me_descricao) {
         $this->me_descricao = $me_descricao;
+        return $this;
+    }
+
+    public function getNrOrdem() {
+        return $this->nr_ordem;
+    }
+
+    public function setNrOrdem($nr_ordem) {
+        $this->nr_ordem = $nr_ordem;
         return $this;
     }
 }

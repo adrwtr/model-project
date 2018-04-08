@@ -49,7 +49,10 @@ class IndexController extends BaseServiceManagerController
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $arrCampos = $this->getEntityManager()
-            ->createQuery('select c from \Application\Entity\Campo c where c.objTabela = :tabela_id')
+            ->createQuery('select c from \Application\Entity\Campo c
+                where c.objTabela = :tabela_id
+                order by c.nr_ordem'
+            )
             ->setParameter('tabela_id', $cd_registro)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -244,25 +247,24 @@ class IndexController extends BaseServiceManagerController
 
                 // inclui a tabela
                 $objTabela = $this->updateTabela($ds_nome, null);
-                var_dump(count($arrCampos));
+
                 if (count($arrCampos) > 0) {
+                    $arrCampoObj = [];
                     foreach ($arrCampos as $arrCampo) {
                         $ds_nome_campo = $arrCampo['ds_nome'];
                         $ds_prop = $arrCampo['ds_prop'];
                         $sn_pk = $arrCampo['sn_pk'];
 
-                        $objCampo = new Campo();
-                        $objCampo->setObjTabela($objTabela);
-                        $objCampo->setDsNome($ds_nome_campo);
-                        $objCampo->setDsProp($ds_prop);
-                        $objCampo->setSnPk($sn_pk);
+                        $objCampo = new \stdClass();
+                        $objCampo->id = null;
+                        $objCampo->ds_nome = $ds_nome_campo;
+                        $objCampo->ds_prop = $ds_prop;
+                        $objCampo->sn_pk = $sn_pk;
 
-                        $this->getEntityManager()
-                            ->persist($objCampo);
+                        $arrCampoObj[] = $objCampo;
                     }
 
-                    $this->getEntityManager()
-                        ->flush();
+                    $this->updateCampos($objTabela, $arrCampoObj);
                 }
             }
         }
@@ -290,6 +292,7 @@ class IndexController extends BaseServiceManagerController
         $objTabela,
         $arrCampos
     ) {
+        var_dump($arrCampos);
         if (is_array($arrCampos)) {
             foreach ($arrCampos as $nr_id => $arrCampo) {
                 $nr_campo_id = $arrCampo->id ?? 0;
@@ -312,6 +315,7 @@ class IndexController extends BaseServiceManagerController
                 $objCampo->setDsProp($ds_prop);
                 $objCampo->setObjTabela($objTabela);
                 $objCampo->setSnPk($sn_pk);
+                $objCampo->setNrOrdem($nr_id);
 
                 $this->getEntityManager()
                     ->persist($objCampo);
