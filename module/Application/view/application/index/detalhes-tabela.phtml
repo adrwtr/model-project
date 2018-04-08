@@ -59,12 +59,12 @@
                                 <div class="row" style="padding-top: 3px">
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control"
-                                            v-model="arrCampo.value"
+                                            v-model="arrCampo.ds_nome"
                                             placeholder="Nome da Tabela">
                                     </div>
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control"
-                                            v-model="arrCampo.value"
+                                            v-model="arrCampo.ds_prop"
                                             placeholder="Nome da Tabela">
                                     </div>
                                     <div class="col-sm-2">
@@ -148,7 +148,27 @@ var app_lista_tabela = new Vue({
         },
 
         salvar: function() {
+            var arrPost = {
+                nr_tabela_id : this.nr_tabela_id,
+                ds_tabela : this.ds_tabela,
+                ds_descricao: this.ds_descricao,
+                arrCampos : this.arrCampos
+            };
 
+            axios.post(
+                '/tabela/update',
+                arrPost
+            )
+            .then(
+                function (objResponse) {
+                    console.log(objResponse);
+                }
+            )
+            .catch(
+                function (error) {
+                    console.log(error);
+                }
+            );
         },
 
         voltar: function() {

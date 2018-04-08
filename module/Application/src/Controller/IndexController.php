@@ -68,10 +68,11 @@ class IndexController extends BaseServiceManagerController
 
         $objJson = json_decode($ds_json_post);
 
-        $nr_id = $objJson->nr_id;
-        $ds_tabela = $objJson->ds_tabela;
-        $ds_sql = $objJson->ds_sql;
-        $ds_descricao = $objJson->ds_descricao;
+        $nr_tabela_id = $objJson->nr_tabela_id ?? 0;
+        $ds_tabela = $objJson->ds_tabela ?? '';
+        $ds_sql = $objJson->ds_sql ?? '';
+        $ds_descricao = $objJson->ds_descricao ?? '';
+        $arrCampos = $objJson->arrCampos ?? [];
 
         $objTabela = null;
 
@@ -79,8 +80,15 @@ class IndexController extends BaseServiceManagerController
             $objTabela = $this->updateTabela(
                 $ds_tabela,
                 $ds_descricao,
-                $nr_id
+                $nr_tabela_id
             );
+
+            if (count($arrCampos) > 0) {
+                $this->updateCampos(
+                    $objTabela,
+                    $arrCampos
+                );
+            }
         }
 
         // importar por sql
@@ -95,7 +103,7 @@ class IndexController extends BaseServiceManagerController
             [
                 'sn_sucesso' => true,
                 'sn_tem_temporario' => $sn_tem_temporario,
-                'nr_id_cadastrado' => $objTabela->getId()
+                'nr_tabela_id_cadastrado' => $objTabela->getId()
             ]
         );
     }
@@ -122,7 +130,7 @@ class IndexController extends BaseServiceManagerController
         return new JsonModel(
             [
                 'sn_sucesso' => true,
-                'nr_id_cadastrado' => $objTabela->getId()
+                'nr_tabela_id_cadastrado' => $objTabela->getId()
             ]
         );
     }
@@ -177,16 +185,16 @@ class IndexController extends BaseServiceManagerController
     private function updateTabela(
         $ds_tabela,
         $ds_descricao = '',
-        $nr_id = null
+        $nr_tabela_id = null
     ) {
         $objTabela = new Tabela();
 
         // é alteracao
-        if ($nr_id > 0) {
+        if ($nr_tabela_id > 0) {
             $objTabela = $this->getEntityManager()
                 ->getRepository(\Application\Entity\Tabela::class)
                 ->findOneBy([
-                    'id' => $nr_id
+                    'id' => $nr_tabela_id
                 ]);
         }
 
@@ -196,7 +204,7 @@ class IndexController extends BaseServiceManagerController
         $objTabela->setDsDescricao($ds_descricao);
 
         // é uma nova? verifica por duplicadas
-        if ($nr_id == null) {
+        if ($nr_tabela_id == null) {
             $objTabelaDuplicada = $this->getEntityManager()
                 ->getRepository(\Application\Entity\Tabela::class)
                 ->findOneBy([
@@ -275,5 +283,28 @@ class IndexController extends BaseServiceManagerController
         }
 
         return false;
+    }
+
+
+    private function updateCampos(
+        $objTabela,
+        $arrCampos
+    ) {
+        foreach ($arrCampos as $nr_id => $arrCampo) {
+            $ds_nome = $arrCampo->ds_nome;
+            $ds_prop = $arrCampo->ds_prop;
+
+            $objCampo = new Campo();
+            $objCampo->setDsNome($ds_nome);
+            $objCampo->setDsProp($ds_prop);
+            $objCampo->setObjTabela($objTabela);
+            $objCampo->setSnPk(false);
+
+            $this->getEntityManager()
+                ->persist($objCampo);
+        }
+
+        $this->getEntityManager()
+            ->flush();
     }
 }
