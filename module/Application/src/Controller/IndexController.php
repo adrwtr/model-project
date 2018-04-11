@@ -140,6 +140,15 @@ class IndexController extends BaseServiceManagerController
 
     public function lerSqlAction()
     {
+        $objComandosSqlService = $this->getObjSm()
+            ->get(\Application\Service\ComandosSqlService::class);
+
+        $objComandosSqlService->parse($ds_sql);
+
+        $arrTabelas = $objComandosSqlService->getArrTabelas();
+
+        var_dump($arrTabelas);
+
     	return new ViewModel();
     }
 
@@ -292,13 +301,13 @@ class IndexController extends BaseServiceManagerController
         $objTabela,
         $arrCampos
     ) {
-        var_dump($arrCampos);
         if (is_array($arrCampos)) {
             foreach ($arrCampos as $nr_id => $arrCampo) {
                 $nr_campo_id = $arrCampo->id ?? 0;
                 $ds_nome = $arrCampo->ds_nome ?? '';
                 $ds_prop = $arrCampo->ds_prop ?? '';
                 $sn_pk = (($arrCampo->sn_pk ?? false) == '1' ? true : false);
+                $ds_descricao = $arrCampo->ds_descricao ?? '';
 
                 $objCampo = new Campo();
 
@@ -316,6 +325,7 @@ class IndexController extends BaseServiceManagerController
                 $objCampo->setObjTabela($objTabela);
                 $objCampo->setSnPk($sn_pk);
                 $objCampo->setNrOrdem($nr_id);
+                $objCampo->setDsDescricao($ds_descricao);
 
                 $this->getEntityManager()
                     ->persist($objCampo);

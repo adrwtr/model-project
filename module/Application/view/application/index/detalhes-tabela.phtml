@@ -55,8 +55,9 @@
 
                     <div class="row">
                         <draggable class="dragArea container"  v-model="arrCampos" >
-                            <div v-for="(arrCampo, nr_index) in arrCampos">
-                                <div class="row" style="padding-top: 3px">
+                            <div v-for="(arrCampo, nr_index) in arrCampos"
+                                style="border-width: 1px; border-style: solid; padding: 10px; margin: 5px; border-color: bisque;">
+                                <div class="row" style="padding-top: 3px;">
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control"
                                             v-model="arrCampo.ds_nome"
@@ -68,6 +69,7 @@
                                             placeholder="Nome da Tabela">
                                     </div>
                                     <div class="col-sm-2">
+                                        PK -
                                         <input type="checkbox" value="1" v-model="arrCampo.sn_pk">
                                     </div>
                                     <div class="col-sm-2">
@@ -77,6 +79,16 @@
                                             class="btn btn-primary" >
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top: 3px">
+                                    <div class="col-sm-12">
+                                        <label for="ds_sql">Descrição</label>
+                                        <textarea class="form-control"
+                                            id=""
+                                            v-model="arrCampo.ds_descricao"
+                                            cols="50"
+                                            rows="3"></textarea>
                                     </div>
                                 </div>
                             </div>

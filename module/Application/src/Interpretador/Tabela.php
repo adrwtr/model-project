@@ -20,10 +20,12 @@ class Tabela {
 
         $arrColunas = $arrTabela['create-def']['sub_tree'];
         $arrCampos = self::processColunas($arrColunas);
+        $arrForeingkey = self::processForeingKeys($arrColunas);
 
         return array(
             'ds_nome' => $ds_nome,
-            'arrCampos' => $arrCampos
+            'arrCampos' => $arrCampos,
+            'arrForeingkey' => $arrForeingkey
         );
     }
 
@@ -62,5 +64,15 @@ class Tabela {
         }
 
         return $arrCampos;
+    }
+
+    private static function processForeingKeys($arrColunas) {
+        $arrForeingkey = array();
+
+        foreach ($arrColunas as $arrColuna) {
+            $arrForeingkey = ForeingKey::interpretar($arrColuna);
+        }
+
+        return $arrForeingkey;
     }
 }

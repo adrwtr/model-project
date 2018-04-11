@@ -39,9 +39,9 @@ class Campo
     protected $sn_pk;
 
     /**
-     * @ORM\Column(name="me_descricao", type="text", nullable=true)
+     * @ORM\Column(name="ds_descricao", type="text", nullable=true)
      */
-    protected $me_descricao;
+    protected $ds_descricao;
 
     /**
      * @ORM\Column(name="nr_ordem", nullable=false, type="integer")
@@ -94,12 +94,12 @@ class Campo
         return $this;
     }
 
-    public function getMeDescricao() {
-        return $this->me_descricao;
+    public function getDsDescricao() {
+        return $this->ds_descricao;
     }
 
-    public function setMeDescricao($me_descricao) {
-        $this->me_descricao = $me_descricao;
+    public function setDsDescricao($ds_descricao) {
+        $this->ds_descricao = $ds_descricao;
         return $this;
     }
 
