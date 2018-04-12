@@ -34,17 +34,30 @@ class Tabela
     protected $sn_excluido;
 
     /**
+     * @ORM\Column(name="ds_descricao", type="text", nullable=true)
+     */
+    protected $ds_descricao;
+
+    /**
      * @ORM\OneToMany(targetEntity="Campo", mappedBy="objTabela")
      */
     protected $arrCampos;
 
     /**
-     * @ORM\Column(name="ds_descricao", type="text", nullable=true)
+     * @ORM\OneToMany(targetEntity="TabelaChave", mappedBy="objTabelaOrigem")
      */
-    protected $ds_descricao;
+    protected $arrTabelaChaveOrigem;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Campo", mappedBy="objTabelaDestino")
+     */
+    protected $arrTabelaChaveDestino;
+
 
     public function __construct() {
         $this->arrCampos = new ArrayCollection();
+        $this->arrTabelaChaveOrigem = new ArrayCollection();
+        $this->arrTabelaChaveDestino = new ArrayCollection();
     }
 
 

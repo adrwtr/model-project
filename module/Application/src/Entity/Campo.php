@@ -18,12 +18,6 @@ class Campo
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tabela", inversedBy="arrCampos")
-     * @ORM\JoinColumn(name="tabela_id", referencedColumnName="id")
-     */
-    private $objTabela;
-
-    /**
      * @ORM\Column(name="ds_nome", nullable=false)
      */
     protected $ds_nome;
@@ -48,6 +42,27 @@ class Campo
      */
     protected $nr_ordem;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Tabela", inversedBy="arrCampos")
+     * @ORM\JoinColumn(name="tabela_id", referencedColumnName="id")
+     */
+    private $objTabela;
+
+    /**
+     * @ORM\OneToMany(targetEntity="TabelaChave", mappedBy="objCampoOrigem")
+     */
+    protected $arrTabelaChaveCampoOrigem;
+
+    /**
+     * @ORM\OneToMany(targetEntity="TabelaChave", mappedBy="objCampoDestino")
+     */
+    protected $arrTabelaChaveCampoDestino;
+
+    public function __construct() {
+        $this->arrCampos = new ArrayCollection();
+        $this->arrTabelaChaveCampoOrigem = new ArrayCollection();
+        $this->arrTabelaChaveCampoDestino = new ArrayCollection();
+    }
 
     public function getId() {
         return $this->id;
