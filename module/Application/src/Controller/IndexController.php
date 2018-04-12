@@ -253,10 +253,12 @@ class IndexController extends BaseServiceManagerController
             foreach ($arrTabelas as $arrTabela) {
                 $ds_nome = $arrTabela['ds_nome'];
                 $arrCampos = $arrTabela['arrCampos'];
+                $arrForeingkeys = $arrTabela['arrForeingkey'];
 
                 // inclui a tabela
                 $objTabela = $this->updateTabela($ds_nome, null);
 
+                // inclui campos
                 if (count($arrCampos) > 0) {
                     $arrCampoObj = [];
                     foreach ($arrCampos as $arrCampo) {
@@ -274,6 +276,26 @@ class IndexController extends BaseServiceManagerController
                     }
 
                     $this->updateCampos($objTabela, $arrCampoObj);
+                }
+
+                // inclui foreingkeys
+                if (count($arrForeingkey) > 0) {
+                    $arrForeingkeyObj = [];
+                    foreach ($arrForeingkeys as $arrForeingkey) {
+                        $ds_nome_campo = $arrCampo['ds_nome_campo'];
+                        $ds_nome_tabela_referencia = $arrCampo['ds_nome_tabela_referencia'];
+                        $ds_nome_campo_referencia = $arrCampo['ds_nome_campo_referencia'];
+
+                        $objForeingkey = new \stdClass();
+                        $objForeingkey->id = null;
+                        $objForeingkey->ds_nome_campo = $ds_nome_campo;
+                        $objForeingkey->ds_nome_tabela_referencia = $ds_nome_tabela_referencia;
+                        $objForeingkey->ds_nome_campo_referencia = $ds_nome_campo_referencia;
+
+                        $arrForeingkeyObj[] = $objCampo;
+                    }
+
+                    $this->updateForeingkeys($objTabela, $arrForeingkeyObj);
                 }
             }
         }
@@ -329,6 +351,50 @@ class IndexController extends BaseServiceManagerController
 
                 $this->getEntityManager()
                     ->persist($objCampo);
+            }
+
+            $this->getEntityManager()
+                ->flush();
+        }
+    }
+
+    private function updateForeingkeys(
+        $objTabela,
+        $arrForeingkeys
+    ) {
+        if (is_array($arrForeingkeys)) {
+            $arrCamposTabela = $objTabela->arrCampos;
+
+
+
+            foreach ($arrForeingkeys as $nr_id => $arrForeingkey) {
+                $nr_campo_id = $objForeingkey->id ?? 0;
+                $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
+                $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
+                $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
+
+                if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
+                    $objTabelaChave = new TabelaChave();
+
+                    // o campo ja existe
+                    if ($nr_campo_id > 0) {
+                        $objCampo = $this->getEntityManager()
+                            ->getRepository(\Application\Entity\Campo::class)
+                            ->findOneBy([
+                                'id' => $nr_campo_id
+                            ]);
+                    }
+
+                    $objCampo->setDsNome($ds_nome);
+                    $objCampo->setDsProp($ds_prop);
+                    $objCampo->setObjTabela($objTabela);
+                    $objCampo->setSnPk($sn_pk);
+                    $objCampo->setNrOrdem($nr_id);
+                    $objCampo->setDsDescricao($ds_descricao);
+
+                    $this->getEntityManager()
+                        ->persist($objCampo);
+                }
             }
 
             $this->getEntityManager()

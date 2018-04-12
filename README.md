@@ -12,17 +12,19 @@ CRUD tabelas
     alterar - OK
     excluir - OK
     Importar SQL - OK
+
     Importar banco - TODO
     Comparar na criacao - TODO
     Comparar com existente - TODO
     Paginar resultado - TODO
+    Permitir excluir os campos - TODO
 
 CRUD campos
     incluir - OK
-    alterar - Falta edição da descricao
+    alterar - OK
     excluir - OK
     ordenar - OK
-    Foreing keys - TODO
+    Foreing keys - WIP
     Mostrar ligacoes ativas - TODO
     Mostrar ligacoes logicas - TODO
 
