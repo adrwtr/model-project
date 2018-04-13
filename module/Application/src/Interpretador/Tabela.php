@@ -68,11 +68,16 @@ class Tabela {
 
     private static function processForeingKeys($arrColunas) {
         $arrForeingkey = array();
+        $arrForeingkeys = array();
 
         foreach ($arrColunas as $arrColuna) {
             $arrForeingkey = ForeingKey::interpretar($arrColuna);
+
+            if ($arrForeingkey != false) {
+                $arrForeingkeys[] = $arrForeingkey;
+            }
         }
 
-        return $arrForeingkey;
+        return $arrForeingkeys;
     }
 }

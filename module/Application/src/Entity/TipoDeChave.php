@@ -2,7 +2,7 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TipoDeChave
 {
+    public const FOREING_KEY = 'FOREING_KEY';
+    public const UNIQUE_KEY = 'UNIQUE_KEY';
+    public const LOGIC_KEY = 'LOGIC_KEY';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -35,8 +39,6 @@ class TipoDeChave
     public function __construct() {
         $this->arrTabelaChave = new ArrayCollection();
     }
-
-
 
     public function getId() {
         return $this->id;

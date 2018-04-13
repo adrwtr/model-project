@@ -41,17 +41,17 @@ class Tabela
     /**
      * @ORM\OneToMany(targetEntity="Campo", mappedBy="objTabela")
      */
-    protected $arrCampos;
+    public $arrCampos;
 
     /**
      * @ORM\OneToMany(targetEntity="TabelaChave", mappedBy="objTabelaOrigem")
      */
-    protected $arrTabelaChaveOrigem;
+    public $arrTabelaChaveOrigem;
 
     /**
      * @ORM\OneToMany(targetEntity="Campo", mappedBy="objTabelaDestino")
      */
-    protected $arrTabelaChaveDestino;
+    public $arrTabelaChaveDestino;
 
 
     public function __construct() {
