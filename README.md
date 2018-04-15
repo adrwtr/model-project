@@ -34,6 +34,9 @@ CRUD campos
     Mostrar ligacoes ativas - TODO
     Mostrar ligacoes logicas - TODO
 
+## Para rodar testes
+É necessario manter atualizado o arquivo sql.sqlite e sql_unittest.sqlite
+.\vendor\bin\phpunit
 
 ## comandos
     D:\dev\php\modelpage>php ..\composer.phar serve

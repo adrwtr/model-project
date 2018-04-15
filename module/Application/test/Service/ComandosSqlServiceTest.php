@@ -58,7 +58,7 @@ class ComandosSqlServiceTest  extends TestCase
         );
 
         $this->assertEquals(
-            false,
+            [],
             $arrTabelas[0]['arrForeingkey']
         );
     }
@@ -94,9 +94,11 @@ class ComandosSqlServiceTest  extends TestCase
         //
         $this->assertEquals(
             array(
+                array(
                 'ds_nome_campo' => '`cd_grupo`',
                 'ds_nome_tabela_referencia' => '`nu_grupos`',
                 'ds_nome_campo_referencia' => '`cd_grupo`'
+                )
             ),
             $arrTabelas[0]['arrForeingkey']
         );
