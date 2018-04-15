@@ -27,11 +27,12 @@ class IndexController extends BaseServiceManagerController
 
     public function listaTabelasAction()
     {
-        $ds_dql = 'select t from \Application\Entity\Tabela t'
-            . ' where t.sn_excluido = 0 and t.sn_temporario = 0';
-
         $arrValores = $this->getEntityManager()
-            ->createQuery($ds_dql)
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\TabelaDqlService::class)
+                    ->listaTabelas()
+            )
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return new JsonModel(
@@ -45,14 +46,19 @@ class IndexController extends BaseServiceManagerController
             ->fromRoute('cd_registro');
 
         $arrTabela = $this->getEntityManager()
-            ->createQuery('select t from \Application\Entity\Tabela t where t.id = :id')
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\TabelaDqlService::class)
+                    ->getTabelaById()
+            )
             ->setParameter('id', $cd_registro)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $arrCampos = $this->getEntityManager()
-            ->createQuery('select c from \Application\Entity\Campo c
-                where c.objTabela = :tabela_id
-                order by c.nr_ordem'
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\CampoDqlService::class)
+                    ->getCamposFromTabela()
             )
             ->setParameter('tabela_id', $cd_registro)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -81,11 +87,14 @@ class IndexController extends BaseServiceManagerController
         $objTabela = null;
 
         if ($ds_tabela != '') {
-            $objTabela = $this->updateTabela(
-                $ds_tabela,
-                $ds_descricao,
-                $nr_tabela_id
-            );
+            $objTabela = $this->getObjSm()
+                ->get(
+                    \Application\Service\Repository\TabelaService::class
+                )->persistir(
+                    $ds_tabela,
+                    $ds_descricao,
+                    $nr_tabela_id
+                );
 
             if (count($arrCampos) > 0) {
                 $this->updateCampos(
@@ -193,49 +202,7 @@ class IndexController extends BaseServiceManagerController
         );
     }
 
-    private function updateTabela(
-        $ds_tabela,
-        $ds_descricao = '',
-        $nr_tabela_id = null
-    ) {
-        $objTabela = new Tabela();
 
-        // é alteracao
-        if ($nr_tabela_id > 0) {
-            $objTabela = $this->getEntityManager()
-                ->getRepository(\Application\Entity\Tabela::class)
-                ->findOneBy([
-                    'id' => $nr_tabela_id
-                ]);
-        }
-
-        $objTabela->setDsNome($ds_tabela);
-        $objTabela->setSnExcluido(false);
-        $objTabela->setSnTemporario(false);
-        $objTabela->setDsDescricao($ds_descricao);
-
-        // é uma nova? verifica por duplicadas
-        if ($nr_tabela_id == null) {
-            $objTabelaDuplicada = $this->getEntityManager()
-                ->getRepository(\Application\Entity\Tabela::class)
-                ->findOneBy([
-                    'ds_nome' => $ds_tabela
-                ]);
-
-            // se ela ja existir, indica que é duplicada
-            if ($objTabelaDuplicada != null) {
-                $objTabela->setSnTemporario(true);
-            }
-        }
-
-        $this->getEntityManager()
-            ->persist($objTabela);
-
-        $this->getEntityManager()
-            ->flush();
-
-        return $objTabela;
-    }
 
     private function processSql($ds_sql)
     {
@@ -255,7 +222,12 @@ class IndexController extends BaseServiceManagerController
                 $arrForeingkeys = $arrTabela['arrForeingkey'];
 
                 // inclui a tabela
-                $objTabela = $this->updateTabela($ds_nome, null);
+                $objTabela = $this->getObjSm()
+                    ->get(
+                        \Application\Service\Repository\TabelaService::class
+                    )->persistir(
+                        $ds_nome
+                    );
 
                 // inclui campos
                 if (count($arrCampos) > 0) {
@@ -397,7 +369,13 @@ class IndexController extends BaseServiceManagerController
 
                         // a tabela nao existe, vamos criar ela
                         if ($objTabelaReferencia == null) {
-                            $objTabelaReferencia = $this->updateTabela($ds_nome_tabela_referencia);
+                            $objTabelaReferencia = $this->getObjSm()
+                                ->get(
+                                    \Application\Service\Repository\TabelaService::class
+                                )->persistir(
+                                    $ds_nome_tabela_referencia
+                                );
+
                         }
 
                         $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();

@@ -153,6 +153,11 @@ return [
     'service_manager' => [
         'factories' => [
             \Application\Service\ComandosSqlService::class => Factory\ComandosSqlServiceFactory::class,
+
+            \Application\Service\Dql\TabelaDqlService::class => InvokableFactory::class,
+            \Application\Service\Dql\CampoDqlService::class => InvokableFactory::class,
+
+            \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,
         ],
 
         /*'invokables' => [
