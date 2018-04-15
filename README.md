@@ -7,23 +7,29 @@ Repositorio para desenvolvimento de um aplicativo em PHP para auxilio na analise
 ## Parte 1
 
 Leituro de arquivos .sql para verificação de estruturas mysql
+
+Urgente
+    Nas ligações, criar os ADDs necessários igual ao tabela campo
+    Refatorar Index
+
 CRUD tabelas
     incluir - OK
     alterar - OK
     excluir - OK
     Importar SQL - OK
+    Permitir excluir os campos - TODO
 
     Importar banco - TODO
     Comparar na criacao - TODO
     Comparar com existente - TODO
     Paginar resultado - TODO
-    Permitir excluir os campos - TODO
 
 CRUD campos
     incluir - OK
     alterar - OK
     excluir - OK
     ordenar - OK
+    adicionar foreing keys - OK
     Foreing keys - WIP
     Mostrar ligacoes ativas - TODO
     Mostrar ligacoes logicas - TODO

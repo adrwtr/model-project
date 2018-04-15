@@ -109,4 +109,9 @@ class Tabela
         $this->ds_descricao = $ds_descricao;
         return $this;
     }
+
+    public function addCampo($objCampo) {
+        $objCampo->setObjTabela($this);
+        $this->arrCampos[] = $objCampo;
+    }
 }

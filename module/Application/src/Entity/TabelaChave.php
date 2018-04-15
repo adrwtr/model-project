@@ -27,9 +27,8 @@ class TabelaChave
     private $objTabelaOrigem;
 
     /**
-     * @ORM\Column(name="tabela_destino_id", nullable=true)
      * @ORM\ManyToOne(targetEntity="Tabela", inversedBy="arrTabelaChaveDestino")
-     * @ORM\JoinColumn(name="tabela_destino_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="tabela_destino_id", referencedColumnName="id", nullable=true)
      */
     private $objTabelaDestino;
 

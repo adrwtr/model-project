@@ -148,8 +148,6 @@ class IndexController extends BaseServiceManagerController
 
         $arrTabelas = $objComandosSqlService->getArrTabelas();
 
-        var_dump($arrTabelas);
-
     	return new ViewModel();
     }
 
@@ -352,7 +350,12 @@ class IndexController extends BaseServiceManagerController
 
                 $this->getEntityManager()
                     ->persist($objCampo);
+
+                $objTabela->addCampo($objCampo);
             }
+
+            $this->getEntityManager()
+                ->persist($objTabela);
 
             $this->getEntityManager()
                 ->flush();
@@ -364,9 +367,7 @@ class IndexController extends BaseServiceManagerController
         $arrForeingkeys
     ) {
         if (is_array($arrForeingkeys)) {
-            $arrCamposTabela = $objTabela->arrCampos;
-            dump($arrCamposTabela);
-            die();
+            $arrCamposTabela = $objTabela->getArrCampos();
 
             foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
 
@@ -376,7 +377,6 @@ class IndexController extends BaseServiceManagerController
                 $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
 
                 if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
-                    echo 'aqui 3';
                     $nr_key_campo_atual = 0;
                     $nr_key_campo_referencia = 0;
 
@@ -387,7 +387,6 @@ class IndexController extends BaseServiceManagerController
                                 $nr_key_campo_atual = $nr_key;
                             }
                         }
-
 
                         // tabela de referencia
                         $objTabelaReferencia = $this->getEntityManager()
@@ -401,7 +400,7 @@ class IndexController extends BaseServiceManagerController
                             $objTabelaReferencia = $this->updateTabela($ds_nome_tabela_referencia);
                         }
 
-                        $arrCamposTabelaReferencia = $objTabelaReferencia->arrCampos;
+                        $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
 
                         // campo referencia
                         if (count($arrCamposTabelaReferencia) > 0) {
@@ -428,16 +427,20 @@ class IndexController extends BaseServiceManagerController
 
                             $this->getEntityManager()
                                 ->persist($objTipoDeChave);
+
+                            $this->getEntityManager()
+                                ->flush();
                         }
 
                         // inclui a chave
-                        $objTabelaChave = new TabelaChave();
+                        $objTabelaChave = new \Application\Entity\TabelaChave();
                         $objTabelaChave->setObjTabelaOrigem($objTabela);
                         $objTabelaChave->setObjTabelaDestino($objTabelaReferencia);
                         $objTabelaChave->setObjCampoOrigem($arrCamposTabela[$nr_key_campo_atual]);
                         $objTabelaChave->setObjTipoDeChave($objTipoDeChave);
 
                         if (count($arrCamposTabelaReferencia) > 0) {
+
                             $objTabelaChave->setObjCampoDestino(
                                 $arrCamposTabelaReferencia[$nr_key_campo_referencia]
                             );
@@ -452,7 +455,5 @@ class IndexController extends BaseServiceManagerController
                 }
             }
         }
-
-        die();
     }
 }
