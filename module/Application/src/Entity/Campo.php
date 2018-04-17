@@ -60,7 +60,6 @@ class Campo
     protected $arrTabelaChaveCampoDestino;
 
     public function __construct() {
-        $this->arrCampos = new ArrayCollection();
         $this->arrTabelaChaveCampoOrigem = new ArrayCollection();
         $this->arrTabelaChaveCampoDestino = new ArrayCollection();
     }
@@ -126,5 +125,15 @@ class Campo
     public function setNrOrdem($nr_ordem) {
         $this->nr_ordem = $nr_ordem;
         return $this;
+    }
+
+    public function addTabelaChaveOrigem($objTabelaChave) {
+        $objTabelaChave->setObjTabela($this);
+        $this->arrTabelaChaveCampoOrigem[] = $objTabelaChave;
+    }
+
+    public function addTabelaChaveOrigem($objTabelaChave) {
+        $objTabelaChave->setObjTabela($this);
+        $this->arrTabelaChaveCampoDestino[] = $objTabelaChave;
     }
 }

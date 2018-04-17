@@ -1,7 +1,7 @@
 <?php
 namespace ApplicationTest\Service;
 
-use ApplicationTest\Service\AbstractZendServiceTestCase;
+use ApplicationTest\Service\Repository\AbstractZendServiceTestCase;
 use PHPUnit\Framework\TestCase;
 use Application\Service\ComandosSqlService;
 use PHPSQLParser\PHPSQLParser;

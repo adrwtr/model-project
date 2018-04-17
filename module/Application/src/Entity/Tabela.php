@@ -114,4 +114,14 @@ class Tabela
         $objCampo->setObjTabela($this);
         $this->arrCampos[] = $objCampo;
     }
+
+    public function addTabelaChaveOrigem($objTabelaChave) {
+        $objTabelaChave->setObjTabela($this);
+        $this->arrTabelaChaveOrigem[] = $objTabelaChave;
+    }
+
+    public function addTabelaChaveDestino($objTabelaChave) {
+        $objTabelaChave->setObjTabela($this);
+        $this->arrTabelaChaveDestino[] = $objTabelaChave;
+    }
 }

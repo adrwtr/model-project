@@ -1,5 +1,5 @@
 <?php
-namespace ApplicationTest\Service;
+namespace ApplicationTest\Service\Repository;
 
 use PHPUnit\Framework\TestCase;
 use Application\Service\ComandosSqlService;
