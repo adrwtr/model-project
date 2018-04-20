@@ -11,8 +11,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 class TipoDeChave
 {
     public const FOREING_KEY = 'FOREING_KEY';
-    public const UNIQUE_KEY = 'UNIQUE_KEY';
     public const LOGIC_KEY = 'LOGIC_KEY';
+    public const UNIQUE_KEY = 'UNIQUE_KEY';
 
     /**
      * @ORM\Id
@@ -66,5 +66,10 @@ class TipoDeChave
     public function setDsChave($ds_chave) {
         $this->ds_chave = $ds_chave;
         return $this;
+    }
+
+    public function addTabelaChave($objTabelaChave) {
+        $objTabelaChave->setObjTipoDeChave($this);
+        $this->arrTabelaChave[] = $objTabelaChave;
     }
 }

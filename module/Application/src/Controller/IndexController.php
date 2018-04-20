@@ -302,26 +302,18 @@ class IndexController extends BaseServiceManagerController
                 $sn_pk = (($arrCampo->sn_pk ?? false) == '1' ? true : false);
                 $ds_descricao = $arrCampo->ds_descricao ?? '';
 
-                $objCampo = new Campo();
-
-                // o campo ja existe
-                if ($nr_campo_id > 0) {
-                    $objCampo = $this->getEntityManager()
-                        ->getRepository(\Application\Entity\Campo::class)
-                        ->findOneBy([
-                            'id' => $nr_campo_id
-                        ]);
-                }
-
-                $objCampo->setDsNome($ds_nome);
-                $objCampo->setDsProp($ds_prop);
-                $objCampo->setObjTabela($objTabela);
-                $objCampo->setSnPk($sn_pk);
-                $objCampo->setNrOrdem($nr_id);
-                $objCampo->setDsDescricao($ds_descricao);
-
-                $this->getEntityManager()
-                    ->persist($objCampo);
+                $objCampo = $this->getObjSm()
+                    ->get(
+                        \Application\Service\Repository\CampoService::class
+                    )->persistir(
+                        $objTabela,
+                        $ds_nome,
+                        $ds_prop,
+                        $ds_descricao,
+                        $sn_pk,
+                        $nr_ordem,
+                        $nr_campo_id
+                    );
 
                 $objTabela->addCampo($objCampo);
             }

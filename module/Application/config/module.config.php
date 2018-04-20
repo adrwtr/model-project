@@ -159,6 +159,8 @@ return [
 
             \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,
             \Application\Service\Repository\CampoService::class => Factory\RepositoryFactory::class,
+            \Application\Service\Repository\TipoDeChaveService::class => Factory\RepositoryFactory::class,
+            \Application\Service\Repository\TabelaChaveService::class => Factory\RepositoryFactory::class,
         ],
 
         /*'invokables' => [
