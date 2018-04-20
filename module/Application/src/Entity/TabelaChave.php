@@ -51,6 +51,9 @@ class TabelaChave
     private $objCampoDestino;
 
     /**
+     * Chaves com o mesmo grupo estão agrupadas
+     * ex: uk com dois fields
+     *
      * @ORM\Column(name="nr_grupo", nullable=false, type="integer")
      */
     protected $nr_grupo;

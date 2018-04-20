@@ -18,7 +18,7 @@ class CampoServiceTest extends AbstractZendServiceTestCase
         parent::tearDown();
     }
 
-    public function testePersistir()
+    public function testPersistir()
     {
         $this->assertQtdRegistro(
             \Application\Entity\Campo::class,
@@ -89,5 +89,53 @@ class CampoServiceTest extends AbstractZendServiceTestCase
             2
         );
 
+    }
+
+
+    public function testGetObjCampoFromTabela()
+    {
+        $objTabela = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\Repository\TabelaService::class)
+            ->persistir(
+                'teste 1',
+                'teste 1',
+                null
+            );
+
+        $objCampo = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\Repository\CampoService::class)
+            ->getObjCampoFromTabela(
+                $objTabela,
+                'nome campo'
+            );
+
+        $this->assertEquals(
+            null,
+            $objCampo
+        );
+
+        $objCampo = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\Repository\CampoService::class)
+            ->persistir(
+                $objTabela,
+                'ds_nome',
+                'ds_prop',
+                'ds_descricao',
+                0,
+                0,
+                null
+            );
+
+        $objCampo = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\Repository\CampoService::class)
+            ->getObjCampoFromTabela(
+                $objTabela,
+                'ds_nome'
+            );
+
+        $this->assertEquals(
+            \Application\Entity\Campo::class,
+            get_class($objCampo)
+        );
     }
 }

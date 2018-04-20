@@ -45,6 +45,21 @@ class CampoService extends AbstractRepositoryService
 
         return $objCampo;
     }
+
+    /**
+     * Recupera o campo de uma tabela
+     */
+    public function getObjCampoFromTabela(
+        $objTabela,
+        $ds_nome
+    ) {
+        return $this->getEntityManager()
+            ->getRepository(\Application\Entity\Campo::class)
+            ->findOneBy([
+                'ds_nome' => $ds_nome,
+                'objTabela' => $objTabela
+            ]);
+    }
 }
 
 

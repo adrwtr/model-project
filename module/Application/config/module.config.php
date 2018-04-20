@@ -153,6 +153,7 @@ return [
     'service_manager' => [
         'factories' => [
             \Application\Service\ComandosSqlService::class => Factory\ComandosSqlServiceFactory::class,
+            \Application\Service\InserirPorArrayService::class => Factory\InserirPorArrayServiceFactory::class,
 
             \Application\Service\Dql\TabelaDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\CampoDqlService::class => InvokableFactory::class,

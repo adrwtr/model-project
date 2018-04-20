@@ -11,47 +11,44 @@ class TabelaChaveService extends AbstractRepositoryService
     }
 
     public function persistir(
-        $ds_nome,
-        $ds_chave = '',
+        $objTabelaOrigem,
+        $objTabelaDestino,
+        $objTipoDeChave,
+        $objCampoOrigem,
+        $objCampoDestino = null,
+        $nr_grupo = 0,
         $nr_tabela_chave_id = null
     ) {
-        $objTabela = new Tabela();
+        $objTabelaChave = new TabelaChave();
 
         // é alteracao
         if ($nr_tabela_chave_id > 0) {
-            $objTabela = $this->getEntityManager()
+            $objTabelaChave = $this->getEntityManager()
                 ->getRepository(Tabela::class)
                 ->findOneBy([
                     'id' => $nr_tabela_id
                 ]);
         }
 
-        $objTabela->setDsNome($ds_tabela);
-        $objTabela->setSnExcluido(false);
-        $objTabela->setSnTemporario(false);
-        $objTabela->setDsDescricao($ds_descricao);
+        $objTabelaChave->setObjTabelaOrigem($objTabelaOrigem);
+        $objTabelaChave->setObjTabelaDestino($objTabelaDestino);
+        $objTabelaChave->setObjTipoDeChave($objTipoDeChave);
+        $objTabelaChave->setObjCampoOrigem($objCampoOrigem);
 
-        // é uma nova? verifica por duplicadas
-        if ($nr_tabela_id == null) {
-            $objTabelaDuplicada = $this->getEntityManager()
-                ->getRepository(Tabela::class)
-                ->findOneBy([
-                    'ds_nome' => $ds_tabela
-                ]);
-
-            // se ela ja existir, indica que é duplicada
-            if ($objTabelaDuplicada != null) {
-                $objTabela->setSnTemporario(true);
-            }
+        if ($objCampoDestino != null) {
+            $objTabelaChave->setObjCampoDestino($objCampoDestino);
         }
 
+        $objTabelaChave->setNrGrupo($nr_grupo);
+
+
         $this->getEntityManager()
-            ->persist($objTabela);
+            ->persist($objTabelaChave);
 
         $this->getEntityManager()
             ->flush();
 
-        return $objTabela;
+        return $objTabelaChave;
     }
 }
 

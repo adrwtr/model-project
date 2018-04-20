@@ -216,59 +216,12 @@ class IndexController extends BaseServiceManagerController
 
         // para cada tabela encontrada no sql
         if ($objComandosSqlService->getTotalTabelas() > 0) {
-            foreach ($arrTabelas as $arrTabela) {
-                $ds_nome = $arrTabela['ds_nome'];
-                $arrCampos = $arrTabela['arrCampos'];
-                $arrForeingkeys = $arrTabela['arrForeingkey'];
+            $objInserirPorArrayService = $this->getObjSm()
+                ->get(\Application\Service\InserirPorArrayService::class);
 
-                // inclui a tabela
-                $objTabela = $this->getObjSm()
-                    ->get(
-                        \Application\Service\Repository\TabelaService::class
-                    )->persistir(
-                        $ds_nome
-                    );
-
-                // inclui campos
-                if (count($arrCampos) > 0) {
-                    $arrCampoObj = [];
-                    foreach ($arrCampos as $arrCampo) {
-                        $ds_nome_campo = $arrCampo['ds_nome'];
-                        $ds_prop = $arrCampo['ds_prop'];
-                        $sn_pk = $arrCampo['sn_pk'];
-
-                        $objCampo = new \stdClass();
-                        $objCampo->id = null;
-                        $objCampo->ds_nome = $ds_nome_campo;
-                        $objCampo->ds_prop = $ds_prop;
-                        $objCampo->sn_pk = $sn_pk;
-
-                        $arrCampoObj[] = $objCampo;
-                    }
-
-                    $this->updateCampos($objTabela, $arrCampoObj);
-                }
-
-                // inclui foreingkeys
-                if (count($arrForeingkeys) > 0) {
-                    $arrForeingkeyObj = [];
-                    foreach ($arrForeingkeys as $arrForeingkey) {
-                        $ds_nome_campo = $arrForeingkey['ds_nome_campo'] ?? '';
-                        $ds_nome_tabela_referencia = $arrForeingkey['ds_nome_tabela_referencia'] ?? '';
-                        $ds_nome_campo_referencia = $arrForeingkey['ds_nome_campo_referencia'] ?? '';
-
-                        $objForeingkey = new \stdClass();
-                        $objForeingkey->id = null;
-                        $objForeingkey->ds_nome_campo = $ds_nome_campo;
-                        $objForeingkey->ds_nome_tabela_referencia = $ds_nome_tabela_referencia;
-                        $objForeingkey->ds_nome_campo_referencia = $ds_nome_campo_referencia;
-
-                        $arrForeingkeyObj[] = $objForeingkey;
-                    }
-
-                    $this->updateForeingkeys($objTabela, $arrForeingkeyObj);
-                }
-            }
+            $objTabela = $objInserirPorArrayService->inserirTabelas(
+                $arrTabelas
+            );
         }
 
         return $objTabela;
@@ -296,11 +249,14 @@ class IndexController extends BaseServiceManagerController
     ) {
         if (is_array($arrCampos)) {
             foreach ($arrCampos as $nr_id => $arrCampo) {
+                var_dump($nr_id);
                 $nr_campo_id = $arrCampo->id ?? 0;
                 $ds_nome = $arrCampo->ds_nome ?? '';
                 $ds_prop = $arrCampo->ds_prop ?? '';
                 $sn_pk = (($arrCampo->sn_pk ?? false) == '1' ? true : false);
                 $ds_descricao = $arrCampo->ds_descricao ?? '';
+                $nr_ordem = $nr_id ?? ;
+                var_dump($nr_ordem);
 
                 $objCampo = $this->getObjSm()
                     ->get(
@@ -323,107 +279,6 @@ class IndexController extends BaseServiceManagerController
 
             $this->getEntityManager()
                 ->flush();
-        }
-    }
-
-    private function updateForeingkeys(
-        $objTabela,
-        $arrForeingkeys
-    ) {
-        if (is_array($arrForeingkeys)) {
-            $arrCamposTabela = $objTabela->getArrCampos();
-
-            foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
-
-                $nr_campo_id = $objForeingkey->id ?? 0;
-                $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
-                $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
-                $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
-
-                if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
-                    $nr_key_campo_atual = 0;
-                    $nr_key_campo_referencia = 0;
-
-                    // campo atual
-                    if (count($arrCamposTabela) > 0) {
-                        foreach ($arrCamposTabela as $nr_key => $objCampo) {
-                            if ($objCampo->getDsNome() == $ds_nome_campo) {
-                                $nr_key_campo_atual = $nr_key;
-                            }
-                        }
-
-                        // tabela de referencia
-                        $objTabelaReferencia = $this->getEntityManager()
-                            ->getRepository(\Application\Entity\Tabela::class)
-                            ->findOneBy([
-                                'ds_nome' => $ds_nome_tabela_referencia
-                            ]);
-
-                        // a tabela nao existe, vamos criar ela
-                        if ($objTabelaReferencia == null) {
-                            $objTabelaReferencia = $this->getObjSm()
-                                ->get(
-                                    \Application\Service\Repository\TabelaService::class
-                                )->persistir(
-                                    $ds_nome_tabela_referencia
-                                );
-
-                        }
-
-                        $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
-
-                        // campo referencia
-                        if (count($arrCamposTabelaReferencia) > 0) {
-                            foreach ($arrCamposTabelaReferencia as $nr_key => $objCampo) {
-                                if ($objCampo->getDsNome() == $ds_nome_campo_referencia) {
-                                    $nr_key_campo_referencia = $nr_key;
-                                }
-                            }
-                        }
-
-                        // buscando a chave
-                        $objTipoDeChave = $this->getEntityManager()
-                            ->getRepository(\Application\Entity\TipoDeChave::class)
-                            ->findOneBy([
-                                'ds_chave' => \Application\Entity\TipoDeChave::FOREING_KEY
-                            ]);
-
-                        if ($objTipoDeChave == null) {
-                            $objTipoDeChave = new \Application\Entity\TipoDeChave();
-                            $objTipoDeChave->setDsNome('Foreing Key')
-                                ->setDsChave(
-                                    \Application\Entity\TipoDeChave::FOREING_KEY
-                                );
-
-                            $this->getEntityManager()
-                                ->persist($objTipoDeChave);
-
-                            $this->getEntityManager()
-                                ->flush();
-                        }
-
-                        // inclui a chave
-                        $objTabelaChave = new \Application\Entity\TabelaChave();
-                        $objTabelaChave->setObjTabelaOrigem($objTabela);
-                        $objTabelaChave->setObjTabelaDestino($objTabelaReferencia);
-                        $objTabelaChave->setObjCampoOrigem($arrCamposTabela[$nr_key_campo_atual]);
-                        $objTabelaChave->setObjTipoDeChave($objTipoDeChave);
-
-                        if (count($arrCamposTabelaReferencia) > 0) {
-
-                            $objTabelaChave->setObjCampoDestino(
-                                $arrCamposTabelaReferencia[$nr_key_campo_referencia]
-                            );
-                        }
-
-                        $this->getEntityManager()
-                            ->persist($objTabelaChave);
-
-                        $this->getEntityManager()
-                            ->flush();
-                    }
-                }
-            }
         }
     }
 }
