@@ -1,11 +1,8 @@
 <?php
 namespace ApplicationTest\Service;
 
-use ApplicationTest\Service\Repository\AbstractZendServiceTestCase;
 use PHPUnit\Framework\TestCase;
-use Application\Service\ComandosSqlService;
-use PHPSQLParser\PHPSQLParser;
-use Zend\Stdlib\ArrayUtils;
+use ApplicationTest\Service\Repository\AbstractZendServiceTestCase;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 
@@ -66,11 +63,6 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
         $this->assertQtdRegistro(
             \Application\Entity\Tabela::class,
             2
-        );
-
-        $this->assertEquals(
-            true,
-            true
         );
     }
 }

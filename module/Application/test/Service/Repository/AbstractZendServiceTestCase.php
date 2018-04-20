@@ -24,7 +24,7 @@ abstract class AbstractZendServiceTestCase extends AbstractHttpControllerTestCas
 
         // faz backup do banco oficial
         copy('sql.sqlite', 'sql_backup.sqlite');
-        unlink('sql.sqlite');
+        @unlink('sql.sqlite');
 
         if (file_exists('sql_unittest.sqlite')) {
             copy('sql_unittest.sqlite', 'sql.sqlite');

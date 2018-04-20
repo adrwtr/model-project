@@ -132,7 +132,7 @@ class Campo
         $this->arrTabelaChaveCampoOrigem[] = $objTabelaChave;
     }
 
-    public function addTabelaChaveOrigem($objTabelaChave) {
+    public function addTabelaChaveDestino($objTabelaChave) {
         $objTabelaChave->setObjTabela($this);
         $this->arrTabelaChaveCampoDestino[] = $objTabelaChave;
     }
