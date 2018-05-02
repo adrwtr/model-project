@@ -18,8 +18,6 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
     }
 
 	public function testParse()	{
-
-
         $objComandosSqlService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\ComandosSqlService::class);
 
@@ -44,6 +42,36 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
         );
     }
 
+    public function testParseForeingKey() {
+        $objComandosSqlService = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\ComandosSqlService::class);
+
+        $objComandosSqlService->parse(
+            $this->getDsSqlForeingKeyDuplo()
+        );
+
+        $arrTabelas = $objComandosSqlService->getArrTabelas();
+
+        $this->getApplicationServiceLocator()
+            ->get(\Application\Service\InserirPorArrayService::class)
+            ->inserirTabelas($arrTabelas);
+
+        $this->assertQtdRegistro(
+            \Application\Entity\Tabela::class,
+            2
+        );
+
+        $this->assertQtdRegistro(
+            \Application\Entity\Campo::class,
+            11
+        );
+
+        $this->assertQtdRegistro(
+            \Application\Entity\TabelaChave::class,
+            1
+        );
+    }
+
     private function getDsSql() {
         return 'CREATE TABLE CUSTOMERS(
             ID   INT              NOT NULL,
@@ -52,5 +80,32 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
             ADDRESS  CHAR (25) ,
             SALARY   DECIMAL (18, 2),
             PRIMARY KEY (ID)';
+    }
+
+    private function getDsSqlForeingKeyDuplo() {
+        return "
+        CREATE TABLE `unim_moodle_cursos` (
+          `cd_moodle_curso` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `ds_descricao` varchar(255) DEFAULT NULL,
+          `ds_sigla` varchar(255) DEFAULT NULL,
+          `dt_revisao` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+          `cd_integracao_externa` smallint(3) DEFAULT NULL,
+          PRIMARY KEY (`cd_moodle_curso`),
+          UNIQUE KEY `uk_sigla` (`ds_sigla`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+        CREATE TABLE `unim_moodle_cursos_disciplinas` (
+          `cd_curso_disciplina` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `cd_moodle_curso` int(10) unsigned NOT NULL,
+          `nr_anosemestre` smallint(6) unsigned NOT NULL,
+          `cd_curso` varchar(15) NOT NULL,
+          `cd_turma` varchar(50) NOT NULL,
+          `id_disciplina` int(11) unsigned NOT NULL,
+          PRIMARY KEY (`cd_curso_disciplina`),
+          KEY `unim_mcdf1` (`cd_moodle_curso`),
+          KEY `unim_mcdf2` (`nr_anosemestre`,`cd_turma`,`cd_curso`),
+          KEY `unim_mcdf3` (`id_disciplina`),
+          CONSTRAINT `ufk_mcdf1` FOREIGN KEY (`cd_moodle_curso`) REFERENCES `unim_moodle_cursos` (`cd_moodle_curso`) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+        ";
     }
 }

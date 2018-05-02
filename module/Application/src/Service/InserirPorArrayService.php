@@ -44,15 +44,15 @@ class InserirPorArrayService {
                     $arrCampos
                 );
             }
-            /*
+
             // inclui foreingkeys
-            if (count($arrForeingkeys) > 0) {
+            if (is_array($arrForeingkeys) && count($arrForeingkeys) > 0) {
                 $this->processForeingKeys(
                     $objTabela,
                     $arrForeingkeys
                 );
             }
-            */
+
         }
 
         return $objTabela;
@@ -87,7 +87,7 @@ class InserirPorArrayService {
     ) {
         $arrForeingkeyObj = [];
 
-        foreach ($arrForeingkeys as $arrForeingkey) {
+        foreach ($arrCampos as $arrForeingkey) {
             $ds_nome_campo = $arrForeingkey['ds_nome_campo'] ?? '';
             $ds_nome_tabela_referencia = $arrForeingkey['ds_nome_tabela_referencia'] ?? '';
             $ds_nome_campo_referencia = $arrForeingkey['ds_nome_campo_referencia'] ?? '';
@@ -101,7 +101,10 @@ class InserirPorArrayService {
             $arrForeingkeyObj[] = $objForeingkey;
         }
 
-        // $this->updateForeingkeys($objTabela, $arrForeingkeyObj);
+        $this->updateForeingkeys(
+            $objTabela,
+            $arrForeingkeyObj
+        );
     }
 
     public function updateCampos(
@@ -145,77 +148,96 @@ class InserirPorArrayService {
         $objTabela,
         $arrForeingkeys
     ) {
-        if (is_array($arrForeingkeys)) {
-            $arrCamposTabela = $objTabela->getArrCampos();
+        $arrCamposTabela = $objTabela->getArrCampos();
 
-            foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
+        foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
+            $nr_campo_id = $objForeingkey->id ?? 0;
+            $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
+            $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
+            $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
 
-                $nr_campo_id = $objForeingkey->id ?? 0;
-                $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
-                $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
-                $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
-
-                if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
-                    $nr_key_campo_atual = 0;
-                    $nr_key_campo_referencia = 0;
-
-                    // campo atual
-                    if (count($arrCamposTabela) > 0) {
-                        foreach ($arrCamposTabela as $nr_key => $objCampo) {
-                            if ($objCampo->getDsNome() == $ds_nome_campo) {
-                                $nr_key_campo_atual = $nr_key;
-                            }
-                        }
-
-                        // tabela de referencia
-                        $objTabelaReferencia = $this->getEntityManager()
-                            ->getRepository(\Application\Entity\Tabela::class)
-                            ->findOneBy([
-                                'ds_nome' => $ds_nome_tabela_referencia
-                            ]);
-
-                        // a tabela nao existe, vamos criar ela
-                        if ($objTabelaReferencia == null) {
-                            $objTabelaReferencia = $this->getObjSm()
-                                ->get(
-                                    \Application\Service\Repository\TabelaService::class
-                                )->persistir(
-                                    $ds_nome_tabela_referencia
-                                );
-
-                        }
-
-                        $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
-
-                        // campo referencia
-                        if (count($arrCamposTabelaReferencia) > 0) {
-                            foreach ($arrCamposTabelaReferencia as $nr_key => $objCampo) {
-                                if ($objCampo->getDsNome() == $ds_nome_campo_referencia) {
-                                    $nr_key_campo_referencia = $nr_key;
-                                }
-                            }
-                        }
-
-                        // buscando a chave
-                        $objTipoDeChave = $this->getObjSm()
-                            ->get(\Application\Service\Repository\TipoDeChaveService::class)
-                            ->getTipoDeChaveForingKey();
-
-                        // inclui a chave
-                        $objTabelaChave = $this->getObjSm()
-                            ->get(\Application\Service\Repository\TabelaChaveService::class)
-                            ->persistir(
-                                $objTabela,
-                                $objTabelaReferencia,
-                                $objTipoDeChave,
-                                $arrCamposTabela[$nr_key_campo_atual],
-                                $objCampoDestino,
-                                0,
-                                null
-                            );
-                    }
+            if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
+                if (count($arrCamposTabela) > 0) {
+                    $this->processForeingKeyAtual(
+                        $objTabela,
+                        $ds_nome_campo,
+                        $ds_nome_tabela_referencia,
+                        $ds_nome_campo_referencia,
+                        $arrCamposTabela
+                    );
                 }
             }
         }
+
+    }
+
+
+    public function processForeingKeyAtual(
+        $objTabelaOrigem,
+        $ds_nome_campo,
+        $ds_nome_tabela_referencia,
+        $ds_nome_campo_referencia,
+        $arrCamposTabela
+    ) {
+        $nr_key_campo_atual = 0;
+        $nr_key_campo_referencia = 0;
+        $objCampoDestino = null;
+
+        // campo atual
+        foreach ($arrCamposTabela as $nr_key => $objCampo) {
+            if ($objCampo->getDsNome() == $ds_nome_campo) {
+                $nr_key_campo_atual = $nr_key;
+            }
+        }
+
+        // tabela de referencia
+        $objTabelaReferencia = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'ds_nome' => $ds_nome_tabela_referencia
+            ]);
+
+        // a tabela nao existe, vamos criar ela
+        if ($objTabelaReferencia == null) {
+            $objTabelaReferencia = $this->getObjSm()
+                ->get(
+                    \Application\Service\Repository\TabelaService::class
+                )->persistir(
+                    $ds_nome_tabela_referencia
+                );
+
+        }
+
+        $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
+
+        // campo referencia
+        if (count($arrCamposTabelaReferencia) > 0) {
+            foreach ($arrCamposTabelaReferencia as $nr_key => $objCampo) {
+                if ($objCampo->getDsNome() == $ds_nome_campo_referencia) {
+                    $nr_key_campo_referencia = $nr_key;
+                    $objCampoDestino = $objCampo;
+                }
+            }
+        }
+
+        // buscando a chave
+        $objTipoDeChave = $this->getObjSm()
+            ->get(\Application\Service\Repository\TipoDeChaveService::class)
+            ->getTipoDeChaveForingKey();
+
+        // inclui a chave
+        $objTabelaChave = $this->getObjSm()
+            ->get(\Application\Service\Repository\TabelaChaveService::class)
+            ->persistir(
+                $objTabelaOrigem,
+                $objTabelaReferencia,
+                $objTipoDeChave,
+                $arrCamposTabela[$nr_key_campo_atual],
+                $objCampoDestino,
+                0,
+                null
+            );
+
+        return $objTabelaChave;
     }
 }

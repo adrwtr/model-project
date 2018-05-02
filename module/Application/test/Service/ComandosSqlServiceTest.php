@@ -151,7 +151,7 @@ class ComandosSqlServiceTest  extends TestCase
 
         $this->assertEquals(
             1,
-            count($arrTabelas[0]['arrForeingkey'])
+            count($arrTabelas[1]['arrForeingkey'])
         );
 
 

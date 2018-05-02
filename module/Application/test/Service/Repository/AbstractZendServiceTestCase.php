@@ -55,8 +55,9 @@ abstract class AbstractZendServiceTestCase extends AbstractHttpControllerTestCas
                 $ds_entidade
             )->findAll();
 
-        $this->assertTrue(
-            count($arrRegistros) == $nr_qtd_registros
+        $this->assertEquals(
+            count($arrRegistros),
+            $nr_qtd_registros
         );
     }
 
