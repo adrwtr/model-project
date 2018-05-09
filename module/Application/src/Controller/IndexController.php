@@ -126,19 +126,12 @@ class IndexController extends BaseServiceManagerController
         $cd_registro = $this->params()
             ->fromRoute('cd_registro');
 
-        $objTabela = $this->getEntityManager()
-            ->getRepository(\Application\Entity\Tabela::class)
-            ->findOneBy([
-                'id' => $cd_registro
-            ]);
-
-        $objTabela->setSnExcluido(true);
-
-        $this->getEntityManager()
-            ->persist($objTabela);
-
-        $this->getEntityManager()
-            ->flush();
+        $this->getObjSm()
+            ->get(
+                \Application\Service\Repository\TabelaService::class
+            )->desativarTabela(
+                $cd_registro
+            );
 
         return new JsonModel(
             [

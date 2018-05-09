@@ -53,6 +53,24 @@ class TabelaService extends AbstractRepositoryService
 
         return $objTabela;
     }
+
+    public function desativarTabela($tabela_id) {
+        $objTabela = $this->getEntityManager()
+            ->getRepository(Tabela::class)
+            ->findOneBy([
+                'id' => $tabela_id
+            ]);
+
+        if ($objTabela != null) {
+            $objTabela->setSnExcluido(true);
+
+            $this->getEntityManager()
+                ->persist($objTabela);
+
+            $this->getEntityManager()
+                ->flush();
+        }
+    }
 }
 
 
