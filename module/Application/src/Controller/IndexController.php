@@ -158,23 +158,13 @@ class IndexController extends BaseServiceManagerController
         $conn = $this->getEntityManager()
             ->getConnection();
 
-        $sql = '
-            select
-                t.id as id,
-                t.ds_nome as ds_nome,
-                t_temp.id as id_temp,
-                t_temp.ds_nome as ds_nome_temp
-            from Tabela t
-            inner join Tabela t_temp ON (
-                t_temp.ds_nome = t.ds_nome
-                and t_temp.sn_temporario = 0
-            )
-            where
-                t.sn_temporario = 1
-            ';
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $arrValores = $stmt->fetch();
+        $ds_sql = $this->getObjSm()
+            ->get(\Application\Service\Dql\TabelaDqlService::class)
+            ->listaTabelasTemporarias();
+
+        $objStmt = $conn->prepare($ds_sql);
+        $objStmt->execute();
+        $arrValores = $objStmt->fetch();
 
         return new JsonModel(
             [
@@ -240,6 +230,7 @@ class IndexController extends BaseServiceManagerController
         $objTabela,
         $arrCampos
     ) {
+	    /*
         if (is_array($arrCampos)) {
             foreach ($arrCampos as $nr_id => $arrCampo) {
                 var_dump($nr_id);
@@ -273,5 +264,6 @@ class IndexController extends BaseServiceManagerController
             $this->getEntityManager()
                 ->flush();
         }
+	    */
     }
 }

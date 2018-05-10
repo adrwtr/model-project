@@ -65,4 +65,30 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
             2
         );
     }
+
+    public function testeDesativarTabela()
+    {
+        $this->getApplicationServiceLocator()
+            ->get(\Application\Service\Repository\TabelaService::class)
+            ->persistir(
+                'teste 1',
+                'teste 1',
+                null
+            );
+
+        $this->getApplicationServiceLocator()
+            ->get(\Application\Service\Repository\TabelaService::class)
+            ->desativarTabela(1);
+
+        $objTabela = $this->getObjSm()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'id' => 1
+            ]);
+
+        $this->assertEquals(
+            1,
+            $objTabela->getSnExcluido()
+        );
+    }
 }
