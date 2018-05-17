@@ -97,7 +97,10 @@ class IndexController extends BaseServiceManagerController
                 );
 
             if (count($arrCampos) > 0) {
-                $this->updateCampos(
+                $objInserirPorArrayService = $this->getObjSm()
+                    ->get(\Application\Service\InserirPorArrayService::class);
+
+                $objInserirPorArrayService->updateCampos(
                     $objTabela,
                     $arrCampos
                 );
@@ -223,47 +226,5 @@ class IndexController extends BaseServiceManagerController
         }
 
         return false;
-    }
-
-
-    private function updateCampos(
-        $objTabela,
-        $arrCampos
-    ) {
-	    /*
-        if (is_array($arrCampos)) {
-            foreach ($arrCampos as $nr_id => $arrCampo) {
-                var_dump($nr_id);
-                $nr_campo_id = $arrCampo->id ?? 0;
-                $ds_nome = $arrCampo->ds_nome ?? '';
-                $ds_prop = $arrCampo->ds_prop ?? '';
-                $sn_pk = (($arrCampo->sn_pk ?? false) == '1' ? true : false);
-                $ds_descricao = $arrCampo->ds_descricao ?? '';
-                $nr_ordem = $nr_id ?? ;
-                var_dump($nr_ordem);
-
-                $objCampo = $this->getObjSm()
-                    ->get(
-                        \Application\Service\Repository\CampoService::class
-                    )->persistir(
-                        $objTabela,
-                        $ds_nome,
-                        $ds_prop,
-                        $ds_descricao,
-                        $sn_pk,
-                        $nr_ordem,
-                        $nr_campo_id
-                    );
-
-                $objTabela->addCampo($objCampo);
-            }
-
-            $this->getEntityManager()
-                ->persist($objTabela);
-
-            $this->getEntityManager()
-                ->flush();
-        }
-	    */
     }
 }
