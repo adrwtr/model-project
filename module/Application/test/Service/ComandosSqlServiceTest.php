@@ -88,7 +88,6 @@ class ComandosSqlServiceTest  extends TestCase
         $objComandosSqlService->parse($ds_sql);
         $arrTabelas = $objComandosSqlService->getArrTabelas();
 
-        //
         $this->assertEquals(
             array(
                 array(
@@ -98,6 +97,11 @@ class ComandosSqlServiceTest  extends TestCase
                 )
             ),
             $arrTabelas[0]['arrForeingkey']
+        );
+
+        $this->assertEquals(
+            '`nu_grupos_pessoas`',
+            $arrTabelas[0]['ds_nome']
         );
     }
 

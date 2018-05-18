@@ -43,6 +43,11 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
     }
 
     public function testParseForeingKey() {
+        $this->assertQtdRegistro(
+            \Application\Entity\Tabela::class,
+            0
+        );
+
         $objComandosSqlService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\ComandosSqlService::class);
 
@@ -60,6 +65,8 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
             \Application\Entity\Tabela::class,
             2
         );
+
+
 
         $this->assertQtdRegistro(
             \Application\Entity\Campo::class,

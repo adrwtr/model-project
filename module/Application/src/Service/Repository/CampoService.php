@@ -30,6 +30,8 @@ class CampoService extends AbstractRepositoryService
                 ]);
         }
 
+        $ds_nome = $this->tratarString($ds_nome);
+
         $objCampo->setObjTabela($objTabela);
         $objCampo->setDsNome($ds_nome);
         $objCampo->setDsProp($ds_prop);
