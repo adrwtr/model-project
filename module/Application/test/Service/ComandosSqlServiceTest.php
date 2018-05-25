@@ -91,16 +91,16 @@ class ComandosSqlServiceTest  extends TestCase
         $this->assertEquals(
             array(
                 array(
-                'ds_nome_campo' => '`cd_grupo`',
-                'ds_nome_tabela_referencia' => '`nu_grupos`',
-                'ds_nome_campo_referencia' => '`cd_grupo`'
+                'ds_nome_campo' => 'cd_grupo',
+                'ds_nome_tabela_referencia' => 'nu_grupos',
+                'ds_nome_campo_referencia' => 'cd_grupo'
                 )
             ),
             $arrTabelas[0]['arrForeingkey']
         );
 
         $this->assertEquals(
-            '`nu_grupos_pessoas`',
+            'nu_grupos_pessoas',
             $arrTabelas[0]['ds_nome']
         );
     }
@@ -159,7 +159,45 @@ class ComandosSqlServiceTest  extends TestCase
             1,
             count($arrTabelas[1]['arrForeingkey'])
         );
+    }
 
+    public function testPK()
+    {
+        $ds_sql = "
+CREATE TABLE `nu_modulos` (
+  `cd_modulo` int(11) NOT NULL AUTO_INCREMENT,
+  `ds_nome_modulo` varchar(100) NOT NULL,
+  `ds_descricao` varchar(255) DEFAULT NULL,
+  `ds_chave` varchar(50) NOT NULL,
+  `sn_fixo` tinyint(1) NOT NULL,
+  `sn_online` tinyint(1) DEFAULT NULL,
+  `me_icone` blob,
+  `sn_visual` tinyint(1) unsigned NOT NULL,
+  `nr_ordem` int(11) unsigned DEFAULT NULL,
+  `sn_ativo` tinyint(1) unsigned DEFAULT '1',
+  `DS_LICENCA` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`cd_modulo`),
+  UNIQUE KEY `cd_modulo` (`cd_modulo`),
+  UNIQUE KEY `cd_modulo_2` (`ds_chave`)
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=latin1";
+
+
+        $objComandosSqlService = new ComandosSqlService(
+            new PHPSQLParser()
+        );
+
+        $objComandosSqlService->parse($ds_sql);
+        $arrTabelas = $objComandosSqlService->getArrTabelas();
+
+        $this->assertEquals(
+            11,
+            count($arrTabelas[0]['arrCampos'])
+        );
+
+        $this->assertEquals(
+            true,
+            $arrTabelas[0]['arrCampos'][0]['sn_pk']
+        );
 
     }
 }

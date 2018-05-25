@@ -6,6 +6,7 @@ class Primary {
         $arrCampos,
         $arrValores
     ) {
+        dump($arrCampos);
         if (self::validador($arrValores) == false) {
             return $arrCampos;
         }

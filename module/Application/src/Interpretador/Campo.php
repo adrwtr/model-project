@@ -1,6 +1,8 @@
 <?php
 namespace Application\Interpretador;
 
+use Application\Interpretador\StringCleaner;
+
 class Campo {
     public static function interpretar($arrValores) {
         if (self::validador($arrValores) == false) {
@@ -10,6 +12,9 @@ class Campo {
         $arrProp = $arrValores['sub_tree'];
         $ds_nome = $arrProp[0]['base_expr'];
         $ds_prop = $arrProp[1]['base_expr'];
+
+        $ds_nome = StringCleaner::removeApostrofo($ds_nome);
+        $ds_prop = StringCleaner::removeApostrofo($ds_prop);
 
         return array(
             'ds_nome' => $ds_nome,

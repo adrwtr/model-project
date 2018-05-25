@@ -3,6 +3,7 @@ namespace Application\Interpretador;
 
 use Application\Interpretador\Campo;
 use Application\Interpretador\Primary;
+use Application\Interpretador\StringCleaner;
 
 class Tabela {
     public static function interpretar($arrValores) {
@@ -17,6 +18,7 @@ class Tabela {
 
         $arrTabela = $arrValores['TABLE'];
         $ds_nome = $arrTabela['name'];
+        $ds_nome = StringCleaner::removeApostrofo($ds_nome);
 
         $arrColunas = $arrTabela['create-def']['sub_tree'];
         $arrCampos = self::processColunas($arrColunas);

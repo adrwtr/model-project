@@ -25,7 +25,7 @@ class TabelaService extends AbstractRepositoryService
                     'id' => $nr_tabela_id
                 ]);
         }
-        $ds_tabela = $this->tratarString($ds_tabela);
+
         $objTabela->setDsNome($ds_tabela);
         $objTabela->setSnExcluido(false);
         $objTabela->setSnTemporario(false);

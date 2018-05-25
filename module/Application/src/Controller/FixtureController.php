@@ -24,8 +24,6 @@ class FixtureController extends BaseServiceManagerController
         $this->getEntityManager()
             ->persist($arrFixtures['tabela1']);
 
-            var_dump($arrFixtures);
-
         $this->getEntityManager()
             ->flush();
 

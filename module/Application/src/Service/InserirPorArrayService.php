@@ -190,12 +190,16 @@ class InserirPorArrayService {
             }
         }
 
+        // aqui esta o problema
+        // a string nao é tratada para tirar o `
+
         // tabela de referencia
         $objTabelaReferencia = $this->getEntityManager()
             ->getRepository(\Application\Entity\Tabela::class)
             ->findOneBy([
                 'ds_nome' => $ds_nome_tabela_referencia
             ]);
+
 
         // a tabela nao existe, vamos criar ela
         if ($objTabelaReferencia == null) {
@@ -205,7 +209,6 @@ class InserirPorArrayService {
                 )->persistir(
                     $ds_nome_tabela_referencia
                 );
-
         }
 
         $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
