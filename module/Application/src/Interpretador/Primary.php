@@ -1,12 +1,13 @@
 <?php
 namespace Application\Interpretador;
 
+use Application\Interpretador\StringCleaner;
+
 class Primary {
     public static function interpretar(
         $arrCampos,
         $arrValores
     ) {
-        dump($arrCampos);
         if (self::validador($arrValores) == false) {
             return $arrCampos;
         }
@@ -14,6 +15,8 @@ class Primary {
         $arrProp = $arrValores['sub_tree'];
         $arrSupProp = $arrProp[2]['sub_tree'];
         $ds_campo = $arrSupProp[0]['name'];
+
+        $ds_campo = StringCleaner::removeApostrofo($ds_campo);
 
         foreach ($arrCampos as $nr_key => $arrCampo) {
             if ($arrCampo['ds_nome'] == $ds_campo) {

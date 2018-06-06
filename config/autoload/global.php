@@ -22,7 +22,7 @@ return [
                 'params' => [
                     'user'     => 'root1',
                     'password' => 'root',
-                    'path' =>'sql.sqlite',
+                    'path' => 'sql.sqlite',
                     'memory' => false
                 ]
             ],

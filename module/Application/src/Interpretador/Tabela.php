@@ -50,6 +50,7 @@ class Tabela {
         $arrCampos = array();
 
         foreach ($arrColunas as $arrColuna) {
+
             // intepreta os campos
             $arrCampo = Campo::interpretar($arrColuna);
 
