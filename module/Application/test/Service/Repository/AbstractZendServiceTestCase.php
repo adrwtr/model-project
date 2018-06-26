@@ -14,21 +14,15 @@ abstract class AbstractZendServiceTestCase extends AbstractHttpControllerTestCas
     {
         $configOverrides = [];
 
-        if (!file_exists('sql.sqlite')) {
-            die('Erro: o arquivo do banco nao existe - sql.sqlite');
+        if (!file_exists('sql_branco.sqlite')) {
+            die('Erro: o arquivo do banco nao existe - sql_branco.sqlite');
         }
 
         if (!file_exists('sql_unittest.sqlite')) {
             die('Erro: o arquivo do banco nao existe - sql_unittest.sqlite');
         }
 
-        // faz backup do banco oficial
-        copy('sql.sqlite', 'sql_backup.sqlite');
-        @unlink('sql.sqlite');
-
-        if (file_exists('sql_unittest.sqlite')) {
-            copy('sql_unittest.sqlite', 'sql.sqlite');
-        }
+        copy('sql_branco.sqlite', 'sql_unittest.sqlite');
 
         $this->setApplicationConfig(
             ArrayUtils::merge(
@@ -56,8 +50,8 @@ abstract class AbstractZendServiceTestCase extends AbstractHttpControllerTestCas
             )->findAll();
 
         $this->assertEquals(
-            count($arrRegistros),
-            $nr_qtd_registros
+            $nr_qtd_registros,
+            count($arrRegistros)
         );
     }
 
@@ -66,9 +60,16 @@ abstract class AbstractZendServiceTestCase extends AbstractHttpControllerTestCas
      */
     public function tearDown()
     {
-        if (!file_exists('sql.sqlite')) {
-            unlink('sql.sqlite');
-            copy('sql_backup.sqlite', 'sql.sqlite');
+        /*
+        echo 'aqui A';
+        if (file_exists('sql_unittest.sqlite')) {
+            echo 'aqui B';
+            $valor = unlink('sql_unittest.sqlite');
+            var_dump($valor);
+            echo "\n\n";
+            echo $valor;
+            copy('sql_backup.sqlite', 'sql_unittest.sqlite');
         }
+        */
     }
 }

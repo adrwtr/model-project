@@ -21,12 +21,14 @@ class TabelaChave
     protected $id;
 
     /**
+     * É a tabela ao qual possui a coluna - filho
      * @ORM\ManyToOne(targetEntity="Tabela", inversedBy="arrTabelaChaveOrigem")
      * @ORM\JoinColumn(name="tabela_origem_id", referencedColumnName="id")
      */
     private $objTabelaOrigem;
 
     /**
+     * É a tabela que possui a informação PAI
      * @ORM\ManyToOne(targetEntity="Tabela", inversedBy="arrTabelaChaveDestino")
      * @ORM\JoinColumn(name="tabela_destino_id", referencedColumnName="id", nullable=true)
      */

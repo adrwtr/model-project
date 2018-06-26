@@ -36,7 +36,7 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
      *
      * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
      */
-    public static $lazyPropertiesDefaults = [];
+    public static $lazyPropertiesDefaults = ['arrCampos' => NULL, 'arrTabelaChaveOrigem' => NULL, 'arrTabelaChaveDestino' => NULL];
 
 
 
@@ -46,16 +46,60 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
      */
     public function __construct($initializer = null, $cloner = null)
     {
+        unset($this->arrCampos, $this->arrTabelaChaveOrigem, $this->arrTabelaChaveDestino);
 
         $this->__initializer__ = $initializer;
         $this->__cloner__      = $cloner;
     }
 
+    /**
+     * 
+     * @param string $name
+     */
+    public function __get($name)
+    {
+        if (array_key_exists($name, $this->__getLazyProperties())) {
+            $this->__initializer__ && $this->__initializer__->__invoke($this, '__get', [$name]);
 
+            return $this->$name;
+        }
 
+        trigger_error(sprintf('Undefined property: %s::$%s', __CLASS__, $name), E_USER_NOTICE);
+    }
 
+    /**
+     * 
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function __set($name, $value)
+    {
+        if (array_key_exists($name, $this->__getLazyProperties())) {
+            $this->__initializer__ && $this->__initializer__->__invoke($this, '__set', [$name, $value]);
 
+            $this->$name = $value;
 
+            return;
+        }
+
+        $this->$name = $value;
+    }
+
+    /**
+     * 
+     * @param  string $name
+     * @return boolean
+     */
+    public function __isset($name)
+    {
+        if (array_key_exists($name, $this->__getLazyProperties())) {
+            $this->__initializer__ && $this->__initializer__->__invoke($this, '__isset', [$name]);
+
+            return isset($this->$name);
+        }
+
+        return false;
+    }
 
     /**
      * 
@@ -64,10 +108,10 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'ds_nome'];
+            return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', 'arrCampos', 'arrTabelaChaveOrigem', 'arrTabelaChaveDestino'];
         }
 
-        return ['__isInitialized__', 'id', 'ds_nome'];
+        return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao'];
     }
 
     /**
@@ -89,6 +133,7 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
                 }
             };
 
+            unset($this->arrCampos, $this->arrTabelaChaveOrigem, $this->arrTabelaChaveDestino);
         }
     }
 
@@ -219,6 +264,116 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDsNome', [$ds_nome]);
 
         return parent::setDsNome($ds_nome);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSnTemporario()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSnTemporario', []);
+
+        return parent::getSnTemporario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSnTemporario($sn_temporario = false)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSnTemporario', [$sn_temporario]);
+
+        return parent::setSnTemporario($sn_temporario);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSnExcluido()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSnExcluido', []);
+
+        return parent::getSnExcluido();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSnExcluido($sn_excluido = false)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSnExcluido', [$sn_excluido]);
+
+        return parent::setSnExcluido($sn_excluido);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getArrCampos()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArrCampos', []);
+
+        return parent::getArrCampos();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDsDescricao()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDsDescricao', []);
+
+        return parent::getDsDescricao();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDsDescricao($ds_descricao)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDsDescricao', [$ds_descricao]);
+
+        return parent::setDsDescricao($ds_descricao);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addCampo($objCampo)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCampo', [$objCampo]);
+
+        return parent::addCampo($objCampo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTabelaChaveOrigem($objTabelaChave)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTabelaChaveOrigem', [$objTabelaChave]);
+
+        return parent::addTabelaChaveOrigem($objTabelaChave);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTabelaChaveDestino($objTabelaChave)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTabelaChaveDestino', [$objTabelaChave]);
+
+        return parent::addTabelaChaveDestino($objTabelaChave);
     }
 
 }

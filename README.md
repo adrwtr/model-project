@@ -30,9 +30,10 @@ CRUD campos
     excluir - OK
     ordenar - OK
     adicionar foreing keys - OK
-    Foreing keys - WIP
+    Foreing keys - OK
     Mostrar ligacoes ativas - TODO
     Mostrar ligacoes logicas - TODO
+    Unique Keys - TODO
 
 ## Para rodar testes
 É necessario manter atualizado o arquivo sql.sqlite e sql_unittest.sqlite

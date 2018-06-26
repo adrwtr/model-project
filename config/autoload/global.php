@@ -14,6 +14,14 @@
 // use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDO;
 
+$ds_oficial_database_name = 'sql.sqlite';
+
+if (defined('PHPUNIT_CONST')) {
+    if (PHPUNIT_CONST == true) {
+        $ds_oficial_database_name = 'sql_unittest.sqlite';
+    }
+}
+
 return [
     'doctrine' => [
         'connection' => [
@@ -22,7 +30,7 @@ return [
                 'params' => [
                     'user'     => 'root1',
                     'password' => 'root',
-                    'path' => 'sql.sqlite',
+                    'path' => $ds_oficial_database_name,
                     'memory' => false
                 ]
             ],

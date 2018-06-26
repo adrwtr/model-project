@@ -198,7 +198,6 @@ CREATE TABLE `nu_modulos` (
             true,
             $arrTabelas[0]['arrCampos'][0]['sn_pk']
         );
-
     }
 }
 
