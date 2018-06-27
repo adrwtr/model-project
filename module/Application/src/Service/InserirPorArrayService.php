@@ -243,4 +243,36 @@ class InserirPorArrayService {
 
         return $objTabelaChave;
     }
+
+    /**
+     * Exclui uma serie de campos informados no array
+     * o array deve conter uma lista de objetos std->id
+     *
+     * @param $arrCamposExcluir
+     * @return $this
+     */
+    public function excluirCampos(
+        $arrCamposExcluir
+    ) {
+        if (is_array($arrCamposExcluir)) {
+            foreach ($arrCamposExcluir as $nr_id => $arrCampo) {
+                $nr_campo_id = $arrCampo->id ?? 0;
+
+                $objCampo = $this->getEntityManager()
+                    ->getRepository(
+                        \Application\Entity\Campo::class
+                    )->findOneBy([
+                        'id' => $nr_campo_id
+                    ]);
+
+                $this->getEntityManager()
+                    ->remove($objCampo);
+            }
+
+            $this->getEntityManager()
+                ->flush();
+        }
+
+        return $this;
+    }
 }

@@ -83,6 +83,7 @@ class IndexController extends BaseServiceManagerController
         $ds_sql = $objJson->ds_sql ?? '';
         $ds_descricao = $objJson->ds_descricao ?? '';
         $arrCampos = $objJson->arrCampos ?? [];
+        $arrCamposExcluido = $objJson->arrCamposExcluido ?? [];
 
         $objTabela = null;
 
@@ -96,10 +97,16 @@ class IndexController extends BaseServiceManagerController
                     $nr_tabela_id
                 );
 
-            if (count($arrCampos) > 0) {
-                $objInserirPorArrayService = $this->getObjSm()
-                    ->get(\Application\Service\InserirPorArrayService::class);
+            $objInserirPorArrayService = $this->getObjSm()
+                ->get(\Application\Service\InserirPorArrayService::class);
 
+            if (count($arrCamposExcluido) > 0) {
+                $objInserirPorArrayService->excluirCampos(
+                    $arrCamposExcluido
+                );
+            }
+
+            if (count($arrCampos) > 0) {
                 $objInserirPorArrayService->updateCampos(
                     $objTabela,
                     $arrCampos

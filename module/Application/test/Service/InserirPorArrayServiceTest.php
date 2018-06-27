@@ -79,6 +79,53 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
         );
     }
 
+    public function testExcluirCampos()
+    {
+        $objComandosSqlService = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\ComandosSqlService::class);
+
+        $objComandosSqlService->parse(
+            $this->getDsSql()
+        );
+
+        $arrTabelas = $objComandosSqlService->getArrTabelas();
+
+        $objInserirPorArrayService = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\InserirPorArrayService::class);
+
+        $objInserirPorArrayService->inserirTabelas($arrTabelas);
+
+        $this->assertQtdRegistro(
+            \Application\Entity\Campo::class,
+            5
+        );
+
+        $arrRegistros = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Campo::class
+            )->findAll();
+
+        $objTemp = new \stdClass;
+        $objTemp->id= $arrRegistros[0]->getId();
+
+        $arrExcluir = [
+            0 => $objTemp
+        ];
+
+        $objInserirPorArrayService->excluirCampos(
+            $arrExcluir
+        );
+
+        $this->assertQtdRegistro(
+            \Application\Entity\Campo::class,
+            4
+        );
+
+
+        // $arrCamposExcluir =
+    }
+
+
     private function getDsSql() {
         return 'CREATE TABLE CUSTOMERS(
             ID   INT              NOT NULL,

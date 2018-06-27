@@ -138,6 +138,7 @@ var app_lista_tabela = new Vue({
         nr_tabela_id : 0,
         ds_sql : '',
         arrCampos : [],
+        arrCamposExcluido : []
 
     },
 
@@ -172,7 +173,7 @@ var app_lista_tabela = new Vue({
         },
 
         excluirCampo: function(nr_index) {
-            this.arrCampoExcluido = this.arrCampos[nr_index];
+            this.arrCamposExcluido.push(this.arrCampos[nr_index]);
 
             this.arrCampos
                 .splice(nr_index, 1);
@@ -185,8 +186,11 @@ var app_lista_tabela = new Vue({
                 nr_tabela_id : this.nr_tabela_id,
                 ds_tabela : this.ds_tabela,
                 ds_descricao: this.ds_descricao,
-                arrCampos : this.arrCampos
+                arrCampos : this.arrCampos,
+                arrCamposExcluido : this.arrCamposExcluido
             };
+
+            console.log(arrPost);
 
             axios.post(
                 '/tabela/update',
