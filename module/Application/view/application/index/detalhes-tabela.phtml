@@ -102,15 +102,47 @@
 
                     <div class="row">
                         <div class="container">
-                            <div class="row">
-                                a
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                FK
+                                            </th>
+                                            <th>
+                                                Campo da tabela atual
+                                            </th>
+                                            <th>
+                                                Tabela de Destino
+                                            </th>
+
+                                            <th>
+                                                Campo da tabela de Destino
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="arrValores in arrTabelaChaves">
+                                            <td>
+                                                {{arrValores.ds_nome_chave}}
+                                            </td>
+                                            <td>
+                                                Campo da tabela atual - {{arrValores.campo_origem_id}}
+                                            </td>
+                                            <td>
+                                                Tabela de Destino - {{arrValores.tabela_origem_id}}
+                                            </td>
+
+                                            <td>
+                                                Campo da tabela de Destino - {{arrValores.campo_destino_id}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="row">
-                                b
-                            </div>
-                            <div class="row">
-                                c
-                            </div>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -138,7 +170,8 @@ var app_lista_tabela = new Vue({
         nr_tabela_id : 0,
         ds_sql : '',
         arrCampos : [],
-        arrCamposExcluido : []
+        arrCamposExcluido : [],
+        arrTabelaChaves : []
 
     },
 
@@ -154,11 +187,13 @@ var app_lista_tabela = new Vue({
                     arrJson => {
                         var arrTabela = arrJson.arrTabela[0];
                         var arrCampos = arrJson.arrCampos;
+                        var arrTabelaChaves = arrJson.arrTabelaChaves;
 
                         this.nr_tabela_id = arrTabela.id;
                         this.ds_tabela = arrTabela.ds_nome;
                         this.ds_descricao = arrTabela.ds_descricao;
                         this.arrCampos = arrCampos;
+                        this.arrTabelaChaves = arrTabelaChaves;
                     }
                 );
         },

@@ -22,11 +22,13 @@ class TabelaDqlService
                 t.ds_nome as ds_nome,
                 t_temp.id as id_temp,
                 t_temp.ds_nome as ds_nome_temp
-            from Tabela t
-            inner join Tabela t_temp ON (
-                t_temp.ds_nome = t.ds_nome
-                and t_temp.sn_temporario = 0
-            )
+            from 
+                Tabela t
+                
+                inner join Tabela t_temp ON (
+                    t_temp.ds_nome = t.ds_nome
+                    and t_temp.sn_temporario = 0
+                )
             where
                 t.sn_temporario = 1
         ';
