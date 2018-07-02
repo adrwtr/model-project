@@ -45,12 +45,13 @@
 
                 <div class="container">
                     <div class="row">
-                        <button type="button" class="btn btn-secondary"
-                            v-on:click="addCampo"
-                            class="btn btn-primary">Novo Campo</button>
-                    </div>
-                    <div class="row">
                         <strong>Campos:</strong>
+                    </div>
+
+                    <div class="row">
+                        <button type="button" class="btn btn-secondary"
+                                v-on:click="addCampo"
+                                class="btn btn-primary">Novo Campo</button>
                     </div>
 
                     <div class="row">
@@ -98,6 +99,14 @@
 
                     <div class="row">
                         <strong>Chaves e Ligações:</strong>
+                    </div>
+
+                    <div class="row">
+                        <button type="button" class="btn btn-secondary"
+                            v-on:click="addTabelaChave"
+                            class="btn btn-primary" data-toggle="modal" data-target="#modalChaveTabela">
+                            Nova Chave
+                        </button>
                     </div>
 
                     <div class="row">
@@ -153,6 +162,78 @@
 
 
 
+</div>
+
+
+<!-- modal chave tabela -->
+<div class="modal" tabindex="-1" role="dialog" id="modalChaveTabela">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chave Tabela</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="nr_tipo_chave">Tipo de Chave:</label>
+                                    <input type="text" class="form-control"
+                                           id="nr_tipo_chave"
+                                           v-model="nr_tipo_chave"
+                                           placeholder="Nome da Tabela" />
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <label for="ds_tabela">Tabela Atual:</label>
+                                    aaaa
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <label for="ds_tabela">Tabela Destino:</label>
+                                    <input type="text" class="form-control"
+                                           id="ds_tabela"
+                                           v-model="ds_tabela"
+                                           placeholder="Nome da Tabela">
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <label for="ds_tabela">Campo da tabela Destino:</label>
+                                    <input type="text" class="form-control"
+                                           id="ds_tabela"
+                                           v-model="ds_tabela"
+                                           placeholder="Nome da Tabela">
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <label for="ds_sql">Descrição</label>
+                                    <textarea class="form-control"
+                                              id="ds_descricao"
+                                              v-model="ds_descricao"
+                                              cols="50"
+                                              rows="3"></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                        v-on:click="doDelete()"
+                        data-dismiss="modal">Sim</button>
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Não</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -241,6 +322,11 @@ var app_lista_tabela = new Vue({
                     console.log(error);
                 }
             );
+        },
+
+
+        addTabelaChave : function() {
+
         },
 
         voltar: function() {

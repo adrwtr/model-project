@@ -36,6 +36,17 @@ return [
                 ],
             ],
 
+            'teste' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/teste',
+                    'defaults' => [
+                        'controller' => Controller\TesteController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
             'fixture' => [
                 'type'    => Literal::class,
                 'options' => [
@@ -147,6 +158,7 @@ return [
         'factories' => [
             Controller\IndexController::class => Factory\ControllerComServiceFactory::class,
             Controller\FixtureController::class => Factory\ControllerComServiceFactory::class,
+            Controller\TesteController::class => Factory\ControllerComServiceFactory::class,
         ]
     ],
 
@@ -157,6 +169,8 @@ return [
 
             \Application\Service\Dql\TabelaDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\CampoDqlService::class => InvokableFactory::class,
+            \Application\Service\Dql\TabelaChaveDqlService::class => InvokableFactory::class,
+
 
             \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,
             \Application\Service\Repository\CampoService::class => Factory\RepositoryFactory::class,

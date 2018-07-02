@@ -23,9 +23,9 @@ class TabelaDqlService
                 t_temp.id as id_temp,
                 t_temp.ds_nome as ds_nome_temp
             from 
-                Tabela t
+                \Application\Entity\Tabela t
                 
-                inner join Tabela t_temp ON (
+                inner join \Application\Entity\Tabela t_temp ON (
                     t_temp.ds_nome = t.ds_nome
                     and t_temp.sn_temporario = 0
                 )

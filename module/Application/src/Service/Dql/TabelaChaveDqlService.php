@@ -10,17 +10,20 @@ class TabelaChaveDqlService
                 tc.tabela_origem_id as tabela_origem_id,
                 tc.tabela_destino_id as tabela_destino_id,
                 tc.campo_origem_id as campo_origem_id,
-                tc.campo_destino_id as campo_destino_id,
-                tp.ds_nome as ds_nome_chave
+                tc.campo_destino_id as campo_destino_id
+                
             from 
-                TabelaChave tc
+                \Application\Entity\TabelaChave tc
+            ';
 
-                inner join TipoDeChave tp ON (
+        // -- ,                tp.ds_nome as ds_nome_chave
+/*
+                inner join \Application\Entity\TipoDeChave tp ON (
                     tp.id = tc.tipo_de_chave_id
                 )
             where
                 tc.tabela_origem_id = :tabela_origem_id
-        ';
+        ';*/
     }
 }
 
