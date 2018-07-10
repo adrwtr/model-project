@@ -72,11 +72,20 @@ class IndexController extends BaseServiceManagerController
             ->setParameter('tabela_origem_id', $cd_registro)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+        $arrTipoDeChave = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\TipoDeChaveDqlService::class)
+                    ->getTiposDeChave()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         return new JsonModel(
             [
                 'arrTabela' => $arrTabela,
                 'arrCampos' => $arrCampos,
-                'arrTabelaChaves' => $arrTabelaChaves
+                'arrTabelaChaves' => $arrTabelaChaves,
+                'arrTipoDeChave' => $arrTipoDeChave
             ]
         );
     }

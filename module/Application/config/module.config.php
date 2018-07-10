@@ -170,6 +170,7 @@ return [
             \Application\Service\Dql\TabelaDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\CampoDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\TabelaChaveDqlService::class => InvokableFactory::class,
+            \Application\Service\Dql\TipoDeChaveDqlService::class => InvokableFactory::class,
 
 
             \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,
