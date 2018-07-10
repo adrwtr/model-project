@@ -80,12 +80,22 @@ class IndexController extends BaseServiceManagerController
             )
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+        $arrTodasAsTabelas = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\TabelaDqlService::class)
+                    ->listaTodasAsTabelas()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+
         return new JsonModel(
             [
                 'arrTabela' => $arrTabela,
                 'arrCampos' => $arrCampos,
                 'arrTabelaChaves' => $arrTabelaChaves,
-                'arrTipoDeChave' => $arrTipoDeChave
+                'arrTipoDeChave' => $arrTipoDeChave,
+                'arrTodasAsTabelas' => $arrTodasAsTabelas
             ]
         );
     }
@@ -210,6 +220,26 @@ class IndexController extends BaseServiceManagerController
         return new ViewModel(
             [
                 'nr_tabela_id' => $nr_tabela_id
+            ]
+        );
+    }
+
+    public function getTabelaCamposAction() {
+        $cd_registro = $this->params()
+            ->fromRoute('cd_registro');
+
+        $arrCampos = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\CampoDqlService::class)
+                    ->getCamposFromTabela()
+            )
+            ->setParameter('tabela_id', $cd_registro)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return new JsonModel(
+            [
+                'arrCampos' => $arrCampos
             ]
         );
     }

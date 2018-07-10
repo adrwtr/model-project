@@ -33,6 +33,22 @@ class TabelaDqlService
                 t.sn_temporario = 1
         ';
     }
+
+    public function listaTodasAsTabelas()
+    {
+        return '
+            select 
+                t.id as id,
+                t.ds_nome as ds_nome 
+            from 
+                \Application\Entity\Tabela t
+            where 
+                t.sn_excluido = 0 and 
+                t.sn_temporario = 0
+            order by 
+              t.ds_nome
+        ';
+    }
 }
 
 

@@ -103,6 +103,18 @@ return [
                 ],
             ],
 
+            'get-tabela-campos' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/tabela/campos/get[/:cd_registro]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'getTabelaCampos',
+                        'cd_registro' => '0'
+                    ],
+                ],
+            ],
+
             'delete-tabela' => [
                 'type' => Segment::class,
                 'options' => [

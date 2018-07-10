@@ -177,41 +177,50 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
-
-                                        <label for="ds_tabela">Tipo de Chave:</label>
-                                        <div class="panel-body">
-                                            <v-select v-model="nr_tipo_de_chave"
-                                                label="ds_nome"
-                                                :options="arrTipoDeChaveOptions" ></v-select>
-                                        </div>
+                                        <label for="ds_nome_fk">Nome da Chave:</label>
+                                        <input type="text" class="form-control"
+                                               v-model="ds_nome_fk"
+                                               placeholder="">
                                     </div>
 
                                     <div class="col-sm-12">
+                                        <label for="ds_tabela">Tipo de Chave:</label>
+                                        <v-select v-model="nr_tipo_de_chave_id"
+                                            label="ds_nome"
+                                            :options="arrTipoDeChaveOptions" ></v-select>
+                                    </div>
+
+
+
+                                    <div class="col-sm-12">
                                         <label for="ds_tabela">Tabela Atual:</label>
-                                        aaaa
+                                        <input type="text" class="form-control"
+                                               v-model="ds_tabela"
+                                               disabled="disabled"
+                                               />
                                     </div>
 
                                     <div class="col-sm-12">
                                         <label for="ds_tabela">Tabela Destino:</label>
-                                        <input type="text" class="form-control"
-                                               id="ds_tabela"
-                                               v-model="ds_tabela"
-                                               placeholder="Nome da Tabela">
+                                        <v-select v-model="nr_tabela_destino_id"
+                                                  label="ds_nome"
+                                                  :options="arrTodasAsTabelas"></v-select>
                                     </div>
 
                                     <div class="col-sm-12">
                                         <label for="ds_tabela">Campo da tabela Destino:</label>
-                                        <input type="text" class="form-control"
-                                               id="ds_tabela"
-                                               v-model="ds_tabela"
-                                               placeholder="Nome da Tabela">
+
+                                        <v-select v-model="nr_campo_destino_id"
+                                                  label="ds_nome"
+                                                  :options="arrCamposFromTabelaFk"
+                                                  v-on:change="onChangeTeste"></v-select>
                                     </div>
 
                                     <div class="col-sm-12">
                                         <label for="ds_sql">Descrição</label>
                                         <textarea class="form-control"
-                                                  id="ds_descricao"
-                                                  v-model="ds_descricao"
+                                                  id="ds_descricao_fk"
+                                                  v-model="ds_descricao_fk"
                                                   cols="50"
                                                   rows="3"></textarea>
                                     </div>
@@ -224,10 +233,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary"
-                            v-on:click="doDelete()"
-                            data-dismiss="modal">Sim</button>
+                            v-on:click="addCampoFk()"
+                            data-dismiss="modal">Confirmar</button>
                     <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">Não</button>
+                            data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -259,17 +268,19 @@ var app_lista_tabela = new Vue({
 
 
         // modal
-        nr_tipo_de_chave : '',
+        nr_tipo_de_chave_id : 0,
+        nr_tabela_destino_id : 0,
+        nr_campo_destino_id : 0,
+        ds_descricao_fk : '',
+
 
         arrTipoDeChaveOptions : [
             { id : 0, ds_nome : 'teste' },
             { id : 0, ds_nome : 'teste 22' }
         ],
 
-
-        // arrTipoDeChaveOptions : [ 'aaa', 'bbb']
-
-
+        arrTodasAsTabelas : [],
+        arrCamposFromTabelaFk : [],
     },
 
     created: function() {
@@ -286,6 +297,7 @@ var app_lista_tabela = new Vue({
                         var arrCampos = arrJson.arrCampos;
                         var arrTabelaChaves = arrJson.arrTabelaChaves;
                         var arrTipoDeChave = arrJson.arrTipoDeChave;
+                        var arrTodasAsTabelas = arrJson.arrTodasAsTabelas;
 
                         this.nr_tabela_id = arrTabela.id;
                         this.ds_tabela = arrTabela.ds_nome;
@@ -293,6 +305,7 @@ var app_lista_tabela = new Vue({
                         this.arrCampos = arrCampos;
                         this.arrTabelaChaves = arrTabelaChaves;
                         this.arrTipoDeChaveOptions =  arrTipoDeChave;
+                        this.arrTodasAsTabelas = arrTodasAsTabelas;
 
                     }
                 );
@@ -345,11 +358,52 @@ var app_lista_tabela = new Vue({
 
 
         addTabelaChave : function() {
+            var arrNovo = {
+                ds_nome_chave
+            };
 
+
+        <tr v-for="arrValores in arrTabelaChaves">
+                <td>
+                {{arrValores.ds_nome_chave}}
+        </td>
+            <td>
+            Campo da tabela atual - {{arrValores.campo_origem_id}}
+        </td>
+            <td>
+            Tabela de Destino - {{arrValores.tabela_origem_id}}
+        </td>
+
+            <td>
+            Campo da tabela de Destino - {{arrValores.campo_destino_id}}
+        </td>
+            </tr>
         },
 
         voltar: function() {
             document.location = '/';
+        },
+
+        addCampoFk: function() {
+            console.log('aqui');
+        },
+    },
+
+    watch: {
+        /**
+         * Responsavel por buscar os campos da tabela selecionada
+         */
+        nr_tabela_destino_id: function() {
+            var nr_tabela_id = this.nr_tabela_destino_id.id;
+
+            fetch('/tabela/campos/get/' + nr_tabela_id)
+                .then(objResponse => objResponse.json())
+                .then(
+                    arrJson => {
+                        var arrCampos = arrJson.arrCampos;
+                        this.arrCamposFromTabelaFk = arrCampos;
+                    }
+                );
         }
     }
 });
