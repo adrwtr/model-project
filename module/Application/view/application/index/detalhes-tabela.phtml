@@ -117,7 +117,7 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                                FK
+                                                Tipo
                                             </th>
                                             <th>
                                                 Campo da tabela atual
@@ -137,14 +137,14 @@
                                                 {{arrValores.ds_nome_chave}}
                                             </td>
                                             <td>
-                                                Campo da tabela atual - {{arrValores.campo_origem_id}}
+                                                Campo da tabela atual - {{arrValores.ds_nome_campo_origem}}
                                             </td>
                                             <td>
-                                                Tabela de Destino - {{arrValores.tabela_origem_id}}
+                                                Tabela de Destino - {{arrValores.ds_nome_tabela_destino}}
                                             </td>
 
                                             <td>
-                                                Campo da tabela de Destino - {{arrValores.campo_destino_id}}
+                                                Campo da tabela de Destino - {{arrValores.ds_nome_campo_destino}}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -178,20 +178,11 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <label for="ds_nome_fk">Nome da Chave:</label>
-                                        <input type="text" class="form-control"
-                                               v-model="ds_nome_fk"
-                                               placeholder="">
-                                    </div>
-
-                                    <div class="col-sm-12">
                                         <label for="ds_tabela">Tipo de Chave:</label>
                                         <v-select v-model="nr_tipo_de_chave_id"
                                             label="ds_nome"
                                             :options="arrTipoDeChaveOptions" ></v-select>
                                     </div>
-
-
 
                                     <div class="col-sm-12">
                                         <label for="ds_tabela">Tabela Atual:</label>
@@ -199,6 +190,15 @@
                                                v-model="ds_tabela"
                                                disabled="disabled"
                                                />
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <label for="ds_tabela">Campo da tabela atual:</label>
+
+                                        <v-select v-model="nr_campo_origem_id"
+                                                  label="ds_nome"
+                                                  :options="arrCampos"
+                                        ></v-select>
                                     </div>
 
                                     <div class="col-sm-12">
@@ -270,17 +270,13 @@ var app_lista_tabela = new Vue({
 
         // modal
         nr_tipo_de_chave_id : 0,
+        nr_campo_origem_id : 0,
         nr_tabela_destino_id : 0,
         nr_campo_destino_id : 0,
         ds_descricao_fk : '',
-        ds_nome_fk : '',
 
 
-        arrTipoDeChaveOptions : [
-            { id : 0, ds_nome : 'teste' },
-            { id : 0, ds_nome : 'teste 22' }
-        ],
-
+        arrTipoDeChaveOptions : [],
         arrTodasAsTabelas : [],
         arrCamposFromTabelaFk : [],
     },
@@ -370,7 +366,24 @@ var app_lista_tabela = new Vue({
         },
 
         addCampoFk: function() {
-            console.log('aqui');
+            var arrNovaChave = {
+                id : null,
+                tabela_origem_id : null,
+                ds_nome_chave : this.nr_tipo_de_chave_id.ds_nome,
+
+                tabela_destino_id : this.nr_tabela_destino_id.id,
+                ds_nome_tabela_destino : this.nr_tabela_destino_id.ds_nome,
+
+                campo_origem_id : this.nr_campo_origem_id.id,
+                ds_nome_campo_origem : this.nr_campo_origem_id.ds_nome,
+
+                campo_destino_id : this.nr_campo_destino_id.id,
+                ds_nome_campo_destino : this.nr_campo_destino_id.ds_nome
+             };
+            
+            console.log(arrNovaChave);
+
+            this.arrTabelaChaves.push(arrNovaChave);
         },
     },
 
@@ -379,6 +392,7 @@ var app_lista_tabela = new Vue({
          * Responsavel por buscar os campos da tabela selecionada
          */
         nr_tabela_destino_id: function() {
+            this.nr_campo_destino_id = null;
             var nr_tabela_id = this.nr_tabela_destino_id.id;
 
             fetch('/tabela/campos/get/' + nr_tabela_id)
