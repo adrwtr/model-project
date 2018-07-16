@@ -129,22 +129,35 @@
                                             <th>
                                                 Campo da tabela de Destino
                                             </th>
+
+                                            <th>
+                                                Excluir
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="arrValores in arrTabelaChaves">
-                                            <td>
+                                        <tr v-for="(arrValores, nr_index) in arrTabelaChaves">
+                                            <td width="5%">
                                                 {{arrValores.ds_nome_chave}}
                                             </td>
-                                            <td>
+                                            <td width="30">
                                                 Campo da tabela atual - {{arrValores.ds_nome_campo_origem}}
                                             </td>
-                                            <td>
+                                            <td width="30">
                                                 Tabela de Destino - {{arrValores.ds_nome_tabela_destino}}
                                             </td>
 
-                                            <td>
+                                            <td width="30">
                                                 Campo da tabela de Destino - {{arrValores.ds_nome_campo_destino}}
+                                            </td>
+
+                                            <td width="1%">
+                                                <button type="button" class="btn btn-secondary"
+                                                        v-on:click="excluirFk(nr_index)"
+                                                        style="font-size: 10px;"
+                                                        class="btn btn-primary" slot="footer" >
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -265,7 +278,9 @@ var app_lista_tabela = new Vue({
         ds_sql : '',
         arrCampos : [],
         arrCamposExcluido : [],
+
         arrTabelaChaves : [],
+        arrTabelaChavesExcluido : [],
 
 
         // modal
@@ -333,7 +348,9 @@ var app_lista_tabela = new Vue({
                 ds_tabela : this.ds_tabela,
                 ds_descricao: this.ds_descricao,
                 arrCampos : this.arrCampos,
-                arrCamposExcluido : this.arrCamposExcluido
+                arrCamposExcluido : this.arrCamposExcluido,
+                arrTabelaChaves : this.arrTabelaChaves,
+                arrTabelaChavesExcluido : this.arrTabelaChavesExcluido
             };
 
             console.log(arrPost);
@@ -368,22 +385,36 @@ var app_lista_tabela = new Vue({
         addCampoFk: function() {
             var arrNovaChave = {
                 id : null,
-                tabela_origem_id : null,
+                tabela_origem_id : this.nr_tabela_id,
+                ds_nome_tabela_referencia : this.ds_tabela,
                 ds_nome_chave : this.nr_tipo_de_chave_id.ds_nome,
 
                 tabela_destino_id : this.nr_tabela_destino_id.id,
                 ds_nome_tabela_destino : this.nr_tabela_destino_id.ds_nome,
+                ds_nome_tabela_referencia : this.nr_tabela_destino_id.ds_nome,
+
 
                 campo_origem_id : this.nr_campo_origem_id.id,
                 ds_nome_campo_origem : this.nr_campo_origem_id.ds_nome,
+                ds_nome_campo : this.nr_campo_origem_id.ds_nome,
 
                 campo_destino_id : this.nr_campo_destino_id.id,
-                ds_nome_campo_destino : this.nr_campo_destino_id.ds_nome
+                ds_nome_campo_destino : this.nr_campo_destino_id.ds_nome,
+                ds_nome_campo_referencia : this.nr_campo_destino_id.ds_nome
              };
-            
+
             console.log(arrNovaChave);
 
             this.arrTabelaChaves.push(arrNovaChave);
+        },
+
+        excluirFk: function(nr_index) {
+            this.arrTabelaChavesExcluido.push(this.arrTabelaChaves[nr_index]);
+
+            this.arrTabelaChaves
+                .splice(nr_index, 1);
+
+            this.sn_desfazer_campo_excluido = true;
         },
     },
 

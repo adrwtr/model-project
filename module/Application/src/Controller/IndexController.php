@@ -114,6 +114,9 @@ class IndexController extends BaseServiceManagerController
         $arrCampos = $objJson->arrCampos ?? [];
         $arrCamposExcluido = $objJson->arrCamposExcluido ?? [];
 
+        $arrTabelaChaves = $objJson->arrTabelaChaves ?? [];
+        $arrTabelaChavesExcluido = $objJson->arrTabelaChavesExcluido ?? [];
+
         $objTabela = null;
 
         if ($ds_tabela != '') {
@@ -139,6 +142,19 @@ class IndexController extends BaseServiceManagerController
                 $objInserirPorArrayService->updateCampos(
                     $objTabela,
                     $arrCampos
+                );
+            }
+
+            if (count($arrTabelaChavesExcluido) > 0) {
+                $objInserirPorArrayService->excluirTabelaChave(
+                    $arrTabelaChavesExcluido
+                );
+            }
+
+            if (count($arrTabelaChaves) > 0) {
+                $objInserirPorArrayService->updateForeingkeys(
+                    $objTabela,
+                    $arrTabelaChaves
                 );
             }
         }

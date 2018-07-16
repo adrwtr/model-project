@@ -144,12 +144,12 @@ class InserirPorArrayService {
         }
     }
 
-    private function updateForeingkeys(
+    public function updateForeingkeys(
         $objTabela,
         $arrForeingkeys
     ) {
         $arrCamposTabela = $objTabela->getArrCampos();
-
+dump($arrForeingkeys);
         foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
             $nr_campo_id = $objForeingkey->id ?? 0;
             $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
@@ -267,6 +267,39 @@ class InserirPorArrayService {
 
                 $this->getEntityManager()
                     ->remove($objCampo);
+            }
+
+            $this->getEntityManager()
+                ->flush();
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Exclui uma serie de chaves de tabela informados no array
+     * o array deve conter uma lista de objetos std->id
+     *
+     * @param $arrTabelaChaveExcluir
+     * @return $this
+     */
+    public function excluirTabelaChave(
+        $arrTabelaChaveExcluir
+    ) {
+        if (is_array($arrTabelaChaveExcluir)) {
+            foreach ($arrTabelaChaveExcluir as $nr_id => $arrCampo) {
+                $nr_campo_id = $arrCampo->id ?? 0;
+
+                $objTabelaChave = $this->getEntityManager()
+                    ->getRepository(
+                        \Application\Entity\TabelaChave::class
+                    )->findOneBy([
+                        'id' => $nr_campo_id
+                    ]);
+
+                $this->getEntityManager()
+                    ->remove($objTabelaChave);
             }
 
             $this->getEntityManager()

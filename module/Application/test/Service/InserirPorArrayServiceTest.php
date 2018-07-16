@@ -120,9 +120,50 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
             \Application\Entity\Campo::class,
             4
         );
+    }
 
 
-        // $arrCamposExcluir =
+    public function testExcluirTabelaChave()
+    {
+        $objComandosSqlService = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\ComandosSqlService::class);
+
+        $objComandosSqlService->parse(
+            $this->getDsSqlForeingKeyDuplo()
+        );
+
+        $arrTabelas = $objComandosSqlService->getArrTabelas();
+
+        $objInserirPorArrayService = $this->getApplicationServiceLocator()
+            ->get(\Application\Service\InserirPorArrayService::class);
+
+        $objInserirPorArrayService->inserirTabelas($arrTabelas);
+
+        $this->assertQtdRegistro(
+            \Application\Entity\TabelaChave::class,
+            1
+        );
+
+        $arrRegistros = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\TabelaChave::class
+            )->findAll();
+
+        $objTemp = new \stdClass;
+        $objTemp->id= $arrRegistros[0]->getId();
+
+        $arrExcluir = [
+            0 => $objTemp
+        ];
+
+        $objInserirPorArrayService->excluirTabelaChave(
+            $arrExcluir
+        );
+
+        $this->assertQtdRegistro(
+            \Application\Entity\TabelaChave::class,
+            0
+        );
     }
 
 
