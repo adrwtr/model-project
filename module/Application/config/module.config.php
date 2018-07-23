@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
 
-  'doctrine' => [
+    'doctrine' => [
         'driver' => [
             __NAMESPACE__ . '_driver' => [
                 'class' => AnnotationDriver::class,
@@ -65,6 +65,40 @@ return [
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
                         'action'     => 'lerSql',
+                    ],
+                ],
+            ],
+
+            'sistema-admin-tabela' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sistema/administrar[/:nr_registro]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'sistemaAdminTabela',
+                        'nr_registro' => '0'
+                    ],
+                ],
+            ],
+
+            'index-tabela' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/tabela',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'indexTabela',
+                    ],
+                ],
+            ],
+
+            'lista-sistemas' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/sistema/lista-sistemas',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'listaSistemas',
                     ],
                 ],
             ],
@@ -176,6 +210,7 @@ return [
 
     'service_manager' => [
         'factories' => [
+            \Zend\Session\Config\ConfigInterface::class => \Zend\Session\Service\SessionConfigFactory::class,
             \Application\Service\ComandosSqlService::class => Factory\ComandosSqlServiceFactory::class,
             \Application\Service\InserirPorArrayService::class => Factory\InserirPorArrayServiceFactory::class,
 
@@ -183,6 +218,7 @@ return [
             \Application\Service\Dql\CampoDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\TabelaChaveDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\TipoDeChaveDqlService::class => InvokableFactory::class,
+            \Application\Service\Dql\SistemaDqlService::class => InvokableFactory::class,
 
 
             \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,
@@ -198,6 +234,7 @@ return [
             Controller\IndexController::class => Factory\ControllerComServiceFactory::class,
         ],  */
     ],
+
 
     'view_manager' => [
         'display_not_found_reason' => true,
@@ -222,4 +259,21 @@ return [
             'ViewJsonStrategy',
         ),
     ],
+
+    'session' => array(
+        'config' => array(
+            'class' => 'Zend\Session\Config\SessionConfig',
+            'options' => array(
+                'name' => 'myapp',
+            ),
+        ),
+
+        'storage' => 'Zend\Session\Storage\SessionArrayStorage',
+
+        'validators' => array(
+            'Zend\Session\Validator\RemoteAddr',
+            'Zend\Session\Validator\HttpUserAgent',
+        ),
+    ),
+
 ];

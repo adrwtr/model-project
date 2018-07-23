@@ -53,6 +53,12 @@ class Tabela
      */
     public $arrTabelaChaveDestino;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Sistema", inversedBy="arrTabelas")
+     * @ORM\JoinColumn(name="sistema_id", referencedColumnName="id")
+     */
+    private $objSistema;
+
 
     public function __construct() {
         $this->arrCampos = new ArrayCollection();
@@ -67,6 +73,15 @@ class Tabela
 
     public function setId($id) {
         $this->id = $id;
+        return $this;
+    }
+
+    public function getObjSistema() {
+        return $this->objSistema;
+    }
+
+    public function setObjSistema($objSistema) {
+        $this->objSistema = $objSistema;
         return $this;
     }
 

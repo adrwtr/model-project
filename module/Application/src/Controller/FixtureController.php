@@ -19,10 +19,23 @@ class FixtureController extends BaseServiceManagerController
         $objectSet = $loader->loadFile(__DIR__ . '\..\..\fixture\fixture-tabelas.yaml');
         $arrFixtures = $objectSet->getObjects();
 
+        $this->clearSistema();
         $this->clearTabela();
 
         $this->getEntityManager()
+            ->persist($arrFixtures['sistema1']);
+        $this->getEntityManager()
+            ->persist($arrFixtures['sistema2']);
+
+        $this->getEntityManager()
+            ->flush();
+
+        $this->getEntityManager()
             ->persist($arrFixtures['tabela1']);
+        $this->getEntityManager()
+            ->persist($arrFixtures['tabela2']);
+        $this->getEntityManager()
+            ->persist($arrFixtures['tabelaSistema2']);
 
         $this->getEntityManager()
             ->flush();
@@ -30,9 +43,18 @@ class FixtureController extends BaseServiceManagerController
         return new ViewModel();
     }
 
+    public function clearSistema() {
+        $objQuery = $this->getEntityManager()
+            ->createQuery('delete from \\Application\\Entity\\Sistema');
+
+        $objQuery->execute();
+
+        return $this;
+    }
+
     public function clearTabela() {
         $objQuery = $this->getEntityManager()
-            ->createQuery('delete from \\Application\\Entity\\Tabela as t');
+            ->createQuery('delete from \\Application\\Entity\\Tabela');
 
         $objQuery->execute();
 

@@ -5,10 +5,13 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
+use Zend\Session\Container;
 use Application\Controller\BaseServiceManagerController;
+
 use \Application\Entity\Tabela;
 use \Application\Entity\Campo;
 use \Application\Entity\TipoDeChave;
+
 
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
@@ -25,19 +28,60 @@ class IndexController extends BaseServiceManagerController
         return new ViewModel();
     }
 
+    public function indexTabelaAction()
+    {
+        return new ViewModel();
+    }
+
     public function listaTabelasAction()
     {
+        // seta na sessao
+        $objContainer = new Container('projeto');
+        $nr_sistema_id = $objContainer->nr_sistema_id;
+
+        if ($nr_sistema_id == null) {
+            $nr_sistema_id = 1;
+        }
+
         $arrValores = $this->getEntityManager()
             ->createQuery(
                 $this->getObjSm()
                     ->get(\Application\Service\Dql\TabelaDqlService::class)
                     ->listaTabelas()
             )
+            ->setParameter('nr_sistema_id', $nr_sistema_id)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return new JsonModel(
             $arrValores
         );
+    }
+
+    public function listaSistemasAction()
+    {
+        $arrValores = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\SistemaDqlService::class)
+                    ->listaSistemas()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return new JsonModel(
+            $arrValores
+        );
+    }
+
+    public function sistemaAdminTabelaAction()
+    {
+        $nr_registro = $this->params()
+            ->fromRoute('nr_registro');
+
+        // seta na sessao
+        $objContainer = new Container('projeto');
+        $objContainer->nr_sistema_id = $nr_registro;
+
+        return $this->redirect()->toRoute('index-tabela');
     }
 
     public function getTabelaAction()

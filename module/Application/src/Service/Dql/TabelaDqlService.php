@@ -6,7 +6,8 @@ class TabelaDqlService
     public function listaTabelas()
     {
         return 'select t from \Application\Entity\Tabela t'
-            . ' where t.sn_excluido = 0 and t.sn_temporario = 0';
+            . ' where t.sn_excluido = 0 and t.sn_temporario = 0'
+            . ' and t.objSistema = :nr_sistema_id';
     }
 
     public function getTabelaById()

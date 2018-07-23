@@ -1,27 +1,46 @@
+Application\Entity\Sistema:
+    sistema1:
+        id: 1
+        ds_nome: 'Sistema 1'
+    sistema2:
+        id: 2
+        ds_nome: 'Sistema 2'
+
 Application\Entity\Tabela:
     tabela1:
         id: 1
+        objSistema: '@sistema1'
         ds_nome: 'Tabela 1'
         ds_descricao: 'Tabela 1'
         sn_temporario: false
         sn_excluido: false
     tabela2:
         id: 2
+        objSistema: '@sistema1'
         ds_nome: 'Tabela 2'
         ds_descricao: 'Tabela 2'
         sn_temporario: false
         sn_excluido: false
     tabelaExcluida:
         id: 3
+        objSistema: '@sistema1'
         ds_nome: 'Tabela Excluida'
         ds_descricao: 'Tabela Excluida'
         sn_temporario: false
         sn_excluido: true
     tabelaTemporaria:
         id: 4
+        objSistema: '@sistema1'
         ds_nome: 'Tabela Temporaria'
         ds_descricao: 'Tabela Temporaria'
         sn_temporario: true
+        sn_excluido: false
+    tabelaSistema2:
+        id: 5
+        objSistema: '@sistema2'
+        ds_nome: 'Tabela 5'
+        ds_descricao: 'Tabela 5'
+        sn_temporario: false
         sn_excluido: false
 
 Application\Entity\Campo:

@@ -39,6 +39,10 @@ CRUD campos
 É necessario manter atualizado o arquivo sql.sqlite e sql_unittest.sqlite
 .\vendor\bin\phpunit
 
+## Rotas
+    http://localhost/
+    http://localhost/fixture
+
 ## comandos
     D:\dev\php\modelpage>php ..\composer.phar serve
     D:\dev\php\modelpage>.\vendor\bin\phpunit
