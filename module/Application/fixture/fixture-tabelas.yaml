@@ -6,6 +6,17 @@ Application\Entity\Sistema:
         id: 2
         ds_nome: 'Sistema 2'
 
+Application\Entity\TipoDeChave:
+    tipoDeChave1:
+        ds_nome: 'Foreing Key'
+        ds_chave: 'FOREING_KEY'
+    tipoDeChave2:
+        ds_nome: 'Chave Lógica'
+        ds_chave: 'LOGIC_KEY'
+    tipoDeChave3:
+        ds_nome: 'Chave Unica'
+        ds_chave: 'UNIQUE_KEY'
+
 Application\Entity\Tabela:
     tabela1:
         id: 1
@@ -42,15 +53,3 @@ Application\Entity\Tabela:
         ds_descricao: 'Tabela 5'
         sn_temporario: false
         sn_excluido: false
-
-Application\Entity\Campo:
-    campo1:
-        id: 1
-        objTabela: '@tabela1'
-        ds_nome: 'campo 1 tabela 1'
-        ds_prop: ''
-    campo2:
-        id: 2
-        objTabela: '@tabela1'
-        ds_nome: 'campo 2 tabela 1'
-        ds_prop: ''

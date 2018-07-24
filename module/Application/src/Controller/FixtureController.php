@@ -19,31 +19,69 @@ class FixtureController extends BaseServiceManagerController
         $objectSet = $loader->loadFile(__DIR__ . '\..\..\fixture\fixture-tabelas.yaml');
         $arrFixtures = $objectSet->getObjects();
 
-        $this->clearSistema();
-        $this->clearTabela();
+        $this->processClear(
+            $this->arrClear()
+        );
 
-        $this->getEntityManager()
-            ->persist($arrFixtures['sistema1']);
-        $this->getEntityManager()
-            ->persist($arrFixtures['sistema2']);
-
-        $this->getEntityManager()
-            ->flush();
-
-        $this->getEntityManager()
-            ->persist($arrFixtures['tabela1']);
-        $this->getEntityManager()
-            ->persist($arrFixtures['tabela2']);
-        $this->getEntityManager()
-            ->persist($arrFixtures['tabelaSistema2']);
-
-        $this->getEntityManager()
-            ->flush();
+        $this->processInclusaoFixtures(
+            $arrFixtures
+        );
 
         return new ViewModel();
     }
 
-    public function clearSistema() {
+    // Limpa todas estas tabelas
+    public function arrClear()
+    {
+        $arrTabelas = array(
+            'Sistema',
+            'TipoDeChave',
+            'Tabela',
+            'Campo'
+        );
+
+        return $arrTabelas;
+    }
+
+    public function arrIncluirPadrao()
+    {
+        $arrTabelas = array(
+            'Sistema',
+            'TipoDeChave',
+            'Tabela',
+            'Campo'
+        );
+
+        return $arrTabelas;
+    }
+
+    public function processClear($arrTabelas)
+    {
+        foreach ($arrTabelas as $key => $value) {
+            $objQuery = $this->getEntityManager()
+                ->createQuery('delete from \\Application\\Entity\\' . $value);
+
+            $objQuery->execute();
+            unset($objQuery);
+        }
+
+        $this->getEntityManager()
+            ->flush();
+    }
+
+    public function processInclusaoFixtures($arrFixtures)
+    {
+        foreach ($arrFixtures as $key => $value) {
+            $this->getEntityManager()
+                ->persist($value);
+        }
+
+        $this->getEntityManager()
+            ->flush();
+    }
+
+    public function clearSistema()
+    {
         $objQuery = $this->getEntityManager()
             ->createQuery('delete from \\Application\\Entity\\Sistema');
 

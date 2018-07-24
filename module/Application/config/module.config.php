@@ -210,7 +210,7 @@ return [
 
     'service_manager' => [
         'factories' => [
-            \Zend\Session\Config\ConfigInterface::class => \Zend\Session\Service\SessionConfigFactory::class,
+
             \Application\Service\ComandosSqlService::class => Factory\ComandosSqlServiceFactory::class,
             \Application\Service\InserirPorArrayService::class => Factory\InserirPorArrayServiceFactory::class,
 
@@ -259,21 +259,4 @@ return [
             'ViewJsonStrategy',
         ),
     ],
-
-    'session' => array(
-        'config' => array(
-            'class' => 'Zend\Session\Config\SessionConfig',
-            'options' => array(
-                'name' => 'myapp',
-            ),
-        ),
-
-        'storage' => 'Zend\Session\Storage\SessionArrayStorage',
-
-        'validators' => array(
-            'Zend\Session\Validator\RemoteAddr',
-            'Zend\Session\Validator\HttpUserAgent',
-        ),
-    ),
-
 ];

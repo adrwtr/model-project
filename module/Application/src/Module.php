@@ -18,15 +18,4 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-
-    public function onBootstrap(
-        MvcEvent $objMvcEvent
-    ) {
-        $application = $objMvcEvent->getApplication();
-        $serviceManager = $application->getServiceManager();
-
-        $manager = new SessionManager();
-        \Zend\Session\Container::setDefaultManager($manager);
-        // $serviceManager->get(SessionManager::class);
-    }
 }

@@ -30,7 +30,9 @@ class IndexController extends BaseServiceManagerController
 
     public function indexTabelaAction()
     {
-        return new ViewModel();
+        return new ViewModel(
+            []
+        );
     }
 
     public function listaTabelasAction()
@@ -38,10 +40,6 @@ class IndexController extends BaseServiceManagerController
         // seta na sessao
         $objContainer = new Container('projeto');
         $nr_sistema_id = $objContainer->nr_sistema_id;
-
-        if ($nr_sistema_id == null) {
-            $nr_sistema_id = 1;
-        }
 
         $arrValores = $this->getEntityManager()
             ->createQuery(

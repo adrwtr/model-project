@@ -106,15 +106,20 @@ var app_lista_tabela = new Vue({
 
     methods: {
         getListRegistros: function() {
-            fetch('/sistema/lista-sistemas')
-                .then(objResponse => objResponse.json())
-                .then(
-                    arrJson => {
-                        this.arrSistemas = arrJson;
-                        this.arrSistemasOriginal = arrJson;
-                        this.sn_carregando = false;
-                    }
-                );
+            fetch(
+                '/sistema/lista-sistemas',
+                {
+                    credentials: 'include'
+                }
+            )
+            .then(objResponse => objResponse.json())
+            .then(
+                arrJson => {
+                    this.arrSistemas = arrJson;
+                    this.arrSistemasOriginal = arrJson;
+                    this.sn_carregando = false;
+                }
+            );
         },
 
         goToEditar: function(nr_id) {
