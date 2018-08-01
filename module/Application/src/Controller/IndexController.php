@@ -257,11 +257,12 @@ class IndexController extends BaseServiceManagerController
 
         $ds_sql = $this->getObjSm()
             ->get(\Application\Service\Dql\TabelaDqlService::class)
-            ->listaTabelasTemporarias();
+            ->nativeListaTabelasTemporarias();
 
         $objStmt = $conn->prepare($ds_sql);
         $objStmt->execute();
         $arrValores = $objStmt->fetch();
+
 
         return new JsonModel(
             [

@@ -378,8 +378,6 @@
                             }
                             return;
                         }
-
-                        console.log(objResponse);
                     }
                 )
                 .catch(
@@ -421,6 +419,9 @@
                 .then(
                     arrJson => {
                         this.arrComparacao = arrJson.arrComparacao;
+
+                        // abrir modal de comparacao
+                        $("#modalTemporario").modal();
                     }
                 );
             },
