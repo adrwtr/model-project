@@ -263,11 +263,77 @@ class IndexController extends BaseServiceManagerController
         $objStmt->execute();
         $arrValores = $objStmt->fetch();
 
+        $nr_tabela_1_id = $arrValores['id'];
+        $nr_tabela_2_id = $arrValores['id_temp'];
+
+        // TODO: converter as buscas abaixo para uma função
+
+        $arrCampos1 = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\CampoDqlService::class)
+                    ->getCamposFromTabela()
+            )
+            ->setParameter('tabela_id', $nr_tabela_1_id)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $arrCampos2 = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\CampoDqlService::class)
+                    ->getCamposFromTabela()
+            )
+            ->setParameter('tabela_id', $nr_tabela_2_id)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        // TODO: converter essa logica abaixo para uma função separada
+
+        $arrCamposIguais = [];
+        $arrSemIgualdadeA = [];
+        $arrSemIgualdadeB = [];
+
+        foreach ($arrCampos2 as $nr_campo_id => $arrCampo2) {
+            $arrCampos2[$nr_campo_id]['sn_correspondente'] = false;
+        }
+
+        foreach ($arrCampos1 as $nr_campo_id => $arrCampo1) {
+            $arrCampos1[$nr_campo_id]['sn_correspondente'] = false;
+
+            foreach ($arrCampos2 as $nr_campo_id2 => $arrCampo2) {
+                // encontrou correspondente
+                if ($arrCampo1['ds_nome'] == $arrCampo2['ds_nome']) {
+                    $arrCampos1[$nr_campo_id]['sn_correspondente'] = true;
+                    $arrCampos2[$nr_campo_id2]['sn_correspondente'] = true;
+
+                    $arrCamposIguais[] = array(
+                        'arrCampo1' => $arrCampo1,
+                        'arrCampo2' => $arrCampo2
+                    );
+                }
+            }
+        }
+
+        // TODO: converter estas chamadas para um lambda
+
+        foreach ($arrCampos1 as $nr_campo_id => $arrCampo1) {
+            if ($arrCampo1['sn_correspondente'] == false) {
+                $arrSemIgualdadeA[] = $arrCampo1;
+            }
+        }
+
+        foreach ($arrCampos2 as $nr_campo_id => $arrCampo2) {
+            if ($arrCampo2['sn_correspondente'] == false) {
+                $arrSemIgualdadeB[] = $arrCampo2;
+            }
+        }
 
         return new JsonModel(
             [
                 'sn_sucesso' => true,
-                'arrComparacao' => $arrValores
+                'arrComparacao' => $arrValores,
+                'arrCamposIguais' => $arrCamposIguais,
+                'arrSemIgualdadeA' => $arrSemIgualdadeA,
+                'arrSemIgualdadeB' => $arrSemIgualdadeB,
             ]
         );
     }

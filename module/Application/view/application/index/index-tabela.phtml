@@ -195,7 +195,7 @@
 
     <!-- modal temporario -->
     <div class="modal" tabindex="-1" role="dialog" id="modalTemporario">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Comparar tabelas</h5>
@@ -213,6 +213,88 @@
                         </div>
                         <div class="col-md-6">
                             {{ arrComparacao.ds_nome_temp }}
+                        </div>
+                    </div>
+
+
+                    <div class="row" id="" v-for="arrCampo in arrCamposIguais">
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{ arrCampo.arrCampo1.ds_nome }}
+                                    </td>
+                                    <td>
+                                        {{ arrCampo.arrCampo1.ds_prop }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{ arrCampo.arrCampo2.ds_nome }}
+                                    </td>
+                                    <td>
+                                        {{ arrCampo.arrCampo2.ds_prop }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row" id="" v-for="(arrCampo, index) in arrSemIgualdadeA">
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{ arrCampo.ds_nome }}
+                                    </td>
+                                    <td>
+                                        {{ arrCampo.ds_prop }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        -
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row" id="" v-for="(arrCampo, index) in arrSemIgualdadeB">
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        -
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{ arrCampo.ds_nome }}
+                                    </td>
+                                    <td>
+                                        {{ arrCampo.ds_prop }}
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 
@@ -257,10 +339,15 @@
 
             // comparador
             arrComparacao: [],
+            arrCamposIguais: [],
+            arrSemIgualdadeA: [],
+            arrSemIgualdadeB: [],
 
             // ultimo campo excluido
             arrCampoExcluido : [],
             sn_desfazer_campo_excluido : false
+
+
         },
 
         created: function() {
@@ -303,6 +390,8 @@
                         this.arrTabelas = arrJson;
                         this.arrTabelasOriginal = arrJson;
                         this.sn_carregando = false;
+
+                        this.iniciarCorrecaoTemporarios();
                     }
                 );
             },
@@ -419,6 +508,9 @@
                 .then(
                     arrJson => {
                         this.arrComparacao = arrJson.arrComparacao;
+                        this.arrCamposIguais = arrJson.arrCamposIguais;
+                        this.arrSemIgualdadeA = arrJson.arrSemIgualdadeA;
+                        this.arrSemIgualdadeB = arrJson.arrSemIgualdadeB;
 
                         // abrir modal de comparacao
                         $("#modalTemporario").modal();
