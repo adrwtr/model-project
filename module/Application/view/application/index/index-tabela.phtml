@@ -217,11 +217,20 @@
                     </div>
 
 
-                    <div class="row" id="" v-for="arrCampo in arrCamposIguais">
+                    <div class="row" id="" v-for="(arrCampo, nr_key) in arrCamposIguais">
                         <div class="col-md-6">
                             <table>
                                 <tr>
                                     <td>
+                                        Nome do Campo
+                                    </td>
+                                    <td>
+                                        Tipo do Campo
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="1" v-model="arrCampo.arrCampo1.sn_selecionado"> -
                                         {{ arrCampo.arrCampo1.ds_nome }}
                                     </td>
                                     <td>
@@ -234,6 +243,15 @@
                             <table>
                                 <tr>
                                     <td>
+                                        Nome do Campo
+                                    </td>
+                                    <td>
+                                        Tipo do Campo
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="1" v-model="arrCampo.arrCampo2.sn_selecionado"> -
                                         {{ arrCampo.arrCampo2.ds_nome }}
                                     </td>
                                     <td>
@@ -249,6 +267,8 @@
                             <table>
                                 <tr>
                                     <td>
+                                        <input type="checkbox" value="1" v-model="arrCampo.sn_selecionado"
+                                               checked="checked"> -
                                         {{ arrCampo.ds_nome }}
                                     </td>
                                     <td>
@@ -288,6 +308,8 @@
                             <table>
                                 <tr>
                                     <td>
+                                        <input type="checkbox" value="1" v-model="arrCampo.sn_selecionado"
+                                               checked="checked">
                                         {{ arrCampo.ds_nome }}
                                     </td>
                                     <td>
@@ -302,10 +324,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary"
-                            v-on:click="doDelete()"
-                            data-dismiss="modal">Sim</button>
-                    <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">Não</button>
+                            v-on:click="doMergeTabela()">Merge</button>
                 </div>
             </div>
         </div>
@@ -450,7 +469,8 @@
                     '/tabela/update',
                     arrPost,
                     {
-                        withCredentials: true
+                        withCredentials: true,
+                        credentials: 'include'
                     }
                 )
                 .then(
@@ -528,6 +548,46 @@
 
             verDetalhes: function(tabela_id) {
                 document.location = '/tabela/detalhes/' + tabela_id;
+            },
+
+
+            doMergeTabela: function() {
+                var arrPost = {
+                    arrComparacao : this.arrComparacao,
+                    arrCamposIguais : this.arrCamposIguais,
+                    arrSemIgualdadeA : this.arrSemIgualdadeA,
+                    arrSemIgualdadeB: this.arrSemIgualdadeB
+                };
+
+                axios.post(
+                    '/tabela/merge',
+                    arrPost,
+                    {
+                        withCredentials: true,
+                        credentials: 'include'
+                    }
+                )
+                .then(
+                    function (objResponse) {
+                        if (objResponse.data.sn_sucesso == true) {
+                            app_lista_tabela.getListRegistros();
+                            app_lista_tabela.limparCampos();
+
+                            // processar temporarios?
+                            var sn_temporario = objResponse.data.sn_tem_temporario;
+
+                            if (sn_temporario == true) {
+                                app_lista_tabela.iniciarCorrecaoTemporarios();
+                            }
+                            return;
+                        }
+                    }
+                )
+                .catch(
+                    function (error) {
+                        console.log(error);
+                    }
+                );
             }
         }
     });

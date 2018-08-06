@@ -125,6 +125,17 @@ return [
                 ],
             ],
 
+            'merge-tabelas' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/tabela/merge',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'mergeTabelas',
+                    ],
+                ],
+            ],
+
             'get-tabela' => [
                 'type' => Segment::class,
                 'options' => [

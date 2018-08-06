@@ -233,14 +233,14 @@ class IndexController extends BaseServiceManagerController
         return new JsonModel(
             [
                 'sn_sucesso' => true,
-                'nr_tabela_id_cadastrado' => $objTabela->getId()
+                'nr_tabela_id_excluido' => $cd_registro
             ]
         );
     }
 
     public function lerSqlAction()
     {
-        $objComandosSqlService = $this->getObjSm()
+        $ds_sql = $objComandosSqlService = $this->getObjSm()
             ->get(\Application\Service\ComandosSqlService::class);
 
         $objComandosSqlService->parse($ds_sql);
@@ -317,12 +317,14 @@ class IndexController extends BaseServiceManagerController
 
         foreach ($arrCampos1 as $nr_campo_id => $arrCampo1) {
             if ($arrCampo1['sn_correspondente'] == false) {
+                $arrCampo1['sn_selecionado'] = true;
                 $arrSemIgualdadeA[] = $arrCampo1;
             }
         }
 
         foreach ($arrCampos2 as $nr_campo_id => $arrCampo2) {
             if ($arrCampo2['sn_correspondente'] == false) {
+                $arrCampo2['sn_selecionado'] = true;
                 $arrSemIgualdadeB[] = $arrCampo2;
             }
         }
@@ -365,6 +367,76 @@ class IndexController extends BaseServiceManagerController
         return new JsonModel(
             [
                 'arrCampos' => $arrCampos
+            ]
+        );
+    }
+
+
+    public function mergeTabelasAction()
+    {
+        $ds_json_post = $this->getRequest()
+            ->getContent();
+
+        $objJson = json_decode($ds_json_post);
+
+        $nr_tabela_id = $objJson->nr_tabela_id ?? 0;
+
+        $arrComparacao = $objJson->arrComparacao;
+        $arrCamposIguais = $objJson->arrCamposIguais;
+        $arrSemIgualdadeA = $objJson->arrSemIgualdadeA;
+        $arrSemIgualdadeB = $objJson->arrSemIgualdadeB;
+
+        // qual vamos manter e
+        // qual vamos apagar?
+        $nr_id_manter = $arrComparacao->id > $arrComparacao->id_temp
+            ? $arrComparacao->id
+            : $arrComparacao->id_temp;
+
+        $nr_id_apagar = $arrComparacao->id > $arrComparacao->id_temp
+            ? $arrComparacao->id_temp
+            : $arrComparacao->id;
+
+        $nr_tabela_id_1 = $arrComparacao->id;
+        $nr_tabela_id_2 = $arrComparacao->id_temp;
+
+        // campos da comparacao
+        foreach ($arrComparacao as $arrCampos) {
+            $sn_campo1_apagado = false;
+            if ($arrCampos['arrCampo1']['sn_selecionado'] == false) {
+                $sn_campo1_apagado = true;
+                // apagar campo 1 da tabela 1
+
+            }
+
+            if ($arrCampos['arrCampo2']['sn_selecionado'] == false) {
+                // apagar campo 2 da tabela 2
+            }
+
+            if ($arrCampos['arrCampo2']['sn_selecionado'] == true && $sn_campo1_apagado == true) {
+                // atualiza o campo 2 para ser da tabela 1
+            }
+        }
+
+
+        foreach ($arrSemIgualdadeA as $arrCampo) {
+            if ($arrCampo['sn_selecionado'] == false) {
+                // apagar campo da tabela 1
+            }
+        }
+
+        foreach ($arrSemIgualdadeB as $arrCampo) {
+            if ($arrCampo['sn_selecionado'] == false) {
+                // apagar campo da tabela 1
+            }
+        }
+        dump($arrCamposIguais);
+        dump($arrSemIgualdadeA);
+        dump($arrSemIgualdadeB);
+
+
+        return new JsonModel(
+            [
+                'sn_sucesso' => true
             ]
         );
     }
