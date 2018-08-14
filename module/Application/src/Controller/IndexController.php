@@ -379,8 +379,6 @@ class IndexController extends BaseServiceManagerController
 
         $objJson = json_decode($ds_json_post);
 
-        $nr_tabela_id = $objJson->nr_tabela_id ?? 0;
-
         $arrComparacao = $objJson->arrComparacao;
         $arrCamposIguais = $objJson->arrCamposIguais;
         $arrSemIgualdadeA = $objJson->arrSemIgualdadeA;
@@ -388,32 +386,86 @@ class IndexController extends BaseServiceManagerController
 
         // qual vamos manter e
         // qual vamos apagar?
-        $nr_id_manter = $arrComparacao->id > $arrComparacao->id_temp
+        $nr_tabela_id_manter = $arrComparacao->id > $arrComparacao->id_temp
             ? $arrComparacao->id
             : $arrComparacao->id_temp;
 
-        $nr_id_apagar = $arrComparacao->id > $arrComparacao->id_temp
+        $nr_tabela_id_apagar = $arrComparacao->id > $arrComparacao->id_temp
             ? $arrComparacao->id_temp
             : $arrComparacao->id;
 
         $nr_tabela_id_1 = $arrComparacao->id;
         $nr_tabela_id_2 = $arrComparacao->id_temp;
 
+        dump($arrCamposIguais);
+
         // campos da comparacao
-        foreach ($arrComparacao as $arrCampos) {
+        foreach ($arrCamposIguais as $arrCampos) {
             $sn_campo1_apagado = false;
-            if ($arrCampos['arrCampo1']['sn_selecionado'] == false) {
+
+            if (!isset($arrCampos->arrCampo1->sn_selecionado)) {
+                $arrCampos->arrCampo1->sn_selecionado = false;
+            }
+
+            if ($arrCampos->arrCampo1->sn_selecionado == false) {
                 $sn_campo1_apagado = true;
+
                 // apagar campo 1 da tabela 1
+                $objCampoApagar = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Campo::class)
+                    ->findOneBy([
+                        'id' => $arrCampos->arrCampo1->id
+                    ]);
 
+                $this->getEntityManager()
+                    ->remove($objCampoApagar);
+
+                $this->getEntityManager()
+                    ->flush();
             }
 
-            if ($arrCampos['arrCampo2']['sn_selecionado'] == false) {
+            if (!isset($arrCampos->arrCampo2->sn_selecionado)) {
+                $arrCampos->arrCampo2->sn_selecionado = false;
+            }
+
+            if ($arrCampos->arrCampo2->sn_selecionado == false) {
                 // apagar campo 2 da tabela 2
+                // apagar campo 1 da tabela 1
+                $objCampoApagar = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Campo::class)
+                    ->findOneBy([
+                        'id' => $arrCampos->arrCampo2->id
+                    ]);
+
+                $this->getEntityManager()
+                    ->remove($objCampoApagar);
+
+                $this->getEntityManager()
+                    ->flush();
             }
 
-            if ($arrCampos['arrCampo2']['sn_selecionado'] == true && $sn_campo1_apagado == true) {
+            if (!isset($arrCampos->arrCampo2->sn_selecionado)) {
+                $arrCampos->arrCampo2->sn_selecionado = false;
+            }
+
+            if ($arrCampos->arrCampo2->sn_selecionado == true && $sn_campo1_apagado == true) {
                 // atualiza o campo 2 para ser da tabela 1
+                $objCampo2 = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Campo::class)
+                    ->findOneBy([
+                        'id' => $arrCampos->arrCampo2->id
+                    ]);
+
+                $objTabela1 = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Campo::class)
+                    ->findOneBy([
+                        'id' => $nr_tabela_id_1
+                    ]);
+
+                $objCampo2->setObjTabela($objTabela1);
+
+                $this->getEntityManager()
+                    ->flush();
             }
         }
 
@@ -421,18 +473,29 @@ class IndexController extends BaseServiceManagerController
         foreach ($arrSemIgualdadeA as $arrCampo) {
             if ($arrCampo['sn_selecionado'] == false) {
                 // apagar campo da tabela 1
+                $objCampoApagar = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Campo::class)
+                    ->findOneBy([
+                        'id' => $arrCampo['id']
+                    ]);
+
+                $this->getEntityManager()
+                    ->remove($objCampoApagar);
             }
         }
 
         foreach ($arrSemIgualdadeB as $arrCampo) {
             if ($arrCampo['sn_selecionado'] == false) {
-                // apagar campo da tabela 1
+                $objCampoApagar = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Campo::class)
+                    ->findOneBy([
+                        'id' => $arrCampo['id']
+                    ]);
+
+                $this->getEntityManager()
+                    ->remove($objCampoApagar);
             }
         }
-        dump($arrCamposIguais);
-        dump($arrSemIgualdadeA);
-        dump($arrSemIgualdadeB);
-
 
         return new JsonModel(
             [

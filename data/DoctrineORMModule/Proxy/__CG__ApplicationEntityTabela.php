@@ -108,10 +108,10 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', 'arrCampos', 'arrTabelaChaveOrigem', 'arrTabelaChaveDestino'];
+            return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', 'arrCampos', 'arrTabelaChaveOrigem', 'arrTabelaChaveDestino', '' . "\0" . 'Application\\Entity\\Tabela' . "\0" . 'objSistema'];
         }
 
-        return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao'];
+        return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', '' . "\0" . 'Application\\Entity\\Tabela' . "\0" . 'objSistema'];
     }
 
     /**
@@ -242,6 +242,28 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', [$id]);
 
         return parent::setId($id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getObjSistema()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObjSistema', []);
+
+        return parent::getObjSistema();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setObjSistema($objSistema)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setObjSistema', [$objSistema]);
+
+        return parent::setObjSistema($objSistema);
     }
 
     /**
