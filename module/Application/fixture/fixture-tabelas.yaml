@@ -44,7 +44,7 @@ Application\Entity\Tabela:
         objSistema: '@sistema1'
         ds_nome: 'Tabela Temporaria'
         ds_descricao: 'Tabela Temporaria'
-        sn_temporario: true
+        sn_temporario: false
         sn_excluido: false
     tabelaSistema2:
         id: 5

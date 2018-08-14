@@ -26,7 +26,7 @@
 
                 <div class="container">
                     <div class="row">
-                        <table class="table">
+                        <table class="table" id="table_lista_sistema">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -44,8 +44,8 @@
                                     <td>
                                         <button type="button" class="btn btn-secondary"
                                             v-on:click="goToEditar(arrValores.id)"
-                                            style="font-size: 10px;"
-                                            class="btn btn-primary">
+                                            v-bind:id="arrValores.id"
+                                            style="font-size: 10px;">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </td>
