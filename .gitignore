@@ -10,3 +10,9 @@ TODO.md
 Todo.todo
 *.sqlite
 teste
+node_modules/
+cypress/fixtures
+cypress/plugins
+cypress/screenshots
+cypress/support
+cypress/integration/examples
