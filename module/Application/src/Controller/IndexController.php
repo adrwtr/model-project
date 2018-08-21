@@ -37,7 +37,6 @@ class IndexController extends BaseServiceManagerController
 
     public function listaTabelasAction()
     {
-        // seta na sessao
         $objContainer = new Container('projeto');
         $nr_sistema_id = $objContainer->nr_sistema_id;
 
@@ -144,6 +143,10 @@ class IndexController extends BaseServiceManagerController
 
     public function updateTabelasAction()
     {
+        $objContainer = new Container('projeto');
+        $nr_sistema_id = $objContainer->nr_sistema_id;
+        $objSistema = $this->getObjSistema($nr_sistema_id);
+
         $ds_json_post = $this->getRequest()
             ->getContent();
 
@@ -166,6 +169,7 @@ class IndexController extends BaseServiceManagerController
                 ->get(
                     \Application\Service\Repository\TabelaService::class
                 )->persistir(
+                    $objSistema,
                     $ds_tabela,
                     $ds_descricao,
                     $nr_tabela_id
@@ -203,7 +207,10 @@ class IndexController extends BaseServiceManagerController
 
         // importar por sql
         if ($ds_sql != '') {
-            $objTabela = $this->processSql($ds_sql);
+            $objTabela = $this->processSql(
+                $objSistema,
+                $ds_sql
+            );
         }
 
         // verifica se foi incluido algum temporario
@@ -506,8 +513,10 @@ class IndexController extends BaseServiceManagerController
 
 
 
-    private function processSql($ds_sql)
-    {
+    private function processSql(
+        $objSistema,
+        $ds_sql
+    ) {
         $objComandosSqlService = $this->getObjSm()
             ->get(\Application\Service\ComandosSqlService::class);
 
@@ -522,6 +531,7 @@ class IndexController extends BaseServiceManagerController
                 ->get(\Application\Service\InserirPorArrayService::class);
 
             $objTabela = $objInserirPorArrayService->inserirTabelas(
+                $objSistema,
                 $arrTabelas
             );
         }
@@ -542,5 +552,14 @@ class IndexController extends BaseServiceManagerController
         }
 
         return false;
+    }
+
+    private function getObjSistema($nr_sistema_id)
+    {
+        return $this->getEntityManager()
+            ->getRepository(\Application\Entity\Sistema::class)
+            ->findOneBy([
+                'id' => $nr_sistema_id
+            ]);
     }
 }

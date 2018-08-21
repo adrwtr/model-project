@@ -39,6 +39,9 @@ CRUD campos
 É necessario manter atualizado o arquivo sql.sqlite e sql_unittest.sqlite
 .\vendor\bin\phpunit
 
+## Para rodar E2E tests
+node_modules\.bin\cypress open
+
 ## Rotas
     http://localhost/
     http://localhost/fixture
@@ -46,6 +49,7 @@ CRUD campos
 ## comandos
     D:\dev\php\modelpage>php ..\composer.phar serve
     D:\dev\php\modelpage>.\vendor\bin\phpunit
+    D:\dev\php\modelpage>node_modules\.bin\cypress open
 
 ## Doctrine
     > windows:

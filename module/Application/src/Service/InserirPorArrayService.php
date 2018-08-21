@@ -23,7 +23,10 @@ class InserirPorArrayService {
     /**
      * Insere uma ou mais tabelas no banco de dados
      */
-    public function inserirTabelas($arrTabelas) {
+    public function inserirTabelas(
+        $objSistema,
+        $arrTabelas
+    ) {
         foreach ($arrTabelas as $arrTabela) {
             $ds_nome = $arrTabela['ds_nome'];
             $arrCampos = $arrTabela['arrCampos'];
@@ -34,6 +37,7 @@ class InserirPorArrayService {
                 ->get(
                     \Application\Service\Repository\TabelaService::class
                 )->persistir(
+                    $objSistema,
                     $ds_nome
                 );
 

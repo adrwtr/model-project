@@ -11,6 +11,7 @@ class TabelaService extends AbstractRepositoryService
     }
 
     public function persistir(
+        $objSistema,
         $ds_tabela,
         $ds_descricao = '',
         $nr_tabela_id = null
@@ -26,6 +27,7 @@ class TabelaService extends AbstractRepositoryService
                 ]);
         }
 
+        $objTabela->setObjSistema($objSistema);
         $objTabela->setDsNome($ds_tabela);
         $objTabela->setSnExcluido(false);
         $objTabela->setSnTemporario(false);
