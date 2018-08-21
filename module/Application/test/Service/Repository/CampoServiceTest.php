@@ -20,6 +20,13 @@ class CampoServiceTest extends AbstractZendServiceTestCase
 
     public function testPersistir()
     {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $this->assertQtdRegistro(
             \Application\Entity\Campo::class,
             0
@@ -28,6 +35,7 @@ class CampoServiceTest extends AbstractZendServiceTestCase
         $objTabela = $this->getApplicationServiceLocator()
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
+                $objSistema,
                 'teste 1',
                 'teste 1',
                 null
@@ -94,9 +102,17 @@ class CampoServiceTest extends AbstractZendServiceTestCase
 
     public function testGetObjCampoFromTabela()
     {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $objTabela = $this->getApplicationServiceLocator()
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
+                $objSistema,
                 'teste 1',
                 'teste 1',
                 null

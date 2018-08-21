@@ -20,6 +20,13 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
 
     public function testePersistir()
     {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $this->assertQtdRegistro(
             \Application\Entity\Tabela::class,
             0
@@ -28,6 +35,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
         $this->getApplicationServiceLocator()
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
+                $objSistema,
                 'teste 1',
                 'teste 1',
                 null
@@ -41,6 +49,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
         $objTabela = $this->getApplicationServiceLocator()
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
+                $objSistema,
                 'teste 2',
                 'teste 2',
                 null
@@ -55,6 +64,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
         $this->getApplicationServiceLocator()
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
+                $objSistema,
                 'teste 2',
                 'teste 2 2',
                 $objTabela->getId()
@@ -68,9 +78,17 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
 
     public function testeDesativarTabela()
     {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $this->getApplicationServiceLocator()
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
+                $objSistema,
                 'teste 1',
                 'teste 1',
                 null

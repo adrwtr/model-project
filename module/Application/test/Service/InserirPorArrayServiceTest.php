@@ -18,6 +18,13 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
     }
 
 	public function testParse()	{
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $objComandosSqlService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\ComandosSqlService::class);
 
@@ -29,7 +36,10 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
 
         $this->getApplicationServiceLocator()
             ->get(\Application\Service\InserirPorArrayService::class)
-            ->inserirTabelas($arrTabelas);
+            ->inserirTabelas(
+                $objSistema,
+                $arrTabelas
+            );
 
         $this->assertQtdRegistro(
             \Application\Entity\Tabela::class,
@@ -43,6 +53,13 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
     }
 
     public function testParseForeingKey() {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $this->assertQtdRegistro(
             \Application\Entity\Tabela::class,
             0
@@ -59,7 +76,10 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
 
         $this->getApplicationServiceLocator()
             ->get(\Application\Service\InserirPorArrayService::class)
-            ->inserirTabelas($arrTabelas);
+            ->inserirTabelas(
+                $objSistema,
+                $arrTabelas
+            );
 
         $this->assertQtdRegistro(
             \Application\Entity\Tabela::class,
@@ -81,6 +101,13 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
 
     public function testExcluirCampos()
     {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $objComandosSqlService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\ComandosSqlService::class);
 
@@ -93,7 +120,10 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
         $objInserirPorArrayService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\InserirPorArrayService::class);
 
-        $objInserirPorArrayService->inserirTabelas($arrTabelas);
+        $objInserirPorArrayService->inserirTabelas(
+            $objSistema,
+            $arrTabelas
+        );
 
         $this->assertQtdRegistro(
             \Application\Entity\Campo::class,
@@ -125,6 +155,13 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
 
     public function testExcluirTabelaChave()
     {
+        $objSistema = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\Sistema::class
+            )->findOneBy([
+                'id' => 1
+            ]);
+
         $objComandosSqlService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\ComandosSqlService::class);
 
@@ -137,7 +174,10 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
         $objInserirPorArrayService = $this->getApplicationServiceLocator()
             ->get(\Application\Service\InserirPorArrayService::class);
 
-        $objInserirPorArrayService->inserirTabelas($arrTabelas);
+        $objInserirPorArrayService->inserirTabelas(
+            $objSistema,
+            $arrTabelas
+        );
 
         $this->assertQtdRegistro(
             \Application\Entity\TabelaChave::class,
