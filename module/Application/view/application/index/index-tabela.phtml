@@ -21,8 +21,9 @@
 
                             <div class="col-sm-2">
                                 <button type="button" class="btn btn-secondary"
-                                        v-on:click="modalIncluir"
-                                        data-toggle="modal" data-target="#modalFormulario">Nova</button>
+                                    id="btn_add_tabela"
+                                    v-on:click="modalIncluir"
+                                    data-toggle="modal" data-target="#modalFormulario">Nova</button>
                             </div>
                         </div>
                     </div>
@@ -30,7 +31,7 @@
 
                 <div class="container">
                     <div class="row">
-                        <table class="table" id="table_lista_sistema">
+                        <table class="table" id="table_lista_tabela">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -142,10 +143,10 @@
                                         <div class="col-sm-12">
                                             <label for="ds_sql">SQL</label>
                                             <textarea class="form-control"
-                                                      id="exampleFormControlTextarea1"
-                                                      v-model="ds_sql"
-                                                      cols="50"
-                                                      rows="10"></textarea>
+                                                id="exampleFormControlTextarea1"
+                                                v-model="ds_sql"
+                                                cols="50"
+                                                rows="10"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +159,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary"
                             v-on:click="submitModalIncluir"
-                            data-dismiss="modal">Save changes</button>
+                            data-dismiss="modal"
+                            id="btn_salvar_tabela">Save changes</button>
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Close</button>
                 </div>
@@ -469,7 +471,6 @@
                     '/tabela/update',
                     arrPost,
                     {
-                        withCredentials: true,
                         credentials: 'include'
                     }
                 )
@@ -563,7 +564,6 @@
                     '/tabela/merge',
                     arrPost,
                     {
-                        withCredentials: true,
                         credentials: 'include'
                     }
                 )

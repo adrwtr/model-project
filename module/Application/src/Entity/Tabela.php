@@ -55,7 +55,7 @@ class Tabela
 
     /**
      * @ORM\ManyToOne(targetEntity="Sistema", inversedBy="arrTabelas")
-     * @ORM\JoinColumn(name="sistema_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="sistema_id", referencedColumnName="id", nullable=false)
      */
     private $objSistema;
 
