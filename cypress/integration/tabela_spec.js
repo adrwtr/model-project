@@ -1,4 +1,5 @@
 describe('Teste de Tabelas', function() {
+    Cypress.Cookies.debug(true);
     it('Acesso', function() {
         // executa a fixture no database
         cy.visit('http://localhost/fixture');
@@ -11,6 +12,12 @@ describe('Teste de Tabelas', function() {
             .type('sistema 1');
 
         cy.get('.fas').click();
+
+        Cypress.Cookies
+            .preserveOnce(
+                "session_id",
+                "PHPSESSID"
+            );
     });
 
     it('Filtros', function() {
@@ -45,6 +52,12 @@ describe('Teste de Tabelas', function() {
                 'have.length',
                 2
             );
+
+        Cypress.Cookies
+            .preserveOnce(
+                "session_id",
+                "PHPSESSID"
+            );
     });
 
     it('Adicionar', function() {
@@ -68,7 +81,7 @@ describe('Teste de Tabelas', function() {
             .children()
             .should(
                 'have.length',
-                2
+                5
             );
     });
 });

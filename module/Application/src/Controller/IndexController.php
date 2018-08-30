@@ -145,8 +145,7 @@ class IndexController extends BaseServiceManagerController
     {
         $objContainer = new Container('projeto');
         $nr_sistema_id = $objContainer->nr_sistema_id;
-        dump($nr_sistema_id);
-        die();
+
         $objSistema = $this->getObjSistema($nr_sistema_id);
 
         $ds_json_post = $this->getRequest()
