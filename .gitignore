@@ -16,3 +16,5 @@ cypress/plugins
 cypress/screenshots
 cypress/support
 cypress/integration/examples
+cypress/examples
+cypress/videos

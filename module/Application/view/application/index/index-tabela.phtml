@@ -52,7 +52,8 @@
                                     <button type="button" class="btn btn-secondary"
                                             v-on:click="modalEditar(arrValores.id)"
                                             style="font-size: 10px;"
-                                            class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario">
+                                            class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario"
+                                            data-btn="selector-btn-alterar">
                                         <i class="fas fa-edit"></i>
                                     </button>
 
@@ -161,8 +162,10 @@
                             v-on:click="submitModalIncluir"
                             data-dismiss="modal"
                             id="btn_salvar_tabela">Save changes</button>
+
                     <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">Close</button>
+                        id="btn_close_form_cadastro"
+                        data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -186,8 +189,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary"
-                            v-on:click="doDelete()"
-                            data-dismiss="modal">Sim</button>
+                        name="btn_confirmar_excluir"
+                        id="btn_confirmar_excluir"
+                        v-on:click="doDelete()"
+                        data-dismiss="modal">Sim</button>
                     <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Não</button>
                 </div>
