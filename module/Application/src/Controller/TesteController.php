@@ -22,6 +22,23 @@ class TesteController extends BaseServiceManagerController
 
     public function indexAction()
     {
+        $objSistema = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Sistema::class)
+            ->findOneBy([
+                'id' => 2
+            ]);
+
+        // tabela de referencia
+        $objTabelaReferencia = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'ds_nome' => 'nu_integracao_externa',
+                'objSistema' => $objSistema
+            ]);
+
+        dump($objTabelaReferencia);
+        die();
+
         return new ViewModel();
     }
 }

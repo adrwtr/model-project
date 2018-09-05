@@ -52,6 +52,7 @@ class InserirPorArrayService {
             // inclui foreingkeys
             if (is_array($arrForeingkeys) && count($arrForeingkeys) > 0) {
                 $this->processForeingKeys(
+                    $objSistema,
                     $objTabela,
                     $arrForeingkeys
                 );
@@ -85,7 +86,12 @@ class InserirPorArrayService {
         $this->updateCampos($objTabela, $arrCampoObj);
     }
 
+    /**
+     * Organiza o array de foreingkeys para chamar a função
+     * de inclusao no banco de daods
+     */
     private function processForeingKeys(
+        $objSistema,
         $objTabela,
         $arrCampos
     ) {
@@ -106,6 +112,7 @@ class InserirPorArrayService {
         }
 
         $this->updateForeingkeys(
+            $objSistema,
             $objTabela,
             $arrForeingkeyObj
         );
@@ -149,11 +156,12 @@ class InserirPorArrayService {
     }
 
     public function updateForeingkeys(
+        $objSistema,
         $objTabela,
         $arrForeingkeys
     ) {
         $arrCamposTabela = $objTabela->getArrCampos();
-dump($arrForeingkeys);
+
         foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
             $nr_campo_id = $objForeingkey->id ?? 0;
             $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
@@ -163,6 +171,7 @@ dump($arrForeingkeys);
             if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
                 if (count($arrCamposTabela) > 0) {
                     $this->processForeingKeyAtual(
+                        $objSistema,
                         $objTabela,
                         $ds_nome_campo,
                         $ds_nome_tabela_referencia,
@@ -177,6 +186,7 @@ dump($arrForeingkeys);
 
 
     public function processForeingKeyAtual(
+        $objSistema,
         $objTabelaOrigem,
         $ds_nome_campo,
         $ds_nome_tabela_referencia,
@@ -201,7 +211,8 @@ dump($arrForeingkeys);
         $objTabelaReferencia = $this->getEntityManager()
             ->getRepository(\Application\Entity\Tabela::class)
             ->findOneBy([
-                'ds_nome' => $ds_nome_tabela_referencia
+                'ds_nome' => $ds_nome_tabela_referencia,
+                'objSistema' => $objSistema
             ]);
 
 
@@ -211,6 +222,7 @@ dump($arrForeingkeys);
                 ->get(
                     \Application\Service\Repository\TabelaService::class
                 )->persistir(
+                    $objSistema,
                     $ds_nome_tabela_referencia
                 );
         }

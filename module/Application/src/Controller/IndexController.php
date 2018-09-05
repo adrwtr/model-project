@@ -405,8 +405,6 @@ class IndexController extends BaseServiceManagerController
         $nr_tabela_id_1 = $arrComparacao->id;
         $nr_tabela_id_2 = $arrComparacao->id_temp;
 
-        dump($arrCamposIguais);
-
         // campos da comparacao
         foreach ($arrCamposIguais as $arrCampos) {
             $sn_campo1_apagado = false;
@@ -510,6 +508,11 @@ class IndexController extends BaseServiceManagerController
                 'sn_sucesso' => true
             ]
         );
+    }
+
+    public function testeAction()
+    {
+
     }
 
 

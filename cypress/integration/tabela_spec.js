@@ -1,13 +1,4 @@
 describe('Teste de Tabelas', function() {
-
-    function presevaSessao() {
-        Cypress.Cookies
-            .preserveOnce(
-                "session_id",
-                "PHPSESSID"
-            );
-    }
-
     Cypress.Cookies.debug(true);
 
     it('Acesso', function() {
@@ -23,7 +14,7 @@ describe('Teste de Tabelas', function() {
 
         cy.get('.fas').click();
 
-        presevaSessao();
+        cy.preservarSessao();
     });
 
     it('Filtros', function() {
@@ -59,7 +50,7 @@ describe('Teste de Tabelas', function() {
                 2
             );
 
-        presevaSessao();
+        cy.preservarSessao();
     });
 
     it('Adicionar', function() {
@@ -86,7 +77,7 @@ describe('Teste de Tabelas', function() {
                 5
             );
 
-        presevaSessao();
+        cy.preservarSessao();
     });
 
     it('Alterar', function() {
@@ -106,7 +97,6 @@ describe('Teste de Tabelas', function() {
             .click();
 
         // ok carregou o registro correto
-
         cy.get('#ds_busca')
             .type('Nome da Tabela');
 
@@ -149,7 +139,7 @@ describe('Teste de Tabelas', function() {
                 2
             );
 
-        presevaSessao();
+        cy.preservarSessao();
     });
 
 
