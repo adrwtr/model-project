@@ -127,8 +127,8 @@ class ComandosSqlServiceTest  extends TestCase
           KEY `unim_mcdf1` (`cd_moodle_curso`),
           KEY `unim_mcdf2` (`nr_anosemestre`,`cd_turma`,`cd_curso`),
           KEY `unim_mcdf3` (`id_disciplina`),
-          CONSTRAINT `ufk_mcdf1` FOREIGN KEY (`cd_moodle_curso`) 
-          REFERENCES `unim_moodle_cursos` (`cd_moodle_curso`) 
+          CONSTRAINT `ufk_mcdf1` FOREIGN KEY (`cd_moodle_curso`)
+          REFERENCES `unim_moodle_cursos` (`cd_moodle_curso`)
           ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
         ";

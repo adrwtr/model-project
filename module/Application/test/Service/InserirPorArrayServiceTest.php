@@ -86,16 +86,19 @@ class InserirPorArrayServiceTest extends AbstractZendServiceTestCase
             2
         );
 
-
-
         $this->assertQtdRegistro(
             \Application\Entity\Campo::class,
             11
         );
 
+        $arrRegistros = $this->getObjSm()
+            ->getRepository(
+                \Application\Entity\TabelaChave::class
+            )->findAll(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         $this->assertQtdRegistro(
             \Application\Entity\TabelaChave::class,
-            1
+            2
         );
     }
 

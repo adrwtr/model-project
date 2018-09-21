@@ -56,4 +56,22 @@ class TipoDeChaveService extends AbstractRepositoryService
 
         return $objTipoDeChave;
     }
+
+    public function getTipoDeChaveUniqueKey() {
+        // buscando a chave
+        $objTipoDeChave = $this->getEntityManager()
+            ->getRepository(\Application\Entity\TipoDeChave::class)
+            ->findOneBy([
+                'ds_chave' => \Application\Entity\TipoDeChave::UNIQUE_KEY
+            ]);
+
+        if ($objTipoDeChave == null) {
+            $objTipoDeChave = $this->persistir(
+                'Unique Key',
+                \Application\Entity\TipoDeChave::UNIQUE_KEY
+            );
+        }
+
+        return $objTipoDeChave;
+    }
 }

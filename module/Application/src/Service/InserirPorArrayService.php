@@ -31,6 +31,7 @@ class InserirPorArrayService {
             $ds_nome = $arrTabela['ds_nome'];
             $arrCampos = $arrTabela['arrCampos'];
             $arrForeingkeys = $arrTabela['arrForeingkey'];
+            $arrUniquekeys = $arrTabela['arrUniquekey'];
 
             // inclui a tabela
             $objTabela = $this->getObjSm()
@@ -55,6 +56,15 @@ class InserirPorArrayService {
                     $objSistema,
                     $objTabela,
                     $arrForeingkeys
+                );
+            }
+
+            // incluir unikekeys
+            if (is_array($arrUniquekeys) && count($arrUniquekeys) > 0) {
+                $this->processUniqueKeys(
+                    $objSistema,
+                    $objTabela,
+                    $arrUniquekeys
                 );
             }
 
@@ -116,6 +126,47 @@ class InserirPorArrayService {
             $objTabela,
             $arrForeingkeyObj
         );
+    }
+
+    public function processUniqueKeys(
+        $objSistema,
+        $objTabela,
+        $arrUniquekeys
+    ) {
+        // buscando a chave
+        $objTipoDeChave = $this->getObjSm()
+            ->get(\Application\Service\Repository\TipoDeChaveService::class)
+            ->getTipoDeChaveUniqueKey();
+
+        if (is_array($arrUniquekeys)) {
+            foreach ($arrUniquekeys as $nr_id_fk => $arrUk) {
+                // uma UK pode ter mais de um campo agrupado
+                foreach ($arrUk['arrCamposUk'] as $nr_id_campo => $ds_nome_campo) {
+                    // busca o campo
+                    $objCampo = $this->getEntityManager()
+                        ->getRepository(
+                            \Application\Entity\Campo::class
+                        )->findOneBy([
+                            'ds_nome' => $ds_nome_campo
+                        ]);
+
+                    // salva o campo-chave
+                    if ($objCampo != null) {
+                        $objTabelaChave = $this->getObjSm()
+                            ->get(\Application\Service\Repository\TabelaChaveService::class)
+                            ->persistir(
+                                $objTabela,
+                                null,
+                                $objTipoDeChave,
+                                $objCampo,
+                                null,
+                                $nr_id_fk,
+                                null
+                            );
+                    }
+                }
+            }
+        }
     }
 
     public function updateCampos(

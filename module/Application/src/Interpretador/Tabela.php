@@ -3,6 +3,8 @@ namespace Application\Interpretador;
 
 use Application\Interpretador\Campo;
 use Application\Interpretador\Primary;
+use Application\Interpretador\ForeingKey;
+use Application\Interpretador\UniqueKey;
 use Application\Interpretador\StringCleaner;
 
 class Tabela {
@@ -21,13 +23,16 @@ class Tabela {
         $ds_nome = StringCleaner::removeApostrofo($ds_nome);
 
         $arrColunas = $arrTabela['create-def']['sub_tree'];
+
         $arrCampos = self::processColunas($arrColunas);
         $arrForeingkey = self::processForeingKeys($arrColunas);
+        $arrUniquekey = self::processUniqueKeys($arrColunas);
 
         return array(
             'ds_nome' => $ds_nome,
             'arrCampos' => $arrCampos,
-            'arrForeingkey' => $arrForeingkey
+            'arrForeingkey' => $arrForeingkey,
+            'arrUniquekey' => $arrUniquekey
         );
     }
 
@@ -82,5 +87,20 @@ class Tabela {
         }
 
         return $arrForeingkeys;
+    }
+
+    private static function processUniqueKeys($arrColunas) {
+        $arrUniqueKey = array();
+        $arrUniqueKeys = array();
+
+        foreach ($arrColunas as $arrColuna) {
+            $arrUniqueKey = UniqueKey::interpretar($arrColuna);
+
+            if ($arrUniqueKey != false) {
+                $arrUniqueKeys[] = $arrUniqueKey;
+            }
+        }
+
+        return $arrUniqueKeys;
     }
 }
