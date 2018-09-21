@@ -313,6 +313,9 @@ class IndexController extends BaseServiceManagerController
                     $arrCampos1[$nr_campo_id]['sn_correspondente'] = true;
                     $arrCampos2[$nr_campo_id2]['sn_correspondente'] = true;
 
+                    $arrCampos1[$nr_campo_id]['sn_selecionado'] = true;
+                    $arrCampos2[$nr_campo_id2]['sn_selecionado'] = false;
+
                     $arrCamposIguais[] = array(
                         'arrCampo1' => $arrCampo1,
                         'arrCampo2' => $arrCampo2
@@ -463,7 +466,7 @@ class IndexController extends BaseServiceManagerController
                     ]);
 
                 $objTabela1 = $this->getEntityManager()
-                    ->getRepository(\Application\Entity\Campo::class)
+                    ->getRepository(\Application\Entity\Tabela::class)
                     ->findOneBy([
                         'id' => $nr_tabela_id_1
                     ]);
@@ -504,7 +507,6 @@ class IndexController extends BaseServiceManagerController
         }
 
         // exclui a temporaria
-        dump($nr_tabela_id_apagar);
         $objTabela2 = $this->getEntityManager()
             ->getRepository(\Application\Entity\Tabela::class)
             ->findOneBy([

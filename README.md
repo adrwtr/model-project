@@ -17,10 +17,10 @@ CRUD tabelas
     alterar - OK
     excluir - OK
     Importar SQL - OK
-    Permitir excluir os campos - TODO
+    Permitir excluir os campos - OK
 
-    Importar banco - TODO
     Comparar na criacao - TODO
+    Importar banco - TODO
     Comparar com existente - TODO
     Paginar resultado - TODO
 

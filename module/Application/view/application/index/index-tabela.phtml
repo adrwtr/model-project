@@ -300,8 +300,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" value="1" v-model="arrCampo.sn_selecionado"
-                                               checked="checked"> -
+                                        <input type="checkbox" value="1" v-model="arrCampo.sn_selecionado"> -
                                         {{ arrCampo.ds_nome }}
                                     </td>
                                     <td>
@@ -341,8 +340,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" value="1" v-model="arrCampo.sn_selecionado"
-                                               checked="checked">
+                                        <input type="checkbox" value="1" v-model="arrCampo.sn_selecionado">
                                         {{ arrCampo.ds_nome }}
                                     </td>
                                     <td>
@@ -630,12 +628,24 @@
                         arrCampos.arrCampo1.sn_selecionado = app_lista_tabela.sn_todos_lado_1;
                     }
                 );
+
+                this.arrSemIgualdadeA.forEach(
+                    function (arrCampos) {
+                        arrCampos.sn_selecionado = app_lista_tabela.sn_todos_lado_1;
+                    }
+                );
             },
 
             selecionarTodosLado2: function() {
                 this.arrCamposIguais.forEach(
                     function (arrCampos) {
                         arrCampos.arrCampo2.sn_selecionado = app_lista_tabela.sn_todos_lado_2;
+                    }
+                );
+
+                this.arrSemIgualdadeB.forEach(
+                    function (arrCampos) {
+                        arrCampos.sn_selecionado = app_lista_tabela.sn_todos_lado_2;
                     }
                 );
             }
