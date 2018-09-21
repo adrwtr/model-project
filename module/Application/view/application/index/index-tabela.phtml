@@ -202,7 +202,7 @@
 
     <!-- modal temporario -->
     <div class="modal" tabindex="-1" role="dialog" id="modalTemporario">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Comparar tabelas</h5>
@@ -224,10 +224,15 @@
                     </div>
 
 
-                    <div class="row" id="" v-for="(arrCampo, nr_key) in arrCamposIguais">
+                    <div class="row" id="" >
                         <div class="col-md-6">
                             <table>
                                 <tr>
+                                    <td>
+                                        <input type="checkbox" value="1"
+                                            v-model="sn_todos_lado_1"
+                                            v-on:change="selecionarTodosLado1()"> -
+                                    </td>
                                     <td>
                                         Nome do Campo
                                     </td>
@@ -235,9 +240,36 @@
                                         Tipo do Campo
                                     </td>
                                 </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" value="1" v-model="arrCampo.arrCampo1.sn_selecionado"> -
+                                        <input type="checkbox" value="1"
+                                            v-model="sn_todos_lado_2"
+                                            v-on:change="selecionarTodosLado2()"> -
+                                    </td>
+                                    <td>
+                                        Nome do Campo
+                                    </td>
+                                    <td>
+                                        Tipo do Campo
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row" id="" v-for="(arrCampo, nr_key) in arrCamposIguais">
+                        <div class="col-md-6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="1"
+                                            v-model="arrCampo.arrCampo1.sn_selecionado"> -
+                                    </td>
+                                    <td>
                                         {{ arrCampo.arrCampo1.ds_nome }}
                                     </td>
                                     <td>
@@ -250,15 +282,9 @@
                             <table>
                                 <tr>
                                     <td>
-                                        Nome do Campo
-                                    </td>
-                                    <td>
-                                        Tipo do Campo
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
                                         <input type="checkbox" value="1" v-model="arrCampo.arrCampo2.sn_selecionado"> -
+                                    </td>
+                                    <td>
                                         {{ arrCampo.arrCampo2.ds_nome }}
                                     </td>
                                     <td>
@@ -371,9 +397,11 @@
 
             // ultimo campo excluido
             arrCampoExcluido : [],
-            sn_desfazer_campo_excluido : false
+            sn_desfazer_campo_excluido : false,
 
-
+            // merge
+            sn_todos_lado_1 : false,
+            sn_todos_lado_2 : false
         },
 
         created: function() {
@@ -540,7 +568,7 @@
                         this.arrSemIgualdadeB = arrJson.arrSemIgualdadeB;
 
                         // abrir modal de comparacao
-                        // adrw $("#modalTemporario").modal();
+                        $("#modalTemporario").modal();
                     }
                 );
             },
@@ -592,6 +620,22 @@
                 .catch(
                     function (error) {
                         console.log(error);
+                    }
+                );
+            },
+
+            selecionarTodosLado1: function() {
+                this.arrCamposIguais.forEach(
+                    function (arrCampos) {
+                        arrCampos.arrCampo1.sn_selecionado = app_lista_tabela.sn_todos_lado_1;
+                    }
+                );
+            },
+
+            selecionarTodosLado2: function() {
+                this.arrCamposIguais.forEach(
+                    function (arrCampos) {
+                        arrCampos.arrCampo2.sn_selecionado = app_lista_tabela.sn_todos_lado_2;
                     }
                 );
             }

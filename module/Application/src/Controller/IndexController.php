@@ -200,6 +200,7 @@ class IndexController extends BaseServiceManagerController
 
             if (count($arrTabelaChaves) > 0) {
                 $objInserirPorArrayService->updateForeingkeys(
+                    $objSistema,
                     $objTabela,
                     $arrTabelaChaves
                 );
@@ -306,7 +307,6 @@ class IndexController extends BaseServiceManagerController
 
         foreach ($arrCampos1 as $nr_campo_id => $arrCampo1) {
             $arrCampos1[$nr_campo_id]['sn_correspondente'] = false;
-
             foreach ($arrCampos2 as $nr_campo_id2 => $arrCampo2) {
                 // encontrou correspondente
                 if ($arrCampo1['ds_nome'] == $arrCampo2['ds_nome']) {
@@ -477,12 +477,12 @@ class IndexController extends BaseServiceManagerController
 
 
         foreach ($arrSemIgualdadeA as $arrCampo) {
-            if ($arrCampo['sn_selecionado'] == false) {
+            if ($arrCampo->sn_selecionado == false) {
                 // apagar campo da tabela 1
                 $objCampoApagar = $this->getEntityManager()
                     ->getRepository(\Application\Entity\Campo::class)
                     ->findOneBy([
-                        'id' => $arrCampo['id']
+                        'id' => $arrCampo->id
                     ]);
 
                 $this->getEntityManager()
@@ -491,17 +491,43 @@ class IndexController extends BaseServiceManagerController
         }
 
         foreach ($arrSemIgualdadeB as $arrCampo) {
-            if ($arrCampo['sn_selecionado'] == false) {
+            if ($arrCampo->sn_selecionado == false) {
                 $objCampoApagar = $this->getEntityManager()
                     ->getRepository(\Application\Entity\Campo::class)
                     ->findOneBy([
-                        'id' => $arrCampo['id']
+                        'id' => $arrCampo->id
                     ]);
 
                 $this->getEntityManager()
                     ->remove($objCampoApagar);
             }
         }
+
+        // exclui a temporaria
+        dump($nr_tabela_id_apagar);
+        $objTabela2 = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'id' => $nr_tabela_id_apagar
+            ]);
+
+        $this->getEntityManager()
+            ->remove($objTabela2);
+
+        // atualiza atual para nao ser temporaria
+        $objTabela = $this->getEntityManager()
+            ->getRepository(\Application\Entity\Tabela::class)
+            ->findOneBy([
+                'id' => $nr_tabela_id_manter
+            ]);
+
+        $objTabela->setSnTemporario(0);
+
+        $this->getEntityManager()
+                ->persist($objTabela);
+
+        $this->getEntityManager()
+            ->flush();
 
         return new JsonModel(
             [
