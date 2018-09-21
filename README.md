@@ -18,8 +18,8 @@ CRUD tabelas
     excluir - OK
     Importar SQL - OK
     Permitir excluir os campos - OK
+    Comparar na criacao - OK
 
-    Comparar na criacao - TODO
     Importar banco - TODO
     Comparar com existente - TODO
     Paginar resultado - TODO

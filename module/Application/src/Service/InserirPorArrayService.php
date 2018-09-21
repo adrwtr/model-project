@@ -196,6 +196,7 @@ class InserirPorArrayService {
         $nr_key_campo_atual = 0;
         $nr_key_campo_referencia = 0;
         $objCampoDestino = null;
+        $objCampoReferencia = null;
 
         // campo atual
         foreach ($arrCamposTabela as $nr_key => $objCampo) {
@@ -225,6 +226,20 @@ class InserirPorArrayService {
                     $objSistema,
                     $ds_nome_tabela_referencia
                 );
+
+            // tambem precisamos criar o campo na tabela de origem/referencia
+            $objCampoReferencia = $this->getObjSm()
+                ->get(
+                    \Application\Service\Repository\CampoService::class
+                )->persistir(
+                    $objTabelaReferencia,
+                    $ds_nome_campo,
+                    '',
+                    'Criado automaticamente pela leitura da SQL - verificar propriedades',
+                    0,
+                    0,
+                    null
+                );
         }
 
         $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
@@ -237,6 +252,11 @@ class InserirPorArrayService {
                     $objCampoDestino = $objCampo;
                 }
             }
+        }
+
+        // caso nao encontre, tenta usar o campo criado
+        if ($objCampoDestino == null) {
+            $objCampoDestino = $objCampoReferencia;
         }
 
         // buscando a chave

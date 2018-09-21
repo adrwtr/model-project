@@ -195,6 +195,18 @@ return [
                 ],
             ],
 
+            'get-tabela-repetida' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/tabela/repetida/get',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'getTabelaRepetida',
+                        'cd_registro' => '0'
+                    ],
+                ],
+            ],
+
 
 
             'application' => [

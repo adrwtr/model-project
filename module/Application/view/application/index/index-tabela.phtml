@@ -355,7 +355,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary"
-                            v-on:click="doMergeTabela()">Merge</button>
+                        v-on:click="doMergeTabela()"
+                        data-dismiss="modal">Merge</button>
                 </div>
             </div>
         </div>
@@ -404,6 +405,7 @@
 
         created: function() {
             this.getListRegistros();
+            this.getTemTabelaRepetida();
         },
 
         watch: {
@@ -442,8 +444,6 @@
                         this.arrTabelas = arrJson;
                         this.arrTabelasOriginal = arrJson;
                         this.sn_carregando = false;
-
-                        this.iniciarCorrecaoTemporarios();
                     }
                 );
             },
@@ -510,6 +510,7 @@
                     function (objResponse) {
                         if (objResponse.data.sn_sucesso == true) {
                             app_lista_tabela.getListRegistros();
+                            app_lista_tabela.getTemTabelaRepetida();
                             app_lista_tabela.limparCampos();
 
                             // processar temporarios?
@@ -540,6 +541,7 @@
                 .then(
                     arrJson => {
                         this.getListRegistros();
+                        this.getTemTabelaRepetida();
                         return;
                     }
                 );
@@ -603,14 +605,15 @@
                     function (objResponse) {
                         if (objResponse.data.sn_sucesso == true) {
                             app_lista_tabela.getListRegistros();
+                            app_lista_tabela.getTemTabelaRepetida();
                             app_lista_tabela.limparCampos();
 
-                            // processar temporarios?
+                            /*// processar temporarios?
                             var sn_temporario = objResponse.data.sn_tem_temporario;
 
                             if (sn_temporario == true) {
                                 app_lista_tabela.iniciarCorrecaoTemporarios();
-                            }
+                            }*/
                             return;
                         }
                     }
@@ -646,6 +649,25 @@
                 this.arrSemIgualdadeB.forEach(
                     function (arrCampos) {
                         arrCampos.sn_selecionado = app_lista_tabela.sn_todos_lado_2;
+                    }
+                );
+            },
+
+            getTemTabelaRepetida: function() {
+                fetch(
+                    '/tabela/repetida/get',
+                    {
+                        credentials: 'include'
+                    }
+                )
+                .then(objResponse => objResponse.json())
+                .then(
+                    arrJson => {
+                        if (arrJson.sn_tem_repetido != undefined) {
+                            if (arrJson.sn_tem_repetido == true) {
+                                app_lista_tabela.iniciarCorrecaoTemporarios();
+                            }
+                        }
                     }
                 );
             }

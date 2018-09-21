@@ -543,6 +543,32 @@ class IndexController extends BaseServiceManagerController
 
     }
 
+    public function getTabelaRepetidaAction()
+    {
+        $conn = $this->getEntityManager()
+            ->getConnection();
+
+        $ds_sql = $this->getObjSm()
+            ->get(\Application\Service\Dql\TabelaDqlService::class)
+            ->nativeListaTabelasTemporarias();
+
+        $objStmt = $conn->prepare($ds_sql);
+        $objStmt->execute();
+        $arrValores = $objStmt->fetch();
+
+        $sn_tem_repetido = false;
+
+        if ($arrValores != false) {
+            $sn_tem_repetido = count($arrValores) >= 1;
+        }
+
+        return new JsonModel(
+            [
+                'sn_tem_repetido' => $sn_tem_repetido
+            ]
+        );
+    }
+
 
 
     private function processSql(
