@@ -3,7 +3,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?= $this->headTitle('Model Page Application')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headTitle('The Mode Project')
+            ->setSeparator(' - ')
+            ->setAutoEscape(false);
+        ?>
 
         <?= $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -11,20 +14,22 @@
         ?>
 
         <!-- Le styles -->
-        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
+        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon',
+            'href' => $this->basePath() . '/img/favicon.ico'])
             ->prependStylesheet($this->basePath('css/style.css'))
-            ->prependStylesheet("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
+            ->prependStylesheet("/css/bootstrap.min.css")
             ->prependStylesheet("https://use.fontawesome.com/releases/v5.0.8/css/all.css");
         ?>
 
         <!-- Scripts -->
         <?= $this->headScript()
-            ->appendFile("https://code.jquery.com/jquery-3.2.1.slim.min.js")
-            ->appendFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
-            ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
+            ->appendFile("/js/libs/jquery-3.1.0.min.js")
+            ->appendFile("/js/libs/bootstrap.min.js")
+            // ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
             // ->appendFile("https://cdn.jsdelivr.net/npm/vue")
+
             ->appendFile("https://vuejs.org/js/vue.js")
-            ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js")
+            ->appendFile("js/libs/lodash.js")
             ->appendFile("https://unpkg.com/axios/dist/axios.min.js")
             ->appendFile("http://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js")
             ->appendFile("https://cdn.rawgit.com/David-Desmaisons/Vue.Draggable/master/dist/vuedraggable.min.js")
@@ -32,45 +37,15 @@
         ?>
     </head>
 
-    <style type="text/css">
-        .teste {
-            background-color: grey;
-        }
-
-        .v-select {
-            display: grid;
-        }
-
-
-        .modal-lg {
-            max-width: 1400px;
-        }
-
-
-    </style>
-
     <body>
-        <nav class="navbar fixed-top navbar-light bg-light" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="<?= $this->url('home') ?>">
-                        &nbsp;Model Page Application
-                    </a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?= $this->url('home') ?>">Home</a></li>
-                    </ul>
-                </div>
+        <?php echo $this->partial('layout/barra_topo'); ?>
+
+        <div class="container-fluid">
+            <div class="row">
+                <?php echo $this->partial('layout/menu'); ?>
+                <?= $this->content ?>
             </div>
-        </nav>
-        <div class="container" style="width: 90%">
-            <?= $this->content ?>
-            <hr>
-            <footer>
-                <p>Adriano -  All rights reserved.</p>
-            </footer>
         </div>
-        <?= $this->inlineScript() ?>
+        <?// = $this->inlineScript() ?>
     </body>
 </html>

@@ -1,130 +1,64 @@
-<div class="row" id="vueApp-lista-tabela">
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Sistemas</h3>
-            </div>
-
-            <div class="panel-body">
-
-                <div class="form-group">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-10">
-                                <input type="text"
-                                    class="form-control"
-                                    id="ds_busca"
-                                    placeholder="Buscar"
-                                    v-model="ds_filtro" />
+    <div class="table-responsive">
+        <div class="row" id="vueApp-lista-tabela">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="col-lg-3">
+                            <h3 class="panel-title">Sistemas</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <input type="text"
+                                            class="form-control"
+                                            id="ds_busca"
+                                            placeholder="Buscar"
+                                            v-model="ds_filtro" />
+                                    </div>
+                                </div>
                             </div>
-
-
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <table class="table table-sm table-hover" id="table_lista_sistema" style="margin : 15px">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Sistema</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="arrValores in arrSistemas">
+                                            <th scope="row">{{arrValores.id}}</th>
+                                            <td>{{arrValores.ds_nome}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-secondary"
+                                                v-on:click="goToEditar(arrValores.id)"
+                                                v-bind:id="arrValores.id"
+                                                style="font-size: 10px;">
+                                                <i class="fas fa-edit"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="container">
-                    <div class="row">
-                        <table class="table" id="table_lista_sistema">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Sistema</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr v-for="arrValores in arrSistemas">
-                                    <th scope="row">{{arrValores.id}}</th>
-                                    <td>{{arrValores.ds_nome}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <button type="button" class="btn btn-secondary"
-                                            v-on:click="goToEditar(arrValores.id)"
-                                            v-bind:id="arrValores.id"
-                                            style="font-size: 10px;">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
-
-
-
-</div>
-
-
-
-
-<script>
-
-var app_lista_tabela = new Vue({
-    el: '#vueApp-lista-tabela',
-
-    data: {
-        arrSistemas: [],
-        arrSistemasOriginal : [],
-        sn_carregando : true,
-        ds_filtro : '',
-    },
-
-    created: function() {
-        this.getListRegistros();
-    },
-
-    watch: {
-        ds_filtro: function ()
-        {
-            var ds_filtrar = this.ds_filtro;
-            this.arrSistemas = this.arrSistemasOriginal;
-
-            if (_.isEmpty(ds_filtrar)) {
-                return;
-            }
-
-            this.arrSistemas = _.filter(
-                this.arrSistemasOriginal,
-                function (arrValor) {
-                    return arrValor.ds_nome
-                        .toLowerCase()
-                        .indexOf(ds_filtrar.toLowerCase()) >= 0;
-                }
-            );
-
-        }
-    },
-
-    methods: {
-        getListRegistros: function() {
-            fetch(
-                '/sistema/lista-sistemas',
-                {
-                    credentials: 'include'
-                }
-            )
-            .then(objResponse => objResponse.json())
-            .then(
-                arrJson => {
-                    this.arrSistemas = arrJson;
-                    this.arrSistemasOriginal = arrJson;
-                    this.sn_carregando = false;
-                }
-            );
-        },
-
-        goToEditar: function(nr_id) {
-            document.location = '/sistema/administrar/' + nr_id;
-        }
-    }
-});
-</script>
+</main>
+<?php
+echo $this->inlineScript()
+    ->appendFile(
+        $this->basePath('js/index/index.js')
+    );
+?>
