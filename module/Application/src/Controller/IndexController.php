@@ -181,6 +181,7 @@ class IndexController extends BaseServiceManagerController
 
             if (count($arrCamposExcluido) > 0) {
                 $objInserirPorArrayService->excluirCampos(
+                    $objTabela,
                     $arrCamposExcluido
                 );
             }

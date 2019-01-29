@@ -339,6 +339,7 @@ class InserirPorArrayService {
      * @return $this
      */
     public function excluirCampos(
+        $objTabela,
         $arrCamposExcluir
     ) {
         if (is_array($arrCamposExcluir)) {
@@ -355,6 +356,21 @@ class InserirPorArrayService {
 
                     $this->getEntityManager()
                         ->remove($objCampo);
+                }
+
+                // apaga todos da tabela
+                if ($nr_campo_id == 0) {
+                    $arrCampos = $this->getEntityManager()
+                        ->getRepository(
+                            \Application\Entity\Campo::class
+                        )->findBy([
+                            'objTabela' => $objTabela
+                        ]);
+
+                    foreach ($arrCampos as $key => $objCampo) {
+                        $this->getEntityManager()
+                            ->remove($objCampo);
+                    }
                 }
             }
 
