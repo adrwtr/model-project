@@ -1,440 +1,308 @@
-<div class="row" id="vueApp-lista-tabela">
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="vueApp-lista-tabela">
+    <div class="">
 
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="row">
-                <div class="col-sm-8">
-                    <h3>Detalhes da tabela</h3>
-                </div>
-                <div class="col-sm-4">
-                    <button type="button" class="btn btn-secondary"
-                        v-on:click="salvar"
-                        class="btn btn-primary">Salvar</button>
+        <div class="row" >
 
-                    <button type="button" class="btn btn-secondary"
-                        v-on:click="voltar"
-                        class="btn btn-primary">Voltar</button>
-                </div>
-            </div>
-
-            <div class="panel-body">
-
-                <div class="form-group">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label for="ds_tabela">Nome da Tabela</label>
-                                <input type="text" class="form-control"
-                                    id="ds_tabela"
-                                    v-model="ds_tabela"
-                                    placeholder="Nome da Tabela">
-                            </div>
-
-                            <div class="col-sm-12">
-                                <label for="ds_sql">Descrição</label>
-                                <textarea class="form-control"
-                                    id="ds_descricao"
-                                    v-model="ds_descricao"
-                                    cols="50"
-                                    rows="3"></textarea>
-                            </div>
-
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3>Detalhes da tabela</h3>
                         </div>
-                    </div>
-                </div>
-
-                <div class="container">
-                    <div class="row">
-                        <strong>Campos:</strong>
-                    </div>
-
-                    <div class="row">
-                        <button type="button" class="btn btn-secondary"
-                                v-on:click="addCampo"
-                                class="btn btn-primary">Novo Campo</button>
-                    </div>
-
-                    <div class="row">
-                        <draggable class="dragArea container"  v-model="arrCampos" >
-                            <div v-for="(arrCampo, nr_index) in arrCampos"
-                                style="border-width: 1px; border-style: solid; padding: 10px; margin: 5px; border-color: bisque;">
-                                <div class="row" style="padding-top: 3px;">
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control"
-                                            v-model="arrCampo.ds_nome"
-                                            placeholder="Nome da Tabela"
-                                            slot="footer">
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input type="text" class="form-control"
-                                            v-model="arrCampo.ds_prop"
-                                            placeholder="Nome da Tabela" slot="footer" />
-                                    </div>
-                                    <div class="col-sm-2">
-                                        PK -
-                                        <input type="checkbox" value="1" v-model="arrCampo.sn_pk">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <button type="button" class="btn btn-secondary"
-                                            v-on:click="excluirCampo(nr_index)"
-                                            style="font-size: 10px;"
-                                            class="btn btn-primary" slot="footer" >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-top: 3px">
-                                    <div class="col-sm-12">
-                                        <label for="ds_sql">Descrição</label>
-                                        <textarea class="form-control"
-                                            id=""
-                                            v-model="arrCampo.ds_descricao"
-                                            cols="50"
-                                            rows="3" slot="footer"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </draggable>
 
                     </div>
 
-                    <div class="row">
-                        <strong>Chaves e Ligações:</strong>
-                    </div>
+                    <div class="panel-body">
 
-                    <div class="row">
-                        <button type="button" class="btn btn-secondary"
-                            v-on:click="addTabelaChave"
-                            class="btn btn-primary" data-toggle="modal" data-target="#modalChaveTabela">
-                            Nova Chave
-                        </button>
-                    </div>
-
-                    <div class="row">
-                        <div class="container">
-                            <div class="table-responsive">
-                                <table class="table table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Tipo
-                                            </th>
-                                            <th>
-                                                Campo da tabela atual
-                                            </th>
-                                            <th>
-                                                Tabela de Destino
-                                            </th>
-
-                                            <th>
-                                                Campo da tabela de Destino
-                                            </th>
-
-                                            <th>
-                                                Excluir
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(arrValores, nr_index) in arrTabelaChaves">
-                                            <td width="5%">
-                                                {{arrValores.ds_nome_chave}}
-                                            </td>
-                                            <td width="30">
-                                                {{arrValores.ds_nome_campo_origem}}
-                                            </td>
-                                            <td width="30">
-                                                {{arrValores.ds_nome_tabela_destino}}
-                                            </td>
-
-                                            <td width="30">
-                                                {{arrValores.ds_nome_campo_destino}}
-                                            </td>
-
-                                            <td width="1%">
-                                                <button type="button" class="btn btn-secondary"
-                                                        v-on:click="excluirFk(nr_index)"
-                                                        style="font-size: 10px;"
-                                                        class="btn btn-primary" slot="footer" >
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- modal chave tabela -->
-    <div class="modal" tabindex="-1" role="dialog" id="modalChaveTabela">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Chave Tabela</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <form>
                         <div class="form-group">
-                            <div class="container">
+                            <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <label for="ds_tabela">Tipo de Chave:</label>
-                                        <v-select v-model="nr_tipo_de_chave_id"
-                                            label="ds_nome"
-                                            :options="arrTipoDeChaveOptions" ></v-select>
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <label for="ds_tabela">Tabela Atual:</label>
+                                        <label for="ds_tabela">Nome da Tabela</label>
                                         <input type="text" class="form-control"
-                                               v-model="ds_tabela"
-                                               disabled="disabled"
-                                               />
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <label for="ds_tabela">Campo da tabela atual:</label>
-
-                                        <v-select v-model="nr_campo_origem_id"
-                                                  label="ds_nome"
-                                                  :options="arrCampos"
-                                        ></v-select>
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <label for="ds_tabela">Tabela Destino:</label>
-                                        <v-select v-model="nr_tabela_destino_id"
-                                                  label="ds_nome"
-                                                  :options="arrTodasAsTabelas"></v-select>
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <label for="ds_tabela">Campo da tabela Destino:</label>
-
-                                        <v-select v-model="nr_campo_destino_id"
-                                                  label="ds_nome"
-                                                  :options="arrCamposFromTabelaFk"
-                                                  ></v-select>
+                                            id="ds_tabela"
+                                            v-model="ds_tabela"
+                                            placeholder="Nome da Tabela">
                                     </div>
 
                                     <div class="col-sm-12">
                                         <label for="ds_sql">Descrição</label>
                                         <textarea class="form-control"
-                                                  id="ds_descricao_fk"
-                                                  v-model="ds_descricao_fk"
-                                                  cols="50"
-                                                  rows="3"></textarea>
+                                            id="ds_descricao"
+                                            v-model="ds_descricao"
+                                            cols="50"
+                                            rows="3"></textarea>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary"
-                            v-on:click="addCampoFk()"
-                            data-dismiss="modal">Confirmar</button>
-                    <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">Cancelar</button>
+
+                        <div class="form-group">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <button type="button" class="btn btn-primary"
+                                            v-on:click="salvar"
+                                            class="btn btn-success">Salvar</button>
+
+                                        <button type="button" class="btn btn-secondary"
+                                            v-on:click="voltar"
+                                            class="btn btn-primary">Voltar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid">
+
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Campos:</strong>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <draggable class="dragArea container-fluid"  v-model="arrCampos" >
+                                            <div v-for="(arrCampo, nr_index) in arrCampos"
+                                                style="border-width: 1px; border-style: solid; padding: 10px; margin: 5px; border-color: bisque;">
+                                                <div class="row" style="padding-top: 3px;">
+                                                    <div class="col-sm-3">
+                                                        <input type="text" class="form-control"
+                                                            v-model="arrCampo.ds_nome"
+                                                            placeholder="Nome da Tabela"
+                                                            slot="footer">
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <input type="text" class="form-control"
+                                                            v-model="arrCampo.ds_prop"
+                                                            placeholder="Nome da Tabela" slot="footer" />
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        PK -
+                                                        <input type="checkbox" value="1" v-model="arrCampo.sn_pk">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            v-on:click="excluirCampo(nr_index)"
+                                                            style="font-size: 10px;"
+                                                            class="btn btn-primary" slot="footer" >
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="padding-top: 3px">
+                                                    <div class="col-sm-12">
+                                                        <label for="ds_sql">Descrição</label>
+                                                        <textarea class="form-control"
+                                                            id=""
+                                                            v-model="arrCampo.ds_descricao"
+                                                            cols="50"
+                                                            rows="3" slot="footer"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </draggable>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 5px; margin-left: 5px">
+                                        <div class="container-fluid">
+                                            <button type="button" class="btn btn-secondary"
+                                                v-on:click="addCampo"
+                                                class="btn btn-primary">Novo Campo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                &nbsp;
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Chaves e Ligações:</strong>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="container-fluid">
+                                            <div class="table-responsive">
+                                                <table class="table table-condensed">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                Tipo
+                                                            </th>
+                                                            <th>
+                                                                Campo da tabela atual
+                                                            </th>
+                                                            <th>
+                                                                Tabela de Destino
+                                                            </th>
+
+                                                            <th>
+                                                                Campo da tabela de Destino
+                                                            </th>
+
+                                                            <th>
+                                                                Excluir
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(arrValores, nr_index) in arrTabelaChaves">
+                                                            <td width="5%">
+                                                                {{arrValores.ds_nome_chave}}
+                                                            </td>
+                                                            <td width="30">
+                                                                {{arrValores.ds_nome_campo_origem}}
+                                                            </td>
+                                                            <td width="30">
+                                                                {{arrValores.ds_nome_tabela_destino}}
+                                                            </td>
+
+                                                            <td width="30">
+                                                                {{arrValores.ds_nome_campo_destino}}
+                                                            </td>
+
+                                                            <td width="1%">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        v-on:click="excluirFk(nr_index)"
+                                                                        style="font-size: 10px;"
+                                                                        class="btn btn-primary" slot="footer" >
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row" style="margin-top: 5px; margin-left: 5px">
+                                        <div class="container-fluid">
+                                            <button type="button" class="btn btn-secondary"
+                                            v-on:click="addTabelaChave"
+                                            class="btn btn-primary" data-toggle="modal" data-target="#modalChaveTabela">
+                                            Nova Chave
+                                        </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
+
+            <input v-model="nr_tabela_id" type="hidden" v-init:nr_tabela_id="<?php echo $nr_tabela_id; ?>"  />
+
+            <!-- modal chave tabela -->
+            <div class="modal" tabindex="-1" role="dialog" id="modalChaveTabela">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chave Tabela</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label for="ds_tabela">Tipo de Chave:</label>
+                                                <v-select v-model="nr_tipo_de_chave_id"
+                                                    label="ds_nome"
+                                                    :options="arrTipoDeChaveOptions" ></v-select>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <label for="ds_tabela">Tabela Atual:</label>
+                                                <input type="text" class="form-control"
+                                                       v-model="ds_tabela"
+                                                       disabled="disabled"
+                                                       />
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <label for="ds_tabela">Campo da tabela atual:</label>
+
+                                                <v-select v-model="nr_campo_origem_id"
+                                                          label="ds_nome"
+                                                          :options="arrCampos"
+                                                ></v-select>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <label for="ds_tabela">Tabela Destino:</label>
+                                                <v-select v-model="nr_tabela_destino_id"
+                                                          label="ds_nome"
+                                                          :options="arrTodasAsTabelas"></v-select>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <label for="ds_tabela">Campo da tabela Destino:</label>
+
+                                                <v-select v-model="nr_campo_destino_id"
+                                                          label="ds_nome"
+                                                          :options="arrCamposFromTabelaFk"
+                                                          ></v-select>
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <label for="ds_sql">Descrição</label>
+                                                <textarea class="form-control"
+                                                          id="ds_descricao_fk"
+                                                          v-model="ds_descricao_fk"
+                                                          cols="50"
+                                                          rows="3"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary"
+                                    v-on:click="addCampoFk()"
+                                    data-dismiss="modal">Confirmar</button>
+
+                            <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
+</main>
 
-
-</div>
-
-
-
-
-
-
-
-<script>
-Vue.component('v-select', VueSelect.VueSelect);
-var app_lista_tabela = new Vue({
-    el: '#vueApp-lista-tabela',
-
-    data: {
-        // form
-        ds_tabela : '',
-        ds_descricao : '',
-        nr_tabela_id : 0,
-        ds_sql : '',
-        arrCampos : [],
-        arrCamposExcluido : [],
-
-        arrTabelaChaves : [],
-        arrTabelaChavesExcluido : [],
-
-
-        // modal
-        nr_tipo_de_chave_id : 0,
-        nr_campo_origem_id : 0,
-        nr_tabela_destino_id : 0,
-        nr_campo_destino_id : 0,
-        ds_descricao_fk : '',
-
-
-        arrTipoDeChaveOptions : [],
-        arrTodasAsTabelas : [],
-        arrCamposFromTabelaFk : [],
-    },
-
-    created: function() {
-        this.getRegistroEditar('<?php echo $nr_tabela_id; ?>');
-    },
-
-    methods: {
-        getRegistroEditar: function(nr_tabela_id) {
-            fetch('/tabela/get/' + nr_tabela_id)
-                .then(objResponse => objResponse.json())
-                .then(
-                    arrJson => {
-                        var arrTabela = arrJson.arrTabela[0];
-                        var arrCampos = arrJson.arrCampos;
-                        var arrTabelaChaves = arrJson.arrTabelaChaves;
-                        var arrTipoDeChave = arrJson.arrTipoDeChave;
-                        var arrTodasAsTabelas = arrJson.arrTodasAsTabelas;
-
-                        this.nr_tabela_id = arrTabela.id;
-                        this.ds_tabela = arrTabela.ds_nome;
-                        this.ds_descricao = arrTabela.ds_descricao;
-                        this.arrCampos = arrCampos;
-                        this.arrTabelaChaves = arrTabelaChaves;
-                        this.arrTipoDeChaveOptions =  arrTipoDeChave;
-                        this.arrTodasAsTabelas = arrTodasAsTabelas;
-
-                    }
-                );
-        },
-
-        addCampo: function() {
-            this.arrCampos.push(
-                {
-                    ds_nome: 'nome do campo',
-                    ds_prop: 'varchar(255)',
-                }
-            );
-        },
-
-        excluirCampo: function(nr_index) {
-            this.arrCamposExcluido.push(this.arrCampos[nr_index]);
-
-            this.arrCampos
-                .splice(nr_index, 1);
-
-            this.sn_desfazer_campo_excluido = true;
-        },
-
-        salvar: function() {
-            var arrPost = {
-                nr_tabela_id : this.nr_tabela_id,
-                ds_tabela : this.ds_tabela,
-                ds_descricao: this.ds_descricao,
-                arrCampos : this.arrCampos,
-                arrCamposExcluido : this.arrCamposExcluido,
-                arrTabelaChaves : this.arrTabelaChaves,
-                arrTabelaChavesExcluido : this.arrTabelaChavesExcluido
-            };
-
-            console.log(arrPost);
-
-            axios.post(
-                '/tabela/update',
-                arrPost
-            )
-            .then(
-                function (objResponse) {
-                    console.log(objResponse);
-                }
-            )
-            .catch(
-                function (error) {
-                    console.log(error);
-                }
-            );
-        },
-
-
-        addTabelaChave : function() {
-            var arrNovo = {
-                ds_nome_chave : 'teste'
-            };
-        },
-
-        voltar: function() {
-            document.location = '/tabela';
-        },
-
-        addCampoFk: function() {
-            var arrNovaChave = {
-                id : null,
-                tabela_origem_id : this.nr_tabela_id,
-                ds_nome_tabela_referencia : this.ds_tabela,
-                ds_nome_chave : this.nr_tipo_de_chave_id.ds_nome,
-
-                tabela_destino_id : this.nr_tabela_destino_id.id,
-                ds_nome_tabela_destino : this.nr_tabela_destino_id.ds_nome,
-                ds_nome_tabela_referencia : this.nr_tabela_destino_id.ds_nome,
-
-
-                campo_origem_id : this.nr_campo_origem_id.id,
-                ds_nome_campo_origem : this.nr_campo_origem_id.ds_nome,
-                ds_nome_campo : this.nr_campo_origem_id.ds_nome,
-
-                campo_destino_id : this.nr_campo_destino_id.id,
-                ds_nome_campo_destino : this.nr_campo_destino_id.ds_nome,
-                ds_nome_campo_referencia : this.nr_campo_destino_id.ds_nome
-             };
-
-            console.log(arrNovaChave);
-
-            this.arrTabelaChaves.push(arrNovaChave);
-        },
-
-        excluirFk: function(nr_index) {
-            this.arrTabelaChavesExcluido.push(this.arrTabelaChaves[nr_index]);
-
-            this.arrTabelaChaves
-                .splice(nr_index, 1);
-
-            this.sn_desfazer_campo_excluido = true;
-        },
-    },
-
-    watch: {
-        /**
-         * Responsavel por buscar os campos da tabela selecionada
-         */
-        nr_tabela_destino_id: function() {
-            this.nr_campo_destino_id = null;
-            var nr_tabela_id = this.nr_tabela_destino_id.id;
-
-            fetch('/tabela/campos/get/' + nr_tabela_id)
-                .then(objResponse => objResponse.json())
-                .then(
-                    arrJson => {
-                        var arrCampos = arrJson.arrCampos;
-                        this.arrCamposFromTabelaFk = arrCampos;
-                    }
-                );
-        }
-    }
-});
-</script>
+<?php
+echo $this->inlineScript()
+    ->appendFile(
+        $this->basePath('js/index/detalhes-tabela.js')
+    );
+?>

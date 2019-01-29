@@ -345,15 +345,17 @@ class InserirPorArrayService {
             foreach ($arrCamposExcluir as $nr_id => $arrCampo) {
                 $nr_campo_id = $arrCampo->id ?? 0;
 
-                $objCampo = $this->getEntityManager()
-                    ->getRepository(
-                        \Application\Entity\Campo::class
-                    )->findOneBy([
-                        'id' => $nr_campo_id
-                    ]);
+                if ($nr_campo_id > 0) {
+                    $objCampo = $this->getEntityManager()
+                        ->getRepository(
+                            \Application\Entity\Campo::class
+                        )->findOneBy([
+                            'id' => $nr_campo_id
+                        ]);
 
-                $this->getEntityManager()
-                    ->remove($objCampo);
+                    $this->getEntityManager()
+                        ->remove($objCampo);
+                }
             }
 
             $this->getEntityManager()
