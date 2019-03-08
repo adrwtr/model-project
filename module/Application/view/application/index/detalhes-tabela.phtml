@@ -264,14 +264,15 @@
                                                 ></v-select>
                                             </div>
 
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-12" id="div_campo_tabela_destino">
                                                 <label for="ds_tabela">Tabela Destino:</label>
                                                 <v-select v-model="nr_tabela_destino_id"
                                                           label="ds_nome_concat"
                                                           :options="arrTodasAsTabelas"></v-select>
                                             </div>
 
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-12"
+                                                id="div_campo_tabela_destino_campo">
                                                 <label for="ds_tabela">Campo da tabela Destino:</label>
 
                                                 <v-select v-model="nr_campo_destino_id"

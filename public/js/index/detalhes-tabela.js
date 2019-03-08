@@ -183,21 +183,39 @@ var app_lista_tabela = new Vue({
          */
         nr_tabela_destino_id: function() {
             this.nr_campo_destino_id = null;
-            var nr_tabela_id = this.nr_tabela_destino_id.id;
 
-            fetch('/tabela/campos/get/' + nr_tabela_id)
-                .then(objResponse => objResponse.json())
-                .then(
-                    arrJson => {
-                        var arrCampos = arrJson.arrCampos;
-                        this.arrCamposFromTabelaFk = arrCampos;
-                    }
-                );
+            if (this.nr_tabela_destino_id != null) {
+                var nr_tabela_id = this.nr_tabela_destino_id.id;
+
+                fetch('/tabela/campos/get/' + nr_tabela_id)
+                    .then(objResponse => objResponse.json())
+                    .then(
+                        arrJson => {
+                            var arrCampos = arrJson.arrCampos;
+                            this.arrCamposFromTabelaFk = arrCampos;
+                        }
+                    );
+            }
         },
 
         nr_tabela_id: function () {
             this.getRegistroEditar(this.nr_tabela_id);
+        },
+
+        nr_tipo_de_chave_id: function () {
+            if (this.nr_tipo_de_chave_id.ds_chave == 'UNIQUE_KEY') {
+                // esconde outros campos
+                $('#div_campo_tabela_destino_campo').hide();
+                $('#div_campo_tabela_destino').hide();
+                this.nr_tabela_destino_id = null;
+                this.nr_campo_destino_id = null;
+            } else {
+                // mostra outros campos
+                $('#div_campo_tabela_destino_campo').show();
+                $('#div_campo_tabela_destino').show();
+            }
         }
+
     }
 });
 
