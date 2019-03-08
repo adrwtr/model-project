@@ -84,6 +84,10 @@ var app_lista_tabela = new Vue({
         },
 
         salvar: function() {
+            var _this = this;
+            this.setBtnCarregando();
+
+
             var arrPost = {
                 nr_tabela_id : this.nr_tabela_id,
                 ds_tabela : this.ds_tabela,
@@ -102,12 +106,14 @@ var app_lista_tabela = new Vue({
             )
             .then(
                 function (objResponse) {
-                    console.log(objResponse);
+                    $('#div_msg_salvado').show();
+                    _this.unsetBtnCarregando();
                 }
             )
             .catch(
                 function (error) {
                     console.log(error);
+                    _this.unsetBtnCarregando();
                 }
             );
         },
@@ -156,6 +162,18 @@ var app_lista_tabela = new Vue({
                 .splice(nr_index, 1);
 
             this.sn_desfazer_campo_excluido = true;
+        },
+
+        setBtnCarregando: function() {
+            $('#btn_salvar').html('');
+            $('#btn_salvar').html('<i class="fa fa-spinner fa-refresh fa-spin" aria-hidden="true"></i> - Aguarde');
+            $('#btn_salvar').attr('disabled', true);
+        },
+
+
+        unsetBtnCarregando: function() {
+            $('#btn_salvar').html('Salvar');
+            $('#btn_salvar').attr('disabled', false);
         },
     },
 
