@@ -18,22 +18,19 @@
             'href' => $this->basePath() . '/img/favicon.ico'])
             ->prependStylesheet($this->basePath('css/style.css'))
             ->prependStylesheet("/css/bootstrap.min.css")
-            ->prependStylesheet("https://use.fontawesome.com/releases/v5.0.8/css/all.css");
+            ->prependStylesheet("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
         ?>
 
         <!-- Scripts -->
         <?= $this->headScript()
-            ->appendFile("/js/libs/jquery-3.1.0.min.js")
-            ->appendFile("/js/libs/bootstrap.min.js")
-            // ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
-            // ->appendFile("https://cdn.jsdelivr.net/npm/vue")
-
-            ->appendFile("https://vuejs.org/js/vue.js")
+            ->appendFile($this->basePath("/js/libs/jquery-3.1.0.min.js"))
+            ->appendFile($this->basePath("/js/libs/bootstrap.min.js"))
+            ->appendFile($this->basePath("js/libs/vue.js"))
             ->appendFile($this->basePath("js/libs/lodash.js"))
-            ->appendFile("https://unpkg.com/axios/dist/axios.min.js")
-            ->appendFile("http://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js")
-            ->appendFile("https://cdn.rawgit.com/David-Desmaisons/Vue.Draggable/master/dist/vuedraggable.min.js")
-            ->appendFile("https://unpkg.com/vue-select@2.4.0/dist/vue-select.js")
+            ->appendFile($this->basePath("js/libs/axios.min.js"))
+            ->appendFile($this->basePath("js/libs/Sortable.min.js"))
+            ->appendFile($this->basePath("js/libs/vuedraggable.umd.js"))
+            ->appendFile($this->basePath("js/libs/vue-select.js"));
         ?>
     </head>
 
