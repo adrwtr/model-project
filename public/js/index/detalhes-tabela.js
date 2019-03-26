@@ -98,6 +98,9 @@ var app_lista_tabela = new Vue({
                 arrTabelaChavesExcluido : this.arrTabelaChavesExcluido
             };
 
+            console.log('Dados do post:');
+            console.log(arrPost);
+
 
             axios.post(
                 '/tabela/update',
@@ -121,9 +124,11 @@ var app_lista_tabela = new Vue({
 
 
         addTabelaChave : function() {
-            var arrNovo = {
-                ds_nome_chave : 'teste'
-            };
+            this.nr_tipo_de_chave_id = null;
+            this.nr_campo_origem_id = null;
+            this.nr_tabela_destino_id = null;
+            this.nr_campo_destino_id = null;
+            this.ds_descricao_fk = '';
         },
 
         voltar: function() {
@@ -131,24 +136,62 @@ var app_lista_tabela = new Vue({
         },
 
         addCampoFk: function() {
+
+            var ds_nome_chave_temp = '';
+            var nr_tipo_de_chave_id_temp = null;
+
+            var tabela_destino_id_temp = null;
+            var ds_nome_tabela_destino_temp = null;
+            var ds_nome_tabela_referencia_temp = null;
+
+            var campo_destino_id_temp = null;
+            var ds_nome_campo_destino_temp = null;
+            var ds_nome_campo_referencia_temp = null;
+
+            if (
+                this.nr_tipo_de_chave_id != null
+                && this.nr_tipo_de_chave_id != undefined
+            ) {
+                ds_nome_chave_temp = this.nr_tipo_de_chave_id.ds_nome;
+                nr_tipo_de_chave_id_temp = this.nr_tipo_de_chave_id.id;
+            }
+
+            if (
+                this.nr_tabela_destino_id != null
+                && this.nr_tabela_destino_id != undefined
+            ) {
+                tabela_destino_id_temp = this.nr_tabela_destino_id.id;
+                ds_nome_tabela_destino_temp = this.nr_tabela_destino_id.ds_nome;
+                ds_nome_tabela_referencia_temp = this.nr_tabela_destino_id.ds_nome;
+            }
+
+            if (
+                this.nr_campo_destino_id != null
+                && this.nr_campo_destino_id != undefined
+            ) {
+                campo_destino_id_temp = this.nr_campo_destino_id.id,
+                ds_nome_campo_destino_temp = this.nr_campo_destino_id.ds_nome,
+                ds_nome_campo_referencia_temp = this.nr_campo_destino_id.ds_nome
+            }
+
             var arrNovaChave = {
                 id : null,
                 tabela_origem_id : this.nr_tabela_id,
                 ds_nome_tabela_referencia : this.ds_tabela,
-                ds_nome_chave : this.nr_tipo_de_chave_id.ds_nome,
+                ds_nome_chave : ds_nome_chave_temp,
+                nr_tipo_de_chave_id : nr_tipo_de_chave_id_temp,
 
-                tabela_destino_id : this.nr_tabela_destino_id.id,
-                ds_nome_tabela_destino : this.nr_tabela_destino_id.ds_nome,
-                ds_nome_tabela_referencia : this.nr_tabela_destino_id.ds_nome,
-
+                tabela_destino_id : tabela_destino_id_temp,
+                ds_nome_tabela_destino : ds_nome_tabela_destino_temp,
+                ds_nome_tabela_referencia : ds_nome_tabela_referencia_temp,
 
                 campo_origem_id : this.nr_campo_origem_id.id,
                 ds_nome_campo_origem : this.nr_campo_origem_id.ds_nome,
                 ds_nome_campo : this.nr_campo_origem_id.ds_nome,
 
-                campo_destino_id : this.nr_campo_destino_id.id,
-                ds_nome_campo_destino : this.nr_campo_destino_id.ds_nome,
-                ds_nome_campo_referencia : this.nr_campo_destino_id.ds_nome
+                campo_destino_id : campo_destino_id_temp,
+                ds_nome_campo_destino : ds_nome_campo_destino_temp,
+                ds_nome_campo_referencia : ds_nome_campo_referencia_temp
              };
 
 
@@ -203,6 +246,10 @@ var app_lista_tabela = new Vue({
         },
 
         nr_tipo_de_chave_id: function () {
+            if (this.nr_tipo_de_chave_id == null) {
+                return;
+            }
+
             if (this.nr_tipo_de_chave_id.ds_chave == 'UNIQUE_KEY') {
                 // esconde outros campos
                 $('#div_campo_tabela_destino_campo').hide();

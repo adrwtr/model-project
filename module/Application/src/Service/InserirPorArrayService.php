@@ -108,12 +108,14 @@ class InserirPorArrayService {
         $arrForeingkeyObj = [];
 
         foreach ($arrCampos as $arrForeingkey) {
+            $nr_tipo_de_chave_id = $arrForeingkey['nr_tipo_de_chave_id'] ?? '';
             $ds_nome_campo = $arrForeingkey['ds_nome_campo'] ?? '';
             $ds_nome_tabela_referencia = $arrForeingkey['ds_nome_tabela_referencia'] ?? '';
             $ds_nome_campo_referencia = $arrForeingkey['ds_nome_campo_referencia'] ?? '';
 
             $objForeingkey = new \stdClass();
             $objForeingkey->id = null;
+            $objForeingkey->nr_tipo_de_chave_id = $nr_tipo_de_chave_id;
             $objForeingkey->ds_nome_campo = $ds_nome_campo;
             $objForeingkey->ds_nome_tabela_referencia = $ds_nome_tabela_referencia;
             $objForeingkey->ds_nome_campo_referencia = $ds_nome_campo_referencia;
@@ -215,15 +217,17 @@ class InserirPorArrayService {
 
         foreach ($arrForeingkeys as $nr_id => $objForeingkey) {
             $nr_campo_id = $objForeingkey->id ?? 0;
+            $nr_tipo_de_chave_id = $objForeingkey->nr_tipo_de_chave_id ?? 0;
             $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
             $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
             $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
 
-            if ($ds_nome_campo != '' && $ds_nome_campo_referencia != '') {
+            if ($ds_nome_campo != '') {
                 if (count($arrCamposTabela) > 0) {
                     $this->processForeingKeyAtual(
                         $objSistema,
                         $objTabela,
+                        $nr_tipo_de_chave_id,
                         $ds_nome_campo,
                         $ds_nome_tabela_referencia,
                         $ds_nome_campo_referencia,
@@ -239,6 +243,7 @@ class InserirPorArrayService {
     public function processForeingKeyAtual(
         $objSistema,
         $objTabelaOrigem,
+        $nr_tipo_de_chave_id,
         $ds_nome_campo,
         $ds_nome_tabela_referencia,
         $ds_nome_campo_referencia,
@@ -248,6 +253,9 @@ class InserirPorArrayService {
         $nr_key_campo_referencia = 0;
         $objCampoDestino = null;
         $objCampoReferencia = null;
+        $sn_unique_key = false;
+        $objTabelaReferencia = null;
+        $objCampoReferencia = null;
 
         // campo atual
         foreach ($arrCamposTabela as $nr_key => $objCampo) {
@@ -256,20 +264,45 @@ class InserirPorArrayService {
             }
         }
 
-        // aqui esta o problema
-        // a string nao é tratada para tirar o `
+        // buscando a chave
+        if ($nr_tipo_de_chave_id == 0 || $nr_tipo_de_chave_id == '') {
+            $objTipoDeChave = $this->getObjSm()
+                ->get(\Application\Service\Repository\TipoDeChaveService::class)
+                ->getTipoDeChaveForingKey();
+        }
+
+        if ($nr_tipo_de_chave_id > 0) {
+            $objTipoDeChave = $this->getObjSm()
+                ->get(\Application\Service\Repository\TipoDeChaveService::class)
+                ->getTipoDeChaveById($nr_tipo_de_chave_id);
+
+            if ($objTipoDeChave->getDsChave() == \Application\Entity\TipoDeChave::UNIQUE_KEY) {
+                $sn_unique_key = true;
+            }
+        }
+
+        if ($objTipoDeChave == null) {
+            $objTipoDeChave = $this->getObjSm()
+                ->get(\Application\Service\Repository\TipoDeChaveService::class)
+                ->getTipoDeChaveForingKey();
+        }
 
         // tabela de referencia
-        $objTabelaReferencia = $this->getEntityManager()
-            ->getRepository(\Application\Entity\Tabela::class)
-            ->findOneBy([
-                'ds_nome' => $ds_nome_tabela_referencia,
-                'objSistema' => $objSistema
-            ]);
+        if ($sn_unique_key == false) {
+            $objTabelaReferencia = $this->getEntityManager()
+                ->getRepository(\Application\Entity\Tabela::class)
+                ->findOneBy([
+                    'ds_nome' => $ds_nome_tabela_referencia,
+                    'objSistema' => $objSistema
+                ]);
+        }
 
 
         // a tabela nao existe, vamos criar ela
-        if ($objTabelaReferencia == null) {
+        if (
+            $objTabelaReferencia == null
+            && $sn_unique_key == false
+        ) {
             $objTabelaReferencia = $this->getObjSm()
                 ->get(
                     \Application\Service\Repository\TabelaService::class
@@ -293,7 +326,11 @@ class InserirPorArrayService {
                 );
         }
 
-        $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
+        $arrCamposTabelaReferencia = array();
+
+        if ($sn_unique_key == false) {
+            $arrCamposTabelaReferencia = $objTabelaReferencia->getArrCampos();
+        }
 
         // campo referencia
         if (count($arrCamposTabelaReferencia) > 0) {
@@ -309,11 +346,6 @@ class InserirPorArrayService {
         if ($objCampoDestino == null) {
             $objCampoDestino = $objCampoReferencia;
         }
-
-        // buscando a chave
-        $objTipoDeChave = $this->getObjSm()
-            ->get(\Application\Service\Repository\TipoDeChaveService::class)
-            ->getTipoDeChaveForingKey();
 
         // inclui a chave
         $objTabelaChave = $this->getObjSm()
@@ -403,8 +435,10 @@ class InserirPorArrayService {
                         'id' => $nr_campo_id
                     ]);
 
-                $this->getEntityManager()
-                    ->remove($objTabelaChave);
+                if ($objTabelaChave != null) {
+                    $this->getEntityManager()
+                        ->remove($objTabelaChave);
+                }
             }
 
             $this->getEntityManager()

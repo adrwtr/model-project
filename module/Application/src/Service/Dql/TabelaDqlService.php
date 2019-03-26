@@ -46,7 +46,7 @@ class TabelaDqlService
             from
                 \Application\Entity\Tabela t
 
-                INNER JOIN \Application\Entity\Sistema t_sistema
+                inner join t.objSistema t_sistema
             where
                 t.sn_excluido = 0 and
                 t.sn_temporario = 0
