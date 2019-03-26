@@ -13,32 +13,7 @@ Urgente
     Refatorar Index
 
 CRUD tabelas
-    incluir - OK
-    alterar - OK
-    excluir - OK
-    Importar SQL - OK
-    Permitir excluir os campos - OK
-    Comparar na criacao - OK
-    Comparar com existente - OK
-    Importar banco - TODO
-    Paginar resultado - TODO
 
-CRUD campos
-    incluir - OK
-    alterar - OK
-    excluir - OK
-    ordenar - OK
-    adicionar foreing keys - OK
-    Foreing keys - OK
-    Unique Keys - OK
-
-    ✔ - Ler Unique keys @done (18-09-21 17:13)
-
-    ☐ - Exibir as UNIQUE KEYS na tela
-    ☐ - Corrigir o merge de tabelas para olhar para o sistema
-
-    Mostrar ligacoes ativas - TODO
-    Mostrar ligacoes logicas - TODO
 
 ## Para rodar testes
 É necessario manter atualizado o arquivo sql.sqlite e sql_unittest.sqlite

@@ -68,7 +68,7 @@ var app_lista_tabela = new Vue({
         addCampo: function() {
             this.arrCampos.push(
                 {
-                    ds_nome: 'nome do campo',
+                    ds_nome: 'nome',
                     ds_prop: 'varchar(255)',
                 }
             );
@@ -98,7 +98,6 @@ var app_lista_tabela = new Vue({
                 arrTabelaChavesExcluido : this.arrTabelaChavesExcluido
             };
 
-            console.log(arrPost);
 
             axios.post(
                 '/tabela/update',
@@ -108,11 +107,13 @@ var app_lista_tabela = new Vue({
                 function (objResponse) {
                     $('#div_msg_salvado').show();
                     _this.unsetBtnCarregando();
+
+                    // precisa recarregar para buscar os ids dos campos
+                    _this.getRegistroEditar(_this.nr_tabela_id);
                 }
             )
             .catch(
                 function (error) {
-                    console.log(error);
                     _this.unsetBtnCarregando();
                 }
             );
@@ -150,7 +151,6 @@ var app_lista_tabela = new Vue({
                 ds_nome_campo_referencia : this.nr_campo_destino_id.ds_nome
              };
 
-            console.log(arrNovaChave);
 
             this.arrTabelaChaves.push(arrNovaChave);
         },
