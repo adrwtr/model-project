@@ -221,6 +221,8 @@ class InserirPorArrayService {
             $ds_nome_campo = $objForeingkey->ds_nome_campo ?? '';
             $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
             $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
+            $nr_tabela_destino_id = $objForeingkey->tabela_destino_id ?? 0;
+
 
             if ($ds_nome_campo != '') {
                 if (count($arrCamposTabela) > 0) {
@@ -229,6 +231,7 @@ class InserirPorArrayService {
                         $objTabela,
                         $nr_tipo_de_chave_id,
                         $ds_nome_campo,
+                        $nr_tabela_destino_id,
                         $ds_nome_tabela_referencia,
                         $ds_nome_campo_referencia,
                         $arrCamposTabela
@@ -245,6 +248,7 @@ class InserirPorArrayService {
         $objTabelaOrigem,
         $nr_tipo_de_chave_id,
         $ds_nome_campo,
+        $nr_tabela_destino_id,
         $ds_nome_tabela_referencia,
         $ds_nome_campo_referencia,
         $arrCamposTabela
@@ -256,6 +260,8 @@ class InserirPorArrayService {
         $sn_unique_key = false;
         $objTabelaReferencia = null;
         $objCampoReferencia = null;
+
+
 
         // campo atual
         foreach ($arrCamposTabela as $nr_key => $objCampo) {
@@ -289,12 +295,45 @@ class InserirPorArrayService {
 
         // tabela de referencia
         if ($sn_unique_key == false) {
-            $objTabelaReferencia = $this->getEntityManager()
-                ->getRepository(\Application\Entity\Tabela::class)
-                ->findOneBy([
+
+            // busca a tabela simplesmente
+            if ($nr_tabela_destino_id > 0) {
+                $objTabelaReferencia = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Tabela::class)
+                    ->findOneBy(
+                        [
+                            'id' => $nr_tabela_destino_id
+                        ]
+                    );
+            }
+
+
+            if ($objTabelaReferencia == null) {
+                // primeiro procura a ocorrencia da tabela no sistema atual
+                $arrBusca = [
                     'ds_nome' => $ds_nome_tabela_referencia,
                     'objSistema' => $objSistema
-                ]);
+                ];
+
+                $objTabelaReferencia = $this->getEntityManager()
+                    ->getRepository(\Application\Entity\Tabela::class)
+                    ->findOneBy($arrBusca);
+
+                // se nao encontrou e for logica
+                if ($objTabelaReferencia == null) {
+                    // se a chave nao for logica, busca de outro sistema
+                    if ($objTipoDeChave->getDsChave() != \Application\Entity\TipoDeChave::LOGIC_KEY) {
+                        // busca em qualquer sistema
+                        $arrBusca = [
+                            'ds_nome' => $ds_nome_tabela_referencia
+                        ];
+
+                        $objTabelaReferencia = $this->getEntityManager()
+                            ->getRepository(\Application\Entity\Tabela::class)
+                            ->findOneBy($arrBusca);
+                    }
+                }
+            }
         }
 
 

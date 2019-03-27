@@ -86,6 +86,7 @@ class IndexController extends BaseServiceManagerController
         $cd_registro = $this->params()
             ->fromRoute('cd_registro');
 
+
         $arrTabela = $this->getEntityManager()
             ->createQuery(
                 $this->getObjSm()
@@ -128,7 +129,6 @@ class IndexController extends BaseServiceManagerController
                     ->listaTodasAsTabelas()
             )
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
 
         return new JsonModel(
             [
