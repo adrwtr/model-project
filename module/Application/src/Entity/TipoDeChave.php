@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="tipo_de_chave")
+ * @ORM\Table(name="tipo_de_chave", options={"collate"="utf8_general_ci", "charset"="utf8"})
  */
 class TipoDeChave
 {

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="tabela")
+ * @ORM\Table(name="tabela", options={"collate"="utf8_general_ci", "charset"="utf8"})
  */
 class Tabela
 {

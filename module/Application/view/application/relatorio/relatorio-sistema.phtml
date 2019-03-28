@@ -1,0 +1,41 @@
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+    <div class="">
+        <div class="row" id="vueApp-lista-tabela">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="col-lg-3">
+                            <h3 class="panel-title">Sistemas</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <input type="text"
+                                            class="form-control"
+                                            id="ds_busca"
+                                            placeholder="Buscar"
+                                            v-model="ds_filtro" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid">
+                            estamos aqui
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<?php
+echo $this->inlineScript()
+    ->appendFile(
+        $this->basePath('js/index/index.js')
+    );
+?>

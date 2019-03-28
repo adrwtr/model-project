@@ -4,17 +4,6 @@
 
 Repositorio para desenvolvimento de um aplicativo em PHP para auxilio na analise de sistemas e projetos
 
-## Parte 1
-
-Leituro de arquivos .sql para verificação de estruturas mysql
-
-Urgente
-    Nas ligações, criar os ADDs necessários igual ao tabela campo
-    Refatorar Index
-
-CRUD tabelas
-
-
 ## Para rodar testes
 É necessario manter atualizado o arquivo sql.sqlite e sql_unittest.sqlite
 .\vendor\bin\phpunit

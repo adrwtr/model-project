@@ -41,7 +41,11 @@ return [
                     'host' => 'localhost',
                     'user'     => 'backup',
                     'password' => 'UniSeguro',
-                    'dbname' => 'model'
+                    'dbname' => 'modelproj',
+                    'charset' => 'utf8',
+                    'driverOptions' => [
+                        \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8' COLLATE 'utf8_general_ci'"
+                    ]
                 ]
             ]
         ]

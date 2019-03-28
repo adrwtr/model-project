@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Pode incluir nesta entidade - Unique keys, foreing keys e chaves lógicas
  *
  * @ORM\Entity
- * @ORM\Table(name="tabela_chave")
+ * @ORM\Table(name="tabela_chave", options={"collate"="utf8_general_ci", "charset"="utf8"})
  */
 class TabelaChave
 {

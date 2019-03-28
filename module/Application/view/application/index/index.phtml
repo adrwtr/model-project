@@ -39,10 +39,17 @@
                                             <td>{{arrValores.ds_nome}}</td>
                                             <td>
                                                 <button type="button" class="btn btn-secondary"
-                                                v-on:click="goToEditar(arrValores.id)"
-                                                v-bind:id="arrValores.id"
-                                                style="font-size: 10px;">
-                                                <i class="fas fa-edit"></i>
+                                                    v-on:click="goToEditar(arrValores.id)"
+                                                    v-bind:id="arrValores.id"
+                                                    style="font-size: 10px;">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+
+                                                <button type="button" class="btn btn-secondary"
+                                                    v-on:click="goToRelatorio(arrValores.id)"
+                                                    v-bind:id="arrValores.id"
+                                                    style="font-size: 10px;">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
                                             </td>
                                         </tr>

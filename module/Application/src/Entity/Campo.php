@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="campo")
+ * @ORM\Table(name="campo", options={"collate"="utf8_general_ci", "charset"="utf8"})
  */
 class Campo
 {

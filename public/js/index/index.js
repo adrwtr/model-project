@@ -53,6 +53,10 @@ var app_lista_tabela = new Vue({
 
         goToEditar: function(nr_id) {
             document.location = '/sistema/administrar/' + nr_id;
+        },
+
+        goToRelatorio: function(nr_id) {
+            document.location = '/sistema/relatorio/' + nr_id;
         }
     }
 });

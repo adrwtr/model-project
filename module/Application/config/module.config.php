@@ -81,6 +81,17 @@ return [
                 ],
             ],
 
+            'relatorio-sistemas' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sistema/relatorio[/:nr_registro]',
+                    'defaults' => [
+                        'controller' => Controller\RelatorioController::class,
+                        'action'     => 'relatorioSistema',
+                    ],
+                ],
+            ],
+
             'index-tabela' => [
                 'type' => Literal::class,
                 'options' => [
@@ -226,6 +237,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => Factory\ControllerComServiceFactory::class,
+            Controller\RelatorioController::class => Factory\ControllerComServiceFactory::class,
             Controller\FixtureController::class => Factory\ControllerComServiceFactory::class,
             Controller\TesteController::class => Factory\ControllerComServiceFactory::class,
         ]
@@ -242,6 +254,7 @@ return [
             \Application\Service\Dql\TabelaChaveDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\TipoDeChaveDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\SistemaDqlService::class => InvokableFactory::class,
+            \Application\Service\Dql\RelatorioDqlService::class => InvokableFactory::class,
 
 
             \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,
