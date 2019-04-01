@@ -29,7 +29,7 @@ class RelatorioController extends BaseServiceManagerController
             ->createQuery(
                 $this->getObjSm()
                     ->get(\Application\Service\Dql\RelatorioDqlService::class)
-                    ->getRelatorio()
+                    ->getRelatorioTabelaCampo()
             )
             // ->setParameter('nr_sistema_id', $nr_sistema_id)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -68,6 +68,7 @@ class RelatorioController extends BaseServiceManagerController
             $ds_string_tudo .= '}<br><br>';
         }
 
+        $ds_string_tudo .= $this->getRelatorioFK();
 
         return new ViewModel(
             array(
@@ -82,6 +83,34 @@ class RelatorioController extends BaseServiceManagerController
         }
 
         return 'varchar';
+    }
+
+    public function getRelatorioFK()
+    {
+        $arrValores = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\RelatorioDqlService::class)
+                    ->getRelatorioFK()
+            )
+            // ->setParameter('nr_sistema_id', $nr_sistema_id)
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $ds_string_tudo = '';
+
+        foreach ($arrValores as $arrFk) {
+            $ds_string_tudo .= 'Ref: '
+                . '"' . $arrFk['ds_nome_tabela_origem']  . '"'
+                . '.'
+                . '"' . $arrFk['ds_nome_campo_origem'] . '"'
+                . ' < '
+                . '"' . $arrFk['ds_nome_tabela_destino']  . '"'
+                . '.'
+                . '"' . $arrFk['ds_nome_campo_destino'] . '"'
+                . '<BR>';
+        }
+
+        return $ds_string_tudo;
     }
 
 
