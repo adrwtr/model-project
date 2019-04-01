@@ -39,37 +39,39 @@
                                         <th>#</th>
                                         <th>Tabela</th>
                                         <th>Descrição</th>
-                                        <th>Ligações</th>
                                         <th></th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
                                     <tr v-for="arrValores in arrTabelas">
-                                        <th scope="row">{{arrValores.id}}</th>
-                                        <td>{{arrValores.ds_nome}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <button type="button" class="btn btn-secondary"
+                                        <td scope="row" width="5%">{{arrValores.id}}</td>
+                                        <td width="20%">{{arrValores.ds_nome}}</td>
+                                        <td width="20%">{{arrValores.ds_descricao}}</td>
+                                        <td width="10%">
+                                            <button type="button"
                                                     v-on:click="modalEditar(arrValores.id)"
                                                     style="font-size: 10px;"
-                                                    class="btn btn-primary" data-toggle="modal" data-target="#modalFormulario"
+                                                    class="btn btn-primary"
+                                                    data-toggle="modal"
+                                                    data-target="#modalFormulario"
                                                     data-btn="selector-btn-alterar">
                                                 <i class="fas fa-edit"></i>
                                             </button>
 
-                                            <button type="button" class="btn btn-secondary"
+                                            <button type="button"
                                                     v-on:click="verDetalhes(arrValores.id)"
                                                     style="font-size: 10px;"
-                                                    class="btn btn-primary" >
-                                                <i class="fas fa-edit"></i>
+                                                    class="btn btn-secondary">
+                                                <i class="fas fa-wrench"></i>
                                             </button>
 
-                                            <button type="button" class="btn btn-secondary"
+                                            <button type="button"
                                                     v-on:click="modalExcluir(arrValores.id)"
                                                     style="font-size: 10px;"
-                                                    class="btn btn-primary" data-toggle="modal" data-target="#modalExcluir">
+                                                    class="btn btn-danger"
+                                                    data-toggle="modal"
+                                                    data-target="#modalExcluir">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </td>

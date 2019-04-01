@@ -35,27 +35,45 @@ class RelatorioController extends BaseServiceManagerController
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $arrTabela = array();
-        $arrCampo = array();
+        $arrCampoAtual = array();
 
         foreach ($arrValores as $nr_key => $arrCampo) {
             $ds_prop = $this->parseProp($arrCampo['ds_prop']);
-            $ds_prop .= ($arrCampo['sn_pk'] == true ? '[primary key]' : '');
+            $ds_prop .= ($arrCampo['sn_pk'] == true ? ' [primary key]' : '');
 
-            $arrCampo = array(
+            $arrCampoAtual = array(
                 'ds_nome' => $arrCampo['ds_nome'],
                 'ds_prop' => $ds_prop
             );
 
-            $arrTabela[$arrCampo['nr_tabela_id']]['arrCampo'][] = $arrCampo;
+            $arrTabela[$arrCampo['nr_tabela_id']]['arrCampo'][] = $arrCampoAtual;
+            $arrTabela[$arrCampo['nr_tabela_id']]['ds_nome'] = $arrCampo['ds_tabela_nome'];
         }
 
-        var_dump($arrValores);
-        var_dump($arrTabela);
 
-die();
+        // construcao da string
+        $ds_string_tudo = '';
+        foreach ($arrTabela as $key => $arrTabela) {
+            $ds_string_tudo .= 'Table '
+                . $arrTabela['ds_nome']
+                . ' {<br>';
+
+            foreach ($arrTabela['arrCampo'] as $arrCampo) {
+                $ds_string_tudo .= $arrCampo['ds_nome']
+                    . ' '
+                    . $arrCampo['ds_prop']
+                    . '<br>';
+            }
+
+            $ds_string_tudo .= '}<br><br>';
+        }
 
 
-        return new ViewModel();
+        return new ViewModel(
+            array(
+                'ds_string_tudo' => $ds_string_tudo
+            )
+        );
     }
 
     public function parseProp($ds_prop) {
@@ -65,4 +83,8 @@ die();
 
         return 'varchar';
     }
+
+
+    // 1 para vários
+    // Ref: "mdl_enrol"."id" < "api_log_qb"."cd_log"
 }

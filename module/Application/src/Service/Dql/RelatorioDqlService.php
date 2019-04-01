@@ -10,7 +10,8 @@ class RelatorioDqlService
                 campo.ds_nome,
                 campo.ds_prop,
                 campo.sn_pk,
-                tabela.id as nr_tabela_id
+                tabela.id as nr_tabela_id,
+                tabela.ds_nome as ds_tabela_nome
             from
                 \Application\Entity\Campo campo
 
