@@ -92,6 +92,17 @@ return [
                 ],
             ],
 
+            'index-sql' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sql',
+                    'defaults' => [
+                        'controller' => Controller\SqlController::class,
+                        'action'     => 'sql',
+                    ],
+                ],
+            ],
+
             'index-tabela' => [
                 'type' => Literal::class,
                 'options' => [
@@ -238,6 +249,7 @@ return [
         'factories' => [
             Controller\IndexController::class => Factory\ControllerComServiceFactory::class,
             Controller\RelatorioController::class => Factory\ControllerComServiceFactory::class,
+            Controller\SqlController::class => Factory\ControllerComServiceFactory::class,
             Controller\FixtureController::class => Factory\ControllerComServiceFactory::class,
             Controller\TesteController::class => Factory\ControllerComServiceFactory::class,
         ]

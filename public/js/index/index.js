@@ -57,6 +57,10 @@ var app_lista_tabela = new Vue({
 
         goToRelatorio: function(nr_id) {
             document.location = '/sistema/relatorio/' + nr_id;
+        },
+
+        goToSql: function() {
+            document.location = '/sql';
         }
     }
 });

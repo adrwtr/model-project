@@ -1,0 +1,29 @@
+<style type="text/css" media="screen">
+#editor {
+    margin: 0;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 750px;
+    height: 300px;
+}
+</style>
+
+<div>
+<pre id="editor">
+SELECT
+    *
+FROM
+    pessoas
+</pre>
+</div>
+
+<script src="js/libs/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/sql");
+</script>
+

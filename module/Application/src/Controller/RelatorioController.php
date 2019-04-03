@@ -82,6 +82,10 @@ class RelatorioController extends BaseServiceManagerController
             return 'int';
         }
 
+        if (substr($ds_prop, 0, 6) == 'bigint') {
+            return 'int';
+        }
+
         return 'varchar';
     }
 
