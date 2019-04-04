@@ -38,6 +38,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
                 $objSistema,
                 'teste 1',
                 'teste 1',
+                'teste 1',
                 null
             );
 
@@ -50,6 +51,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
                 $objSistema,
+                'teste 2',
                 'teste 2',
                 'teste 2',
                 null
@@ -66,6 +68,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
             ->persistir(
                 $objSistema,
                 'teste 2',
+                'teste 2 2',
                 'teste 2 2',
                 $objTabela->getId()
             );
@@ -89,6 +92,7 @@ class TabelaServiceTest extends AbstractZendServiceTestCase
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
                 $objSistema,
+                'teste 1',
                 'teste 1',
                 'teste 1',
                 null

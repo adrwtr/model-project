@@ -38,6 +38,7 @@ class CampoServiceTest extends AbstractZendServiceTestCase
                 $objSistema,
                 'teste 1',
                 'teste 1',
+                'teste 1',
                 null
             );
 
@@ -113,6 +114,7 @@ class CampoServiceTest extends AbstractZendServiceTestCase
             ->get(\Application\Service\Repository\TabelaService::class)
             ->persistir(
                 $objSistema,
+                'teste 1',
                 'teste 1',
                 'teste 1',
                 null

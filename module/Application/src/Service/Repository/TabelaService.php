@@ -14,6 +14,7 @@ class TabelaService extends AbstractRepositoryService
         $objSistema,
         $ds_tabela,
         $ds_descricao = '',
+        $ds_tag = '',
         $nr_tabela_id = null
     ) {
         $objTabela = new Tabela();
@@ -29,6 +30,7 @@ class TabelaService extends AbstractRepositoryService
 
         $objTabela->setObjSistema($objSistema);
         $objTabela->setDsNome($ds_tabela);
+        $objTabela->setDsTag($ds_tag);
         $objTabela->setSnExcluido(false);
         $objTabela->setSnTemporario(false);
         $objTabela->setDsDescricao($ds_descricao);

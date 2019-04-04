@@ -39,6 +39,11 @@ class Tabela
     protected $ds_descricao;
 
     /**
+     * @ORM\Column(name="ds_tag", nullable=true)
+     */
+    protected $ds_tag;
+
+    /**
      * @ORM\OneToMany(targetEntity="Campo", mappedBy="objTabela")
      */
     public $arrCampos;
@@ -122,6 +127,15 @@ class Tabela
 
     public function setDsDescricao($ds_descricao) {
         $this->ds_descricao = $ds_descricao;
+        return $this;
+    }
+
+    public function getDsTag() {
+        return $this->ds_tag;
+    }
+
+    public function setDsTag($ds_tag) {
+        $this->ds_tag = $ds_tag;
         return $this;
     }
 

@@ -157,6 +157,7 @@ class IndexController extends BaseServiceManagerController
         $ds_tabela = $objJson->ds_tabela ?? '';
         $ds_sql = $objJson->ds_sql ?? '';
         $ds_descricao = $objJson->ds_descricao ?? '';
+        $ds_tag = $objJson->ds_tag ?? '';
         $arrCampos = $objJson->arrCampos ?? [];
         $arrCamposExcluido = $objJson->arrCamposExcluido ?? [];
 
@@ -173,6 +174,7 @@ class IndexController extends BaseServiceManagerController
                     $objSistema,
                     $ds_tabela,
                     $ds_descricao,
+                    $ds_tag,
                     $nr_tabela_id
                 );
 
