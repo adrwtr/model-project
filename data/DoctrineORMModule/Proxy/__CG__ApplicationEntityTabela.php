@@ -108,10 +108,10 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', 'arrCampos', 'arrTabelaChaveOrigem', 'arrTabelaChaveDestino', '' . "\0" . 'Application\\Entity\\Tabela' . "\0" . 'objSistema'];
+            return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', 'ds_tag', 'arrCampos', 'arrTabelaChaveOrigem', 'arrTabelaChaveDestino', '' . "\0" . 'Application\\Entity\\Tabela' . "\0" . 'objSistema'];
         }
 
-        return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', '' . "\0" . 'Application\\Entity\\Tabela' . "\0" . 'objSistema'];
+        return ['__isInitialized__', 'id', 'ds_nome', 'sn_temporario', 'sn_excluido', 'ds_descricao', 'ds_tag', '' . "\0" . 'Application\\Entity\\Tabela' . "\0" . 'objSistema'];
     }
 
     /**
@@ -363,6 +363,28 @@ class Tabela extends \Application\Entity\Tabela implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDsDescricao', [$ds_descricao]);
 
         return parent::setDsDescricao($ds_descricao);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDsTag()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDsTag', []);
+
+        return parent::getDsTag();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDsTag($ds_tag)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDsTag', [$ds_tag]);
+
+        return parent::setDsTag($ds_tag);
     }
 
     /**

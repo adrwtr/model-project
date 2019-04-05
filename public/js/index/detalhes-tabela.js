@@ -7,6 +7,7 @@ var app_lista_tabela = new Vue({
         // form
         ds_tabela : '',
         ds_descricao : '',
+        ds_tag : '',
         nr_tabela_id : 0,
         ds_sql : '',
         arrCampos : [],
@@ -56,6 +57,7 @@ var app_lista_tabela = new Vue({
                         this.nr_tabela_id = arrTabela.id;
                         this.ds_tabela = arrTabela.ds_nome;
                         this.ds_descricao = arrTabela.ds_descricao;
+                        this.ds_tag = arrTabela.ds_tag;
                         this.arrCampos = arrCampos;
                         this.arrTabelaChaves = arrTabelaChaves;
                         this.arrTipoDeChaveOptions =  arrTipoDeChave;
@@ -92,6 +94,7 @@ var app_lista_tabela = new Vue({
                 nr_tabela_id : this.nr_tabela_id,
                 ds_tabela : this.ds_tabela,
                 ds_descricao: this.ds_descricao,
+                ds_tag: this.ds_tag,
                 arrCampos : this.arrCampos,
                 arrCamposExcluido : this.arrCamposExcluido,
                 arrTabelaChaves : this.arrTabelaChaves,
