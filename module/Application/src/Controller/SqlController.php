@@ -32,4 +32,19 @@ class SqlController extends BaseServiceManagerController
             )
         );
     }
+
+    public function listaTodosCamposAction()
+    {
+        $arrValores = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\CampoDqlService::class)
+                    ->getAllCampos()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return new JsonModel(
+            $arrValores
+        );
+    }
 }

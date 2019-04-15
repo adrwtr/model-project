@@ -92,6 +92,7 @@ return [
                 ],
             ],
 
+
             'index-sql' => [
                 'type' => Segment::class,
                 'options' => [
@@ -99,6 +100,18 @@ return [
                     'defaults' => [
                         'controller' => Controller\SqlController::class,
                         'action'     => 'sql',
+                    ],
+                ],
+            ],
+
+            'sql-campos' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sql/campos',
+                    'defaults' => [
+                        'controller' => Controller\SqlController::class,
+                        'action'     => 'listaTodosCampos',
+                        'cd_registro' => '0'
                     ],
                 ],
             ],
@@ -241,6 +254,9 @@ return [
                     ],
                 ],
             ],
+
+
+
 
         ],
     ],

@@ -10,38 +10,27 @@
 }
 </style>
 
-<div>
-<pre id="editor">
-SELECT
-    *
-FROM
-    pessoas
-</pre>
+<div id="">
+    <pre id="editor">
+    SELECT
+        *
+    FROM
+        pessoas
+    </pre>
 </div>
 
-<script src="js/libs/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/libs/ace/src-noconflict/ext-language_tools.js"></script>
-<script>
-    ace.require("ace/ext/language_tools");
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/sql");
+<div id="vueApp-sql">
+</div>
 
-    var eventoGlobal = null;
-
-    editor.setOptions({
-        enableBasicAutocompletion: true,
-        enableSnippets: true,
-        enableLiveAutocompletion: false
-    });
-
-    editor.session.selection.on(
-        'changeSelection',
-        function(e) {
-            console.log(e);
-            console.log(e.text);
-            eventoGlobal = e;
-        }
+<?php
+echo $this->inlineScript()
+    ->appendFile(
+        $this->basePath('js/libs/ace/src-noconflict/ace.js')
+    )
+    ->appendFile(
+        $this->basePath('js/libs/ace/src-noconflict/ext-language_tools.js')
+    )
+    ->appendFile(
+        $this->basePath('js/sql/sql.js')
     );
-</script>
-
+?>

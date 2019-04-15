@@ -1,62 +1,95 @@
-var buildDom = require("ace/lib/dom").buildDom;
-    var editor = ace.edit();
-    editor.setOptions({
-        theme: "ace/theme/tomorrow_night_eighties",
-        mode: "ace/mode/markdown",
-        maxLines: 30,
-        minLines: 30,
-        autoScrollEditorIntoView: true,
-    });
-    var refs = {};
-    function updateToolbar() {
-        refs.saveButton.disabled = editor.session.getUndoManager().isClean();
-        refs.undoButton.disabled = !editor.session.getUndoManager().hasUndo();
-        refs.redoButton.disabled = !editor.session.getUndoManager().hasRedo();
-    }
-    editor.on("input", updateToolbar);
-    editor.session.setValue(localStorage.savedValue || "Welcome to ace Toolbar demo!")
-    function save() {
-        localStorage.savedValue = editor.getValue();
-        editor.session.getUndoManager().markClean();
-        updateToolbar();
-    }
-    editor.commands.addCommand({
-        name: "save",
-        exec: save,
-        bindKey: { win: "ctrl-s", mac: "cmd-s" }
-    });
+// global var
+var ds_texto_selecionado = '';
 
-    buildDom(["div", { class: "toolbar" },
-        ["button", {
-            ref: "saveButton",
-            onclick: save
-        }, "save"],
-        ["button", {
-            ref: "undoButton",
-            onclick: function() {
-                editor.undo();
+// inicialização do editor
+ace.require("ace/ext/language_tools");
+
+var editor = ace.edit("editor");
+
+editor.setTheme("ace/theme/monokai");
+editor.session.setMode("ace/mode/sql");
+
+
+editor.setOptions({
+    enableBasicAutocompletion: true,
+    enableSnippets: true,
+    enableLiveAutocompletion: false
+});
+
+editor.session.selection.on(
+    'changeSelection',
+    function(e) {
+        // seta na global
+        ds_texto_selecionado = editor.getCopyText();
+    }
+);
+
+
+// inicialização do vue
+var app_sql = new Vue({
+    el: '#vueApp-sql',
+
+    data: {
+        arrCampos : [],
+        arrTabelas : []
+    },
+
+    created: function() {
+        this.getCampos();
+    },
+
+    watch: {
+    },
+    methods: {
+        getCampos: function() {
+            fetch(
+                '/sql/campos',
+                {
+                    credentials: 'include'
+                }
+            )
+            .then(objResponse => objResponse.json())
+            .then(
+                arrJson => {
+                    this.arrCampos = arrJson;
+                    this.processNomesTabela();
+                }
+            );
+        },
+
+        processNomesTabela: function()
+        {
+            var arrTabelas = Array();
+
+            for(var i=0; i<this.arrCampos.length; i++) {
+                arrTabelas[this.arrCampos[i].ds_nome_tabela] = 1;
             }
-        }, "undo"],
-        ["button", {
-            ref: "redoButton",
-            onclick: function() {
-                editor.redo();
+
+            this.arrTabelas = R.keys(arrTabelas);
+
+            var staticWordCompleter = {
+                getCompletions: (editor, session, pos, prefix, callback) => {
+                    var wordList = this.arrTabelas;
+
+                    callback(
+                        null,
+                        wordList.map(
+                            function(word) {
+                                return {
+                                    caption: word,
+                                    value: word,
+                                    meta: "static"
+                                };
+                            }
+                        )
+                    );
+
+                }
             }
-        }, "redo"],
-        ["button", {
-            style: "font-weight: bold",
-            onclick: function() {
-                editor.insertSnippet("**${1:$SELECTION}**");
-                editor.renderer.scrollCursorIntoView()
-            }
-        }, "bold"],
-        ["button", {
-            style: "font-style: italic",
-            onclick: function() {
-                editor.insertSnippet("*${1:$SELECTION}*");
-                editor.renderer.scrollCursorIntoView()
-            }
-        }, "Italic"],
-    ], document.body, refs);
-    document.body.appendChild(editor.container)
-    window.editor = editor;
+
+            // langTools.setCompleters([staticWordCompleter])
+            // or
+            editor.completers = [staticWordCompleter];
+        }
+    }
+});
