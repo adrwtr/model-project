@@ -72,6 +72,7 @@ var app_lista_tabela = new Vue({
                 {
                     ds_nome: 'nome',
                     ds_prop: 'varchar(255)',
+                    sn_pk : false
                 }
             );
         },
