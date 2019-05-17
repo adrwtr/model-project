@@ -1,16 +1,19 @@
 // global var
+
+// texto que foi selecionado
 var ds_texto_selecionado = '';
+
+// tokens do teclado
 var arrToken = new Array();
 var arrTokenTemp = new Array();
 arrTokenTemp.push('');
+
 var ds_token = '';
 var ds_token_temp = '';
 
 // inicialização do editor
 ace.require("ace/ext/language_tools");
-
 var editor = ace.edit("editor");
-
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/sql");
 
@@ -21,6 +24,9 @@ editor.setOptions({
     enableLiveAutocompletion: false
 });
 
+
+// sempe que houver uma seleção de texto,
+// salva na variavel ds_texto_selecionado
 editor.session.selection.on(
     'changeSelection',
     function(e) {
@@ -29,19 +35,24 @@ editor.session.selection.on(
     }
 );
 
+
+// sempre que houve uma alteracao
 editor.on(
     "change",
     function(e) {
+        // le o valor digitado
         ds_token = e.lines[0];
 
+        // se a token for um espaço, ou um enter
         if (ds_token == ' ' || ds_token == '') {
-            //arrToken.push()
+            // pega todas as letras digitadas antes de espaco e enter
             ds_token_temp = arrTokenTemp.reduce(
                 function(x, y) {
                     return x.concat(y);
                 }
             );
 
+            // remove espaco
             ds_token_temp = ds_token_temp.replace(" ", "");
 
             arrToken.push(ds_token_temp);
@@ -49,6 +60,7 @@ editor.on(
             arrTokenTemp = new Array();
             arrTokenTemp.push(' ');
 
+            // TODO: espaços, tabs e escapes estão estragando
             app_sql.helperGetDadosTabela(ds_token_temp);
         }
 
@@ -71,8 +83,10 @@ var app_sql = new Vue({
     el: '#vueApp-sql',
 
     data: {
+        tabela_encontrada : '',
         arrCampos : [],
-        arrTabelas : []
+        arrTabelas : [],
+        arrCamposEncontrados : []
     },
 
     created: function() {
@@ -95,6 +109,7 @@ var app_sql = new Vue({
             .then(
                 arrJson => {
                     this.arrCampos = arrJson;
+                    console.log(arrJson);
                     this.processNomesTabela();
                 }
             );
@@ -113,8 +128,6 @@ var app_sql = new Vue({
             }
 
             this.arrTabelas = R.keys(arrTabelas);
-
-            console.log(this.arrTabelas);
 
             var staticWordCompleter = {
                 getCompletions: (editor, session, pos, prefix, callback) => {
@@ -152,13 +165,16 @@ var app_sql = new Vue({
             // usa para encontrar no array
             var sn_encontrado = R.find(testeAtual, this.arrTabelas);
 
-            if (sn_encontrado) {
+            if (sn_encontrado != undefined) {
                 this.helperGetCampos(ds_token);
             }
         },
 
         helperGetCampos: function(ds_tabela) {
-            console.log(ds_tabela)
+            this.tabela_encontrada = ds_tabela;
+
+            var oCampoTemATabela = R.propEq('ds_nome_tabela', ds_tabela);
+            this.arrCamposEncontrados = R.filter(oCampoTemATabela, this.arrCampos);
         }
 
 
