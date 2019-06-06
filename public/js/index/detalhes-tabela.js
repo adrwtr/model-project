@@ -180,6 +180,7 @@ var app_lista_tabela = new Vue({
 
             var arrNovaChave = {
                 id : null,
+                ds_descricao_fk : this.ds_descricao_fk,
                 tabela_origem_id : this.nr_tabela_id,
                 ds_nome_tabela_referencia : this.ds_tabela,
                 ds_nome_chave : ds_nome_chave_temp,

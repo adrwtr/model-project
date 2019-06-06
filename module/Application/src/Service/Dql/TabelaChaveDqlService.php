@@ -23,9 +23,9 @@ class TabelaChaveDqlService
                 \Application\Entity\TabelaChave tc
 
                 inner join tc.objTipoDeChave tdc
-                inner join tc.objTabelaDestino td
                 inner join tc.objCampoOrigem co
-                inner join tc.objCampoDestino cd
+                left join tc.objTabelaDestino td
+                left join tc.objCampoDestino cd
 
             where
                 tc.objTabelaOrigem = :tabela_origem_id

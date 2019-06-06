@@ -60,6 +60,11 @@ class TabelaChave
      */
     protected $nr_grupo;
 
+    /**
+     * @ORM\Column(name="ds_descricao", type="text", nullable=true)
+     */
+    protected $ds_descricao;
+
     public function __construct() {
         $this->nr_grupo = 0;
     }
@@ -138,6 +143,19 @@ class TabelaChave
     public function setNrGrupo($nr_grupo)
     {
         $this->nr_grupo = $nr_grupo;
+
+        return $this;
+    }
+
+
+    public function getDsDescricao()
+    {
+        return $this->ds_descricao;
+    }
+
+    public function setDsDescricao($ds_descricao)
+    {
+        $this->ds_descricao = $ds_descricao;
 
         return $this;
     }

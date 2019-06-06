@@ -17,6 +17,7 @@ class TabelaChaveService extends AbstractRepositoryService
         $objCampoOrigem,
         $objCampoDestino = null,
         $nr_grupo = 0,
+        $ds_descricao_fk = '',
         $nr_tabela_chave_id = null
     ) {
         $objTabelaChave = new TabelaChave();
@@ -34,6 +35,7 @@ class TabelaChaveService extends AbstractRepositoryService
         $objTabelaChave->setObjTabelaDestino($objTabelaDestino);
         $objTabelaChave->setObjTipoDeChave($objTipoDeChave);
         $objTabelaChave->setObjCampoOrigem($objCampoOrigem);
+        $objTabelaChave->setDsDescricao($ds_descricao_fk);
 
         if ($objCampoDestino != null) {
             $objTabelaChave->setObjCampoDestino($objCampoDestino);

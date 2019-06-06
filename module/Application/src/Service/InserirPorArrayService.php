@@ -222,6 +222,7 @@ class InserirPorArrayService {
             $ds_nome_tabela_referencia = $objForeingkey->ds_nome_tabela_referencia ?? '';
             $ds_nome_campo_referencia = $objForeingkey->ds_nome_campo_referencia ?? '';
             $nr_tabela_destino_id = $objForeingkey->tabela_destino_id ?? 0;
+            $ds_descricao_fk = $objForeingkey->ds_descricao_fk ?? '';
 
 
             if ($ds_nome_campo != '') {
@@ -234,6 +235,7 @@ class InserirPorArrayService {
                         $nr_tabela_destino_id,
                         $ds_nome_tabela_referencia,
                         $ds_nome_campo_referencia,
+                        $ds_descricao_fk,
                         $arrCamposTabela
                     );
                 }
@@ -251,6 +253,7 @@ class InserirPorArrayService {
         $nr_tabela_destino_id,
         $ds_nome_tabela_referencia,
         $ds_nome_campo_referencia,
+        $ds_descricao_fk,
         $arrCamposTabela
     ) {
         $nr_key_campo_atual = 0;
@@ -396,6 +399,7 @@ class InserirPorArrayService {
                 $arrCamposTabela[$nr_key_campo_atual],
                 $objCampoDestino,
                 0,
+                $ds_descricao_fk,
                 null
             );
 
