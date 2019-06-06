@@ -81,6 +81,26 @@ editor.on(
 // functional program - globals fn
 var getJsonFromAjax = objResponse => objResponse.json();
 
+function getFromAPI(ds_url) {
+    return new Promise(
+        function(resolve, reject) {
+            fetch(
+                ds_url,
+                {
+                    credentials: 'include'
+                }
+            )
+            .then(getJsonFromAjax)
+            .then(
+                arrJson => {
+                    // console.log(arrJson);
+                    resolve(arrJson);
+                }
+            );
+        }
+    );
+}
+
 
 
 // inicialização do vue
@@ -111,28 +131,19 @@ var app_sql = new Vue({
     },
 
     methods: {
-
         // recupera as conexoes
         getConexao: function() {
-            fetch(
-                '/sql/lista-conexao',
-                {
-                    credentials: 'include'
-                }
-            )
-            .then(getJsonFromAjax)
-            .then(
+            getFromAPI('/sql/lista-conexao').then(
                 arrJson => {
                     this.arrConexao = arrJson;
-                    console.log(arrJson);
                 }
             );
-        }
+        },
 
         // recupera informacoes tabelas
         getAllInfoFromTabelas: function() {
 
-        }
+        },
 
 
 
