@@ -58,6 +58,8 @@ return [
                 ],
             ],
 
+
+
             'ler-sql' => [
                 'type' => Literal::class,
                 'options' => [
@@ -93,6 +95,9 @@ return [
             ],
 
 
+            ////////////////////
+            // SQL
+
             'index-sql' => [
                 'type' => Segment::class,
                 'options' => [
@@ -103,6 +108,19 @@ return [
                     ],
                 ],
             ],
+
+            'lista-conexoes' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sql/lista-conexao',
+                    'defaults' => [
+                        'controller' => Controller\SqlController::class,
+                        'action'     => 'listaConexao',
+                    ],
+                ],
+            ],
+
+
 
             'sql-campos' => [
                 'type' => Segment::class,
@@ -115,6 +133,12 @@ return [
                     ],
                 ],
             ],
+
+
+
+
+
+
 
             'index-tabela' => [
                 'type' => Literal::class,
@@ -283,6 +307,7 @@ return [
             \Application\Service\Dql\TipoDeChaveDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\SistemaDqlService::class => InvokableFactory::class,
             \Application\Service\Dql\RelatorioDqlService::class => InvokableFactory::class,
+            \Application\Service\Dql\ConexaoDqlService::class => InvokableFactory::class,
 
 
             \Application\Service\Repository\TabelaService::class => Factory\RepositoryFactory::class,

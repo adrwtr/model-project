@@ -25,11 +25,25 @@ class SqlController extends BaseServiceManagerController
 
     public function sqlAction()
     {
-
         return new ViewModel(
             array(
 
             )
+        );
+    }
+
+    public function listaConexaoAction()
+    {
+        $arrValores = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\ConexaoDqlService::class)
+                    ->getAllConexao()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return new JsonModel(
+            $arrValores
         );
     }
 

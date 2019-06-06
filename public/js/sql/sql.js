@@ -6,6 +6,7 @@ var ds_texto_selecionado = '';
 // tokens do teclado
 var arrToken = new Array();
 var arrTokenTemp = new Array();
+
 arrTokenTemp.push('');
 
 var ds_token = '';
@@ -13,10 +14,11 @@ var ds_token_temp = '';
 
 // inicialização do editor
 ace.require("ace/ext/language_tools");
+
 var editor = ace.edit("editor");
+
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/sql");
-
 
 editor.setOptions({
     enableBasicAutocompletion: true,
@@ -76,6 +78,9 @@ editor.on(
     }
 );
 
+// functional program - globals fn
+var getJsonFromAjax = objResponse => objResponse.json();
+
 
 
 // inicialização do vue
@@ -83,6 +88,11 @@ var app_sql = new Vue({
     el: '#vueApp-sql',
 
     data: {
+
+        // conexoes
+        arrConexao : [],
+
+
         tabela_encontrada : '',
         arrCampos : [],
         arrTabelas : [],
@@ -90,12 +100,45 @@ var app_sql = new Vue({
     },
 
     created: function() {
-        this.getCampos();
+        // recupera as conexoes
+        this.getConexao();
+
+        // recupera informacoes tabelas
+        this.getAllInfoFromTabelas();
     },
 
     watch: {
     },
+
     methods: {
+
+        // recupera as conexoes
+        getConexao: function() {
+            fetch(
+                '/sql/lista-conexao',
+                {
+                    credentials: 'include'
+                }
+            )
+            .then(getJsonFromAjax)
+            .then(
+                arrJson => {
+                    this.arrConexao = arrJson;
+                    console.log(arrJson);
+                }
+            );
+        }
+
+        // recupera informacoes tabelas
+        getAllInfoFromTabelas: function() {
+
+        }
+
+
+
+
+
+
 
         // api
         getCampos: function() {
@@ -109,7 +152,6 @@ var app_sql = new Vue({
             .then(
                 arrJson => {
                     this.arrCampos = arrJson;
-                    console.log(arrJson);
                     this.processNomesTabela();
                 }
             );
@@ -182,3 +224,5 @@ var app_sql = new Vue({
 
     }
 });
+
+
