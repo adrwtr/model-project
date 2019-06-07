@@ -26,7 +26,8 @@
 
         "indaxia/doctrine-orm-transformations": "^2.0",
         "symfony/var-dumper": "^4.0",
-        "zendframework/zend-session": "^2.8"
+        "zendframework/zend-session": "^2.8",
+        "lstrojny/functional-php": "^1.9"
     },
     "autoload": {
         "psr-4": {

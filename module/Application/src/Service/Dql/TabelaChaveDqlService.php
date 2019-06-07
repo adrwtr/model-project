@@ -36,11 +36,21 @@ class TabelaChaveDqlService
         return 'select
             tc.id,
             tc.ds_descricao,
-            tdc.ds_chave,
+
+            tdc.id as nr_tipo_de_chave_id,
+            tdc.ds_nome as ds_nome_chave,
+
             to.id as tabela_origem_id,
-            co.id as campo_origem_id,
+            to.ds_nome as ds_nome_tabela_origem,
+
             td.id as tabela_destino_id,
-            cd.id as campo_destino_id
+            td.ds_nome as ds_nome_tabela_destino,
+
+            co.id as campo_origem_id,
+            co.ds_nome as ds_nome_campo_origem,
+
+            cd.id as campo_destino_id,
+            cd.ds_nome as ds_nome_campo_destino
         from
             \Application\Entity\TabelaChave tc
 

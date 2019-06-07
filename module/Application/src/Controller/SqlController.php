@@ -16,6 +16,10 @@ use \Application\Entity\TipoDeChave;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
+// functional
+use function Functional\select;
+use function Functional\map;
+
 class SqlController extends BaseServiceManagerController
 {
 	public function __construct($objSM)
@@ -52,7 +56,7 @@ class SqlController extends BaseServiceManagerController
     // para a realizacao de sqls e afins
     public function listaAllCamposAction()
     {
-        $arrTabela = $this->getEntityManager()
+        $arrTabelas = $this->getEntityManager()
             ->createQuery(
                 $this->getObjSm()
                     ->get(\Application\Service\Dql\TabelaDqlService::class)
@@ -69,7 +73,7 @@ class SqlController extends BaseServiceManagerController
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
 
-        $arrTabelaChave = $this->getEntityManager()
+        $arrTabelaChaves = $this->getEntityManager()
             ->createQuery(
                 $this->getObjSm()
                     ->get(\Application\Service\Dql\TabelaChaveDqlService::class)
@@ -77,10 +81,41 @@ class SqlController extends BaseServiceManagerController
             )
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        dump($arrTabelaChave);
+
+        // se a tabela_id for encontrada no array (no indice correto)
+        $fnMapTabelasExistentes = function ($tabela_id, $ds_indice) {
+            return function($arrValores, $nr_key, $arrColection) use ($tabela_id, $ds_indice) {
+                return ($arrValores[$ds_indice] == $tabela_id);
+            };
+        };
+
+        $fnMapTabelas = function($arrTabela) use ($arrCampos, $arrTabelaChaves, $fnMapTabelasExistentes) {
+            $arrCamposSelecionados = select(
+                $arrCampos,
+                $fnMapTabelasExistentes(
+                    $arrTabela['id'],
+                    'tabela_id'
+                )
+            );
+
+            $arrTabelaChaveSelecionada = select(
+                $arrTabelaChaves,
+                $fnMapTabelasExistentes(
+                    $arrTabela['id'],
+                    'tabela_origem_id'
+                )
+            );
+
+            $arrTabela['arrCampos'] = $arrCamposSelecionados;
+            $arrTabela['arrTabelaChavesOrigem'] = $arrTabelaChaveSelecionada;
+
+            return $arrTabela;
+        };
+
+        $arrTabelas = map($arrTabelas, $fnMapTabelas);
 
         return new JsonModel(
-            ['teste' => 'teste111']
+            $arrTabelas
         );
     }
 }
