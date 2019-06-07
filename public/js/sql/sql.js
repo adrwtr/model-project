@@ -63,7 +63,7 @@ editor.on(
             arrTokenTemp.push(' ');
 
             // TODO: espaços, tabs e escapes estão estragando
-            app_sql.helperGetDadosTabela(ds_token_temp);
+            // app_sql.helperGetDadosTabela(ds_token_temp);
         }
 
 
@@ -79,8 +79,12 @@ editor.on(
 );
 
 // functional program - globals fn
+
+// retorna o objeto json
 var getJsonFromAjax = objResponse => objResponse.json();
 
+// executa a api da url para get de um json
+// ao resolver, retorna o json
 function getFromAPI(ds_url) {
     return new Promise(
         function(resolve, reject) {
@@ -100,6 +104,31 @@ function getFromAPI(ds_url) {
     );
 }
 
+// essa funcao retorna o mapeamento para o autocomplete
+var fnMapeamentoAutocomplete = ds_metadata => {
+    return (ds_palavra) => {
+        return {
+            caption: ds_palavra,
+            value: ds_palavra,
+            meta: ds_metadata
+        };
+    };
+};
+
+// seta o autocomplete do campo
+var fnCallbackWordCompleter = (arrNomes, ds_metadata) => {
+    return {
+        getCompletions : function (editor, session, pos, prefix, callback) {
+            callback(
+                null,
+                arrNomes.map(
+                    fnMapeamentoAutocomplete(ds_metadata)
+                )
+            );
+        }
+    };
+};
+
 
 
 // inicialização do vue
@@ -108,14 +137,21 @@ var app_sql = new Vue({
 
     data: {
 
-        // conexoes
+        // lista de conexoes
         arrConexao : [],
 
+        // array com todas as tabelas - campos - ligações
+        arrTabelas : [],
 
+        // verificar
+        arrCamposEncontrados : []
+
+        /*
         tabela_encontrada : '',
         arrCampos : [],
         arrTabelas : [],
         arrCamposEncontrados : []
+        */
     },
 
     created: function() {
@@ -143,71 +179,16 @@ var app_sql = new Vue({
         getAllInfoFromTabelas: function() {
             getFromAPI('/sql/lista-all-campos').then(
                 arrJson => {
-                    this.arrConexao = arrJson;
+                    this.arrTabelas = arrJson;
+                    this.setTabelasNoAutoComplete(arrJson);
                 }
             );
         },
 
-
-
-
-
-
-
-        // api
-        getCampos: function() {
-            fetch(
-                '/sql/campos',
-                {
-                    credentials: 'include'
-                }
-            )
-            .then(objResponse => objResponse.json())
-            .then(
-                arrJson => {
-                    this.arrCampos = arrJson;
-                    this.processNomesTabela();
-                }
-            );
-        },
-
-        // processa
-        processNomesTabela: function()
-        {
-
-            var getDsNomeTabela = R.prop('ds_nome_tabela');
-
-            var arrTabelas = Array();
-
-            for(var i=0; i<this.arrCampos.length; i++) {
-                arrTabelas[getDsNomeTabela(this.arrCampos[i])] = 1;
-            }
-
-            this.arrTabelas = R.keys(arrTabelas);
-
-            var staticWordCompleter = {
-                getCompletions: (editor, session, pos, prefix, callback) => {
-                    var wordList = this.arrTabelas;
-
-                    callback(
-                        null,
-                        wordList.map(
-                            function(word) {
-                                return {
-                                    caption: word,
-                                    value: word,
-                                    meta: "tabelas"
-                                };
-                            }
-                        )
-                    );
-
-                }
-            }
-
-            // langTools.setCompleters([staticWordCompleter])
-            // or
-            editor.completers = [staticWordCompleter];
+        setTabelasNoAutoComplete: function(arrTabelas) {
+            var getNomeTabela = arr => arr.ds_nome
+            var arrNomesDasTabelas = R.map(getNomeTabela, arrTabelas);
+            editor.completers = [fnCallbackWordCompleter(arrNomesDasTabelas, 'tabelas')];
         },
 
 
@@ -230,7 +211,7 @@ var app_sql = new Vue({
             this.tabela_encontrada = ds_tabela;
 
             var oCampoTemATabela = R.propEq('ds_nome_tabela', ds_tabela);
-            this.arrCamposEncontrados = R.filter(oCampoTemATabela, this.arrCampos);
+            // this.arrCamposEncontrados = R.filter(oCampoTemATabela, this.arrCampos);
         }
 
 
