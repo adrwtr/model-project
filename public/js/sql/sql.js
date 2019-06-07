@@ -148,7 +148,8 @@ var app_sql = new Vue({
         arrTabelaInfo : [
             {
                 'ds_nome' : '',
-                'ds_descricao' : ''
+                'ds_descricao' : '',
+                'arrCampos' : []
             }
         ],
 

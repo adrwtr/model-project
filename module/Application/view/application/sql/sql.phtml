@@ -28,7 +28,7 @@ FROM
     <div class="container">
         <div class="row">
 
-            <table class="table table-sm table-dark" v-for="arrValores in arrTabelaInfo">
+            <table class="table table-sm table-dark" v-for="arrTabela in arrTabelaInfo">
                 <thead>
                     <tr>
                         <th scope="col">Nome</th>
@@ -37,11 +37,18 @@ FROM
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">{{arrValores.ds_nome}}</th>
-                        <td>{{arrValores.ds_descricao}}</td>
+                        <th scope="row">{{arrTabela.ds_nome}}</th>
+                        <td>{{arrTabela.ds_descricao}}</td>
+                    </tr>
+
+                    <tr v-for="arrCampo in arrTabela.arrCampos">
+                        <th scope="row">{{arrCampo.ds_nome}}</th>
+                        <td>{{arrCampo.ds_descricao}}</td>
                     </tr>
                 </tbody>
             </table>
+
+
 
         </div>
     </div>
