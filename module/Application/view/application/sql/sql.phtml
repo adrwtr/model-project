@@ -21,19 +21,28 @@ FROM
 
 <div id="vueApp-sql">
     <div class="container">
+        <div class="row" style="margin-left: 1300px">
+        &nbsp;
+        </div>
+    </div>
+    <div class="container">
         <div class="row">
-            <div style="padding: 10px" v-for="arrValores in arrCamposEncontrados">
-                <div>
-                    <button type="button"
-                        class="btn btn-secondary"
-                        style="">
-                        {{ arrValores.ds_nome }}
-                    </button>
-                </div>
-                <div>
-                    {{ arrValores.ds_descricao }}
-                </div>
-            </div>
+
+            <table class="table table-sm table-dark" v-for="arrValores in arrTabelaInfo">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Descricao</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">{{arrValores.ds_nome}}</th>
+                        <td>{{arrValores.ds_descricao}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
     </div>
 </div>

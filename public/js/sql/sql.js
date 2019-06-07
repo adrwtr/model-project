@@ -64,6 +64,7 @@ editor.on(
 
             // TODO: espaços, tabs e escapes estão estragando
             // app_sql.helperGetDadosTabela(ds_token_temp);
+            app_sql.getInfoFromTabela(ds_token_temp);
         }
 
 
@@ -143,6 +144,14 @@ var app_sql = new Vue({
         // array com todas as tabelas - campos - ligações
         arrTabelas : [],
 
+        // informacoes sobre uma tabela
+        arrTabelaInfo : [
+            {
+                'ds_nome' : '',
+                'ds_descricao' : ''
+            }
+        ],
+
         // verificar
         arrCamposEncontrados : []
 
@@ -166,6 +175,10 @@ var app_sql = new Vue({
     },
 
     methods: {
+        getArrTabelas: function() {
+            return this.arrTabelas;
+        },
+
         // recupera as conexoes
         getConexao: function() {
             getFromAPI('/sql/lista-conexao').then(
@@ -187,9 +200,40 @@ var app_sql = new Vue({
 
         setTabelasNoAutoComplete: function(arrTabelas) {
             var getNomeTabela = arr => arr.ds_nome
+
+            // cria um array com todos os nomes de tabelas
             var arrNomesDasTabelas = R.map(getNomeTabela, arrTabelas);
+
+            // coloca todos os nomes de tabela no autocomplete do campo
             editor.completers = [fnCallbackWordCompleter(arrNomesDasTabelas, 'tabelas')];
         },
+
+        getInfoFromTabela: function(ds_nome) {
+            var fnFiltraTabela = (ds_nome, arrTabela) => {
+                // console.log(ds_nome, arrTabela.ds_nome);
+                return arrTabela.ds_nome == ds_nome
+                    ? arrTabela
+                    : null;
+            };
+
+            var curryFnFiltraTabela = R.curry(fnFiltraTabela)(ds_nome);
+
+            // retorna a tabela se ela for encontrada no array
+            var arrTabela = R.filter(
+                curryFnFiltraTabela,
+                this.getArrTabelas()
+            );
+
+            if (arrTabela[0] != undefined) {
+                console.log(arrTabela);
+                this.arrTabelaInfo = arrTabela;
+            }
+        },
+
+
+
+
+
 
 
         helperGetDadosTabela: function(ds_token) {
