@@ -31,6 +31,28 @@ class TabelaChaveDqlService
                 tc.objTabelaOrigem = :tabela_origem_id
             ';
     }
+
+    public function getAllTabelaChave() {
+        return 'select
+            tc.id,
+            tc.ds_descricao,
+            tdc.ds_chave,
+            to.id as tabela_origem_id,
+            co.id as campo_origem_id,
+            td.id as tabela_destino_id,
+            cd.id as campo_destino_id
+        from
+            \Application\Entity\TabelaChave tc
+
+            inner join tc.objTipoDeChave tdc
+            inner join tc.objTabelaOrigem as to
+            inner join tc.objCampoOrigem co
+            left join tc.objTabelaDestino td
+            left join tc.objCampoDestino cd
+
+        order by
+            tc.id';
+    }
 }
 
 

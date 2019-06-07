@@ -12,16 +12,19 @@ class CampoDqlService
     public function getAllCampos() {
         return 'select
             c.id,
+            tabela.id as tabela_id,
             c.ds_nome,
             c.ds_prop,
             c.sn_pk,
             c.ds_descricao,
-            t.ds_nome as ds_nome_tabela,
-            t.ds_descricao as ds_descricao_tabela
+            c.nr_ordem
 
-        from \Application\Entity\Campo c
-            inner join c.objTabela as t
-            order by t.id, c.ds_nome';
+        from
+            \Application\Entity\Campo c
+
+        inner join c.objTabela tabela
+
+            order by c.nr_ordem';
     }
 }
 

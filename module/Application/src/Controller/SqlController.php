@@ -32,6 +32,7 @@ class SqlController extends BaseServiceManagerController
         );
     }
 
+    // retorna todas as conexoes
     public function listaConexaoAction()
     {
         $arrValores = $this->getEntityManager()
@@ -47,9 +48,19 @@ class SqlController extends BaseServiceManagerController
         );
     }
 
-    public function listaTodosCamposAction()
+    // retorna todas as informacoes necessarias
+    // para a realizacao de sqls e afins
+    public function listaAllCamposAction()
     {
-        $arrValores = $this->getEntityManager()
+        $arrTabela = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\TabelaDqlService::class)
+                    ->getAllTabelas()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $arrCampos = $this->getEntityManager()
             ->createQuery(
                 $this->getObjSm()
                     ->get(\Application\Service\Dql\CampoDqlService::class)
@@ -57,8 +68,19 @@ class SqlController extends BaseServiceManagerController
             )
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+
+        $arrTabelaChave = $this->getEntityManager()
+            ->createQuery(
+                $this->getObjSm()
+                    ->get(\Application\Service\Dql\TabelaChaveDqlService::class)
+                    ->getAllTabelaChave()
+            )
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        dump($arrTabelaChave);
+
         return new JsonModel(
-            $arrValores
+            ['teste' => 'teste111']
         );
     }
 }

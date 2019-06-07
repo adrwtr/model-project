@@ -120,16 +120,13 @@ return [
                 ],
             ],
 
-
-
-            'sql-campos' => [
+            'sql-lista-all-campos' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route'    => '/sql/campos',
+                    'route'    => '/sql/lista-all-campos',
                     'defaults' => [
                         'controller' => Controller\SqlController::class,
-                        'action'     => 'listaTodosCampos',
-                        'cd_registro' => '0'
+                        'action'     => 'listaAllCampos',
                     ],
                 ],
             ],

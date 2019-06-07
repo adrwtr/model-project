@@ -55,6 +55,17 @@ class TabelaDqlService
                 t.ds_nome
         ';
     }
+
+    public function getAllTabelas() {
+        return 'select
+            t.id,
+            t.ds_nome,
+            t.ds_descricao,
+            t.ds_tag
+
+        from \Application\Entity\Tabela t
+            order by t.ds_nome';
+    }
 }
 
 

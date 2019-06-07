@@ -92,10 +92,9 @@ function getFromAPI(ds_url) {
             )
             .then(getJsonFromAjax)
             .then(
-                arrJson => {
-                    // console.log(arrJson);
-                    resolve(arrJson);
-                }
+                arrJson => resolve(arrJson)
+            ).catch(
+                error => console.log(error)
             );
         }
     );
@@ -142,7 +141,11 @@ var app_sql = new Vue({
 
         // recupera informacoes tabelas
         getAllInfoFromTabelas: function() {
-
+            getFromAPI('/sql/lista-all-campos').then(
+                arrJson => {
+                    this.arrConexao = arrJson;
+                }
+            );
         },
 
 
