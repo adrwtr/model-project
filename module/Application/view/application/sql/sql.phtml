@@ -7,6 +7,7 @@
     right: 0;
     width: 950px;
     height: 300px;
+    margin-left: 20px;
 }
 </style>
 
@@ -58,7 +59,7 @@
     </div>
     <div class="">
         <div class="row">
-            <div class="overflow-auto" style="height: 300px; width: 650px">
+            <div class="overflow-auto" style="height: 300px; width: 650px; margin-left: 20px;">
                 <table class="table table-sm table-dark" v-for="arrTabela in arrTabelaInfo">
                     <thead>
                         <tr>
@@ -75,6 +76,29 @@
                         <tr v-for="arrCampo in arrTabela.arrCampos">
                             <th scope="row">{{arrCampo.ds_nome}}</th>
                             <td>{{arrCampo.ds_descricao}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="overflow-auto" style="height: 300px; width: 650px; margin-left: 20px;">
+                <table class="table table-sm table-dark" v-for="arrTabela in arrTabelaInfo">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Descricao</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="arrTabelaChave in arrTabela.arrTabelaChavesOrigem">
+                            <th scope="row">
+                                {{arrTabelaChave.ds_nome_campo_origem}}
+                                >
+                                {{arrTabelaChave.ds_nome_tabela_destino}}
+                                .
+                                {{arrTabelaChave.ds_nome_campo_destino}}
+                            </th>
+                            <td>{{arrTabelaChave.ds_descricao}}</td>
                         </tr>
                     </tbody>
                 </table>
