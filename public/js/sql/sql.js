@@ -79,6 +79,17 @@ editor.on(
     }
 );
 
+
+// add command to lazy-load keybinding_menu extension
+editor.commands.addCommand({
+    name: "executeSql",
+    bindKey: {win: "F9", mac: "F9"},
+    exec: function(editor) {
+        console.log('teste f9')
+    }
+});
+
+
 // functional program - globals fn
 
 // retorna o objeto json
@@ -138,9 +149,6 @@ var app_sql = new Vue({
 
     data: {
 
-        // lista de conexoes
-        arrConexao : [],
-
         // array com todas as tabelas - campos - ligações
         arrTabelas : [],
 
@@ -165,11 +173,11 @@ var app_sql = new Vue({
     },
 
     created: function() {
-        // recupera as conexoes
-        this.getConexao();
-
         // recupera informacoes tabelas
         this.getAllInfoFromTabelas();
+
+        // nao mostra mais o menu
+        $('#div_menu').hide();
     },
 
     watch: {
@@ -178,15 +186,6 @@ var app_sql = new Vue({
     methods: {
         getArrTabelas: function() {
             return this.arrTabelas;
-        },
-
-        // recupera as conexoes
-        getConexao: function() {
-            getFromAPI('/sql/lista-conexao').then(
-                arrJson => {
-                    this.arrConexao = arrJson;
-                }
-            );
         },
 
         // recupera informacoes tabelas
@@ -262,6 +261,43 @@ var app_sql = new Vue({
 
 
 
+    }
+});
+
+
+
+
+
+// inicialização do vue
+var app_conexao = new Vue({
+    el: '#vueApp-conexao',
+
+    data: {
+        // lista de conexoes
+        arrConexao : [],
+        conexao_atual : []
+    },
+
+    created: function() {
+        // recupera as conexoes
+        this.getConexao();
+    },
+
+    methods: {
+        // recupera as conexoes
+        getConexao: function() {
+            getFromAPI('/sql/lista-conexao').then(
+                arrJson => {
+                    this.conexao_atual = [];
+                    this.arrConexao = arrJson;
+                    console.log(this.arrConexao);
+                }
+            );
+        },
+
+        executeSql: function(ds_sql) {
+
+        }
     }
 });
 
