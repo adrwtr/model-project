@@ -12,15 +12,32 @@
 
 <div id="">
     <div class="row" id="vueApp-conexao">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="form-group" style="margin: 5px">
                 <label for="lista_conexoes">Conexões</label>
-                <select class="form-control" id="lista_conexoes" v-model="conexao_atual">
+                <select class="form-control"
+                    id="lista_conexoes"
+                    v-model="conexao_atual"
+                    @change="getConexaoDatabases()">
                     <option name="">
                         Selecione
                     </option>
                     <option v-for="arrValor in arrConexao" v-bind:value="arrValor">
                         {{arrValor.ds_nome}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group" style="margin: 5px">
+                <label for="lista_database">Database</label>
+                <select class="form-control" id="lista_database" v-model="database_atual">
+                    <option name="">
+                        Selecione
+                    </option>
+                    <option v-for="arrDatabaseValor in arrDatabase" v-bind:value="arrDatabaseValor">
+                        {{arrDatabaseValor.Database}}
                     </option>
                 </select>
             </div>

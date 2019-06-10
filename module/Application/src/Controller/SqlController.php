@@ -35,6 +35,14 @@ class SqlController extends BaseServiceManagerController
         );
     }
 
+    public function popupExecutadoAction()
+    {
+        return new ViewModel(
+            array(
+            )
+        );
+    }
+
     // retorna todas as conexoes
     public function listaConexaoAction()
     {
@@ -50,6 +58,39 @@ class SqlController extends BaseServiceManagerController
             $arrValores
         );
     }
+
+    // retorna todas as databases de uma conexao
+    public function listaDatabaseAction()
+    {
+        $ds_json_post = $this->getRequest()
+            ->getContent();
+
+        $objJson = json_decode($ds_json_post);
+        $arrResultado = [];
+
+        if (isset($objJson->conexao_atual)) {
+            if ($objJson->conexao_atual != 'Selecione') {
+                $arrResultado = $this->getObjSm()
+                    ->get(\Application\Service\Mysql\MysqlService::class)
+                    ->novaConexao(
+                        $objJson->conexao_atual->ds_host,
+                        $objJson->conexao_atual->ds_login,
+                        $objJson->conexao_atual->ds_pass,
+                        'unimestre'
+                    )
+                    ->executa('show databases');
+
+                $this->getObjSm()
+                    ->get(\Application\Service\Mysql\MysqlService::class)
+                    ->fecharConexao();
+            }
+        }
+
+        return new JsonModel(
+            $arrResultado
+        );
+    }
+
 
     // retorna todas as informacoes necessarias
     // para a realizacao de sqls e afins
@@ -88,7 +129,11 @@ class SqlController extends BaseServiceManagerController
             };
         };
 
-        $fnMapTabelas = function($arrTabela) use ($arrCampos, $arrTabelaChaves, $fnMapTabelasExistentes) {
+        $fnMapTabelas = function($arrTabela) use (
+            $arrCampos,
+            $arrTabelaChaves,
+            $fnMapTabelasExistentes
+        ) {
             $arrCamposSelecionados = select(
                 $arrCampos,
                 $fnMapTabelasExistentes(
@@ -125,21 +170,24 @@ class SqlController extends BaseServiceManagerController
             ->getContent();
 
         $objJson = json_decode($ds_json_post);
+        $ds_sql = $objJson->ds_sql;
+        $arrResultado = [];
 
+        if (isset($objJson->conexao_atual) && $ds_sql != '') {
+            $arrResultado = $this->getObjSm()
+                ->get(\Application\Service\Mysql\MysqlService::class)
+                ->novaConexao(
+                    $objJson->conexao_atual->ds_host,
+                    $objJson->conexao_atual->ds_login,
+                    $objJson->conexao_atual->ds_pass,
+                    $objJson->database_atual->Database,
+                )
+                ->executa($ds_sql);
 
-        $arrResultado = $this->getObjSm()
-            ->get(\Application\Service\Mysql\MysqlService::class)
-            ->novaConexao(
-                $objJson->conexao_atual->ds_host,
-                $objJson->conexao_atual->ds_login,
-                $objJson->conexao_atual->ds_pass,
-                'unimestre'
-            )
-            ->executa('select cd_pessoa, nm_pessoa from pessoas limit 10');
-
-        $this->getObjSm()
-            ->get(\Application\Service\Mysql\MysqlService::class)
-            ->fecharConexao();
+            $this->getObjSm()
+                ->get(\Application\Service\Mysql\MysqlService::class)
+                ->fecharConexao();
+        }
 
         return new JsonModel(
             $arrResultado

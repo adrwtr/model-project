@@ -1,0 +1,27 @@
+<div id="vueApp-sql">
+    <div class="">
+        <div class="row" style="margin-left: 1300px">
+        &nbsp;
+        </div>
+    </div>
+    <div class="">
+        <div class="row">
+
+            chegamos aqui
+
+        </div>
+    </div>
+</div>
+
+<?php
+echo $this->inlineScript()
+    ->appendFile(
+        $this->basePath('js/libs/ace/src-noconflict/ace.js')
+    )
+    ->appendFile(
+        $this->basePath('js/libs/ace/src-noconflict/ext-language_tools.js')
+    )
+    ->appendFile(
+        $this->basePath('js/sql/popup-executado.js')
+    );
+?>

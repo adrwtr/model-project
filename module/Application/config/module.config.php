@@ -120,6 +120,17 @@ return [
                 ],
             ],
 
+            'lista-database' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sql/lista-database',
+                    'defaults' => [
+                        'controller' => Controller\SqlController::class,
+                        'action'     => 'listaDatabase',
+                    ],
+                ],
+            ],
+
             'sql-lista-all-campos' => [
                 'type' => Segment::class,
                 'options' => [
@@ -138,6 +149,17 @@ return [
                     'defaults' => [
                         'controller' => Controller\SqlController::class,
                         'action'     => 'executa',
+                    ],
+                ],
+            ],
+
+            'sql-popup-executado' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/sql/popup-executado',
+                    'defaults' => [
+                        'controller' => Controller\SqlController::class,
+                        'action'     => 'popupExecutado',
                     ],
                 ],
             ],

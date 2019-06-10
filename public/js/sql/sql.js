@@ -85,7 +85,7 @@ editor.commands.addCommand({
     name: "executeSql",
     bindKey: {win: "F9", mac: "F9"},
     exec: function(editor) {
-        var ds_sql = (editor.getCopyText() != null )
+        var ds_sql = (editor.getCopyText() != null && editor.getCopyText() != '')
             ? editor.getCopyText()
             : editor.getValue();
 
@@ -279,7 +279,15 @@ var app_conexao = new Vue({
     data: {
         // lista de conexoes
         arrConexao : [],
-        conexao_atual : []
+
+        // lista de databases
+        arrDatabase : [],
+
+        // contem a conexao atual selecioanda na combo
+        conexao_atual : [],
+
+        // contem a database atual selecioanda na combo
+        database_atual : []
     },
 
     created: function() {
@@ -294,7 +302,28 @@ var app_conexao = new Vue({
                 arrJson => {
                     this.conexao_atual = [];
                     this.arrConexao = arrJson;
-                    console.log(this.arrConexao);
+                }
+            );
+        },
+
+        // recupera as conexoes
+        getConexaoDatabases: function() {
+            var arrPost = {
+                conexao_atual : this.conexao_atual
+            };
+
+            axios.post(
+                '/sql/lista-database',
+                arrPost
+            )
+            .then(
+                arrJson => {
+                    this.arrDatabase = arrJson.data;
+                }
+            )
+            .catch(
+                function (error) {
+                    console.log(error);
                 }
             );
         },
@@ -302,6 +331,7 @@ var app_conexao = new Vue({
         executeSql: function(ds_sql) {
             var arrPost = {
                 conexao_atual : this.conexao_atual,
+                database_atual : this.database_atual,
                 ds_sql : ds_sql
             };
 
