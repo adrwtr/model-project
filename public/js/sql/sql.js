@@ -85,7 +85,11 @@ editor.commands.addCommand({
     name: "executeSql",
     bindKey: {win: "F9", mac: "F9"},
     exec: function(editor) {
-        console.log('teste f9')
+        var ds_sql = (editor.getCopyText() != null )
+            ? editor.getCopyText()
+            : editor.getValue();
+
+        app_conexao.executeSql(ds_sql);
     }
 });
 
@@ -296,7 +300,26 @@ var app_conexao = new Vue({
         },
 
         executeSql: function(ds_sql) {
+            var arrPost = {
+                conexao_atual : this.conexao_atual,
+                ds_sql : ds_sql
+            };
 
+            axios.post(
+                '/sql/executa',
+                arrPost
+            )
+            .then(
+                function (objResponse) {
+                    console.log('teste certo 1');
+                    console.log(objResponse);
+                }
+            )
+            .catch(
+                function (error) {
+                    console.log(error);
+                }
+            );
         }
     }
 });

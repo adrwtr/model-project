@@ -31,7 +31,6 @@ class SqlController extends BaseServiceManagerController
     {
         return new ViewModel(
             array(
-
             )
         );
     }
@@ -116,6 +115,34 @@ class SqlController extends BaseServiceManagerController
 
         return new JsonModel(
             $arrTabelas
+        );
+    }
+
+
+    public function executaAction()
+    {
+        $ds_json_post = $this->getRequest()
+            ->getContent();
+
+        $objJson = json_decode($ds_json_post);
+
+
+        $arrResultado = $this->getObjSm()
+            ->get(\Application\Service\Mysql\MysqlService::class)
+            ->novaConexao(
+                $objJson->conexao_atual->ds_host,
+                $objJson->conexao_atual->ds_login,
+                $objJson->conexao_atual->ds_pass,
+                'unimestre'
+            )
+            ->executa('select cd_pessoa, nm_pessoa from pessoas limit 10');
+
+        $this->getObjSm()
+            ->get(\Application\Service\Mysql\MysqlService::class)
+            ->fecharConexao();
+
+        return new JsonModel(
+            $arrResultado
         );
     }
 }

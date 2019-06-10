@@ -19,7 +19,7 @@
                     <option name="">
                         Selecione
                     </option>
-                    <option v-for="arrValor in arrConexao">
+                    <option v-for="arrValor in arrConexao" v-bind:value="arrValor">
                         {{arrValor.ds_nome}}
                     </option>
                 </select>
