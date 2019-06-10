@@ -3,6 +3,9 @@
 // texto que foi selecionado
 var ds_texto_selecionado = '';
 
+// popup de resultado
+var popup_resultado = null;
+
 // tokens do teclado
 var arrToken = new Array();
 var arrTokenTemp = new Array();
@@ -340,9 +343,11 @@ var app_conexao = new Vue({
                 arrPost
             )
             .then(
-                function (objResponse) {
-                    console.log('teste certo 1');
-                    console.log(objResponse);
+                objResponse => {
+                    this.setResultadoNewWindow(
+                        objResponse.data
+                    );
+                    console.log(objResponse.data);
                 }
             )
             .catch(
@@ -350,8 +355,24 @@ var app_conexao = new Vue({
                     console.log(error);
                 }
             );
+        },
+
+        setResultadoNewWindow: function(arrResultado) {
+            if (popup_resultado == null) {
+                popup_resultado = window.open("http://localhost:8000/sql/popup-executado", "teste", "fullscreen=yes");
+            }
+
+            popup_resultado.focus();
+
+            popup_resultado.addEventListener(
+                'load',
+                function() {
+                    popup_resultado.setResultado(arrResultado);
+                },
+                true
+            );
+
+            return;
         }
     }
 });
-
-

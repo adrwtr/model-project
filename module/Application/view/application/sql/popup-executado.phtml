@@ -6,20 +6,21 @@
     </div>
     <div class="">
         <div class="row">
-
-            chegamos aqui
-
+            <div id="div_resultado">
+            </div>
         </div>
     </div>
 </div>
 
 <?php
+$this->headLink()
+    ->prependStylesheet(
+        'https://unpkg.com/tabulator-tables@4.2.7/dist/css/tabulator.min.css'
+    );
+
 echo $this->inlineScript()
     ->appendFile(
-        $this->basePath('js/libs/ace/src-noconflict/ace.js')
-    )
-    ->appendFile(
-        $this->basePath('js/libs/ace/src-noconflict/ext-language_tools.js')
+        'https://unpkg.com/tabulator-tables@4.2.7/dist/js/tabulator.min.js'
     )
     ->appendFile(
         $this->basePath('js/sql/popup-executado.js')
