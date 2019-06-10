@@ -7,6 +7,8 @@ function setResultado(arrValores)
         {
             data : arrValores,
             autoColumns : true,
+            selectableRangeMode:"click",
+            selectable:true,
         }
     );
 }

@@ -359,18 +359,28 @@ var app_conexao = new Vue({
 
         setResultadoNewWindow: function(arrResultado) {
             if (popup_resultado == null) {
-                popup_resultado = window.open("http://localhost:8000/sql/popup-executado", "teste", "fullscreen=yes");
+                popup_resultado = window.open(
+                    "http://localhost:8000/sql/popup-executado",
+                    "teste",
+                    "toolbar=yes,scrollbars=yes,resizable=yes,top=10,left=10,fullscreen=yes"
+                );
+
+                popup_resultado.focus();
+
+                popup_resultado.addEventListener(
+                    'load',
+                    teste => {
+                        console.log(arrResultado);
+                        popup_resultado.setResultado(arrResultado);
+                    },
+                    true
+                );
+
+                return;
             }
 
             popup_resultado.focus();
-
-            popup_resultado.addEventListener(
-                'load',
-                function() {
-                    popup_resultado.setResultado(arrResultado);
-                },
-                true
-            );
+            popup_resultado.setResultado(arrResultado);
 
             return;
         }
