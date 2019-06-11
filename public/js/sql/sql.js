@@ -237,36 +237,46 @@ var app_sql = new Vue({
             }
         },
 
-
-
-
-
-
-
-        helperGetDadosTabela: function(ds_token) {
-            // cria a função de teste da token
-            var testaToken = (ds_token_test, ds_find) => ds_token_test == ds_find;
-
-            // deixa a função pronta
-            var testeAtual = R.curry(testaToken)(ds_token);
-
-            // usa para encontrar no array
-            var sn_encontrado = R.find(testeAtual, this.arrTabelas);
-
-            if (sn_encontrado != undefined) {
-                this.helperGetCampos(ds_token);
-            }
+        getInfoFromTabelaSelecionada: function() {
+            this.getInfoFromTabela(ds_texto_selecionado);
         },
 
-        helperGetCampos: function(ds_tabela) {
-            this.tabela_encontrada = ds_tabela;
+        // pega a fk e cria um inner join para a tabela
+        setAndCopyInnerJoin : function(objTabelaChave) {
+            var ds_sql_inserir = '';
 
-            var oCampoTemATabela = R.propEq('ds_nome_tabela', ds_tabela);
-            // this.arrCamposEncontrados = R.filter(oCampoTemATabela, this.arrCampos);
+            if (objTabelaChave.ds_nome_chave == "Foreing Key") {
+                ds_sql_inserir = "\n"
+                    + ' inner join '
+                    +  objTabelaChave.ds_nome_tabela_destino
+                    + ' as '
+                    + objTabelaChave.ds_nome_tabela_destino.substr(0, 4)
+                    + ' ON ( '
+                    // + "\n"
+                    + objTabelaChave.ds_nome_tabela_destino.substr(0, 4)
+                    + '.'
+                    + objTabelaChave.ds_nome_campo_destino
+                    + ' = '
+                    + objTabelaChave.ds_nome_tabela_origem.substr(0, 4)
+                    + '.'
+                    + objTabelaChave.ds_nome_campo_origem
+                    // + "\n"
+                    + ')';
+
+                // To focus the ace editor
+                editor.focus();
+
+                var n = editor.getSession().getValue().split("\n").length;
+                editor.gotoLine(n);
+                editor.execCommand("gotolineend");
+
+                editor.session.insert(
+                    editor.getCursorPosition(),
+                    ds_sql_inserir
+                );
+
+            }
         }
-
-
-
 
     }
 });
@@ -331,6 +341,8 @@ var app_conexao = new Vue({
             );
         },
 
+        // executa o sql na conexao e base selecionada
+        // e envia para a janela o resultado
         executeSql: function(ds_sql) {
             var arrPost = {
                 conexao_atual : this.conexao_atual,
@@ -357,6 +369,8 @@ var app_conexao = new Vue({
             );
         },
 
+        // seta o resultado na janela de resultados
+        // exibe a janela
         setResultadoNewWindow: function(arrResultado) {
             if (popup_resultado == null) {
                 popup_resultado = window.open(
@@ -383,6 +397,6 @@ var app_conexao = new Vue({
             popup_resultado.setResultado(arrResultado);
 
             return;
-        }
+        },
     }
 });

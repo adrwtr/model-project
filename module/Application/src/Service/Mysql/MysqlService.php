@@ -4,9 +4,13 @@ namespace Application\Service\Mysql;
 class MysqlService {
 
     private $objConexao;
+    private $sn_conectado;
+    private $ds_msg_erro;
 
     public function __construct() {
         $this->objConexao = null;
+        $this->sn_conectado = false;
+        $this->ds_msg_erro = '';
     }
 
     public function novaConexao(
@@ -15,22 +19,32 @@ class MysqlService {
         $ds_senha,
         $ds_database
     ) {
-        $this->objConexao = new \mysqli(
-            $ds_host,
-            $ds_login,
-            $ds_senha,
-            $ds_database
-        );
+        try {
+            $this->objConexao = new \mysqli(
+                $ds_host,
+                $ds_login,
+                $ds_senha
+            );
+
+            $this->sn_conectado = true;
+        } catch (\Exception $e) {
+            $this->sn_conectado = false;
+            $this->ds_msg_erro = $e->getMessage();
+        }
 
         if ($this->objConexao->connect_errno) {
-            printf("Connect failed: %s\n", $mysqli->connect_error);
-            die();
+            $this->sn_conectado = false;
+            $this->ds_msg_erro = $mysqli->connect_error;
         }
 
         return $this;
     }
 
     public function executa($ds_sql) {
+        if ($this->sn_conectado == false) {
+            return [];
+        }
+
         $arrResult = $this->getObjConexao()
             ->query(
                 $ds_sql,

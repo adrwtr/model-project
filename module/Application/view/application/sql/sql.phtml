@@ -46,17 +46,27 @@
     </div>
 
     <div class="row">
-        <div id="editor">SELECT * FROM pessoas limit 10
+        <div id="editor">SELECT * FROM nu_grupos_pessoas limit 10
         </div>
     </div>
 </div>
 
 <div id="vueApp-sql">
+    <div class="row">
+        <div class="btn-group" role="group" aria-label="Basic example" style="margin-left: 20px; margin-top: 5px;">
+            <button type="button" class="btn btn-secondary"
+                @click="getInfoFromTabelaSelecionada()"><i class="fas fa-table"></i></button>
+            <button type="button" class="btn btn-secondary">Middle</button>
+            <button type="button" class="btn btn-secondary">Right</button>
+        </div>
+    </div>
+
     <div class="">
-        <div class="row" style="margin-left: 1300px">
+        <div class="row" style="margin-left: 1100px">
         &nbsp;
         </div>
     </div>
+
     <div class="">
         <div class="row">
             <div class="overflow-auto" style="height: 300px; width: 650px; margin-left: 20px;">
@@ -91,13 +101,15 @@
                     </thead>
                     <tbody>
                         <tr v-for="arrTabelaChave in arrTabela.arrTabelaChavesOrigem">
-                            <th scope="row">
-                                {{arrTabelaChave.ds_nome_campo_origem}}
-                                >
-                                {{arrTabelaChave.ds_nome_tabela_destino}}
-                                .
-                                {{arrTabelaChave.ds_nome_campo_destino}}
-                            </th>
+                            <td scope="row">
+                                <a href="#" @click="setAndCopyInnerJoin(arrTabelaChave)">
+                                    {{arrTabelaChave.ds_nome_campo_origem}}
+                                    >
+                                    {{arrTabelaChave.ds_nome_tabela_destino}}
+                                    .
+                                    {{arrTabelaChave.ds_nome_campo_destino}}
+                                </a>
+                            </td>
                             <td>{{arrTabelaChave.ds_descricao}}</td>
                         </tr>
                     </tbody>
