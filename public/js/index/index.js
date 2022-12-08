@@ -36,7 +36,7 @@ var app_lista_tabela = new Vue({
     methods: {
         getListRegistros: function() {
             fetch(
-                '/sistema/lista-sistemas',
+                'sistema/lista-sistemas',
                 {
                     credentials: 'include'
                 }

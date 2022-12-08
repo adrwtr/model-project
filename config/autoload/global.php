@@ -38,10 +38,11 @@ return [
             'orm_default' => [
                 'driverClass' => PDOMySqlDriver::class,
                 'params' =>     [
-                    'host' => 'localhost',
+                    'host' => '172.18.0.1',
                     'user'     => 'backup',
                     'password' => 'UniSeguro',
                     'dbname' => 'modelproj',
+                    'port' => '3357',
                     'charset' => 'utf8',
                     'driverOptions' => [
                         \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8' COLLATE 'utf8_general_ci'"
