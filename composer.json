@@ -47,7 +47,7 @@
         "sebbmeyer/php-microsoft-teams-connector": "^0.1.6",
         "roave/better-reflection": "^4.3",
         "gedmo/doctrine-extensions": "^3.0",
-        "firebase/php-jwt": "^5.4",
+        "firebase/php-jwt": "^6.0",
         "phpoffice/phpword": "^0.18.2",
         "greenlion/php-sql-parser": "^4.1",
         "phpunit/phpunit": "^7.0",
