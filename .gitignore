@@ -18,3 +18,4 @@ cypress/support
 cypress/integration/examples
 cypress/examples
 cypress/videos
+package-lock.json
