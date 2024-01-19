@@ -125,7 +125,7 @@ final class Version20181128185837 extends AbstractMigration
         INSERT INTO saas_parametro
             (id, saas_cliente_id, ds_nome, ds_valor) VALUES
             (1, 1, 'VINDI_API_URI', 'https://app.vindi.com.br/api/v1/'),
-            (2, 1, 'VINDI_API_KEY', 'TdBG8qZ7x4RcC74P7isfnBq6-vBp183_m5_lebf7NWc');
+            (2, 1, 'VINDI_API_KEY', '');
         ";
         $this->addSql($sql);
 
